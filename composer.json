@@ -1,0 +1,19 @@
+{
+    "name": "kateru/riyu",
+    "description": "simple framework",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Riyu\\": "src/",
+            "App\\": "app/",
+            "Utils\\": "Utils/"
+        }
+    },
+    "authors": [
+        {
+            "name": "lutfisobri",
+            "email": "lutfisobri@gmail.com"
+        }
+    ],
+    "require": {}
+}

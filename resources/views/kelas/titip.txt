@@ -1,0 +1,54 @@
+<!-- Ubah Siswa Modal -->
+            							<!-- <div class="modal fade" id="ubah-siswa">
+            								<div class="modal-dialog">
+            									<div class="modal-content">
+            										<div class="modal-header">
+            											<h5 class="modal-title" id="exampleModalLabel">Ubah Siswa</h5>
+            											<button type="button" class="close" data-dismiss="modal">
+            												<i class="anticon anticon-close"></i>
+            											</button>
+            										</div>
+            										<div class="modal-body">
+            											<div class="input-group mb-4">
+            												<div class="input-group-prepend">
+            													<span class="input-group-text" id="basic-addon1"><i class="anticon anticon-idcard" style="font-size: 20px;"></i></span>
+            												</div>
+            												<input type="text" name="nis" class="form-control" id="nis" value="" placeholder="Nomor Induk Siswa" aria-label="NIS" aria-describedby="basic-addon1">
+            											</div>
+            											<div class="input-group mb-4">
+            												<div class="input-group-prepend">
+            													<span class="input-group-text" id="basic-addon1"><i class="anticon anticon-user" style="font-size: 20px;"></i></span>
+            												</div>
+            												<input type="text" name="nama" id="nama" value="" class="form-control" placeholder="Nama Siswa" aria-label="Nama Siswa" aria-describedby="basic-addon1">
+            											</div>
+            											<div class="input-group mb-4">
+            												<div class="input-group-prepend">
+            													<span class="input-group-text" id="basic-addon1"><i class="anticon anticon-home" style="font-size: 20px;"></i></span>
+            												</div>
+            												<input type="text" name="alamat" id="alamat" value="" class="form-control" placeholder="Alamat Siswa" aria-label="Alamat Siswa" aria-describedby="basic-addon1">
+            											</div>
+            											<div class="input-group mb-4">
+            												<div class="input-group-prepend">
+            													<span class="input-group-text" id="basic-addon1"><i class="anticon anticon-contacts" style="font-size: 20px;"></i></span>
+            												</div>
+            												<input type="text" name="telepon" id="telepon" value="" class="form-control" placeholder="Telepon/HP Siswa" aria-label="Telepon/HP Siswa" aria-describedby="basic-addon1">
+            											</div>
+            											<div class="input-group mb-4">
+            												<label for="radio" class="mr-3">Jenis Kelamin</label>
+            												<div class="radio mr-3">
+            													<input id="radio1" name="radioDemo" type="radio" checked>
+            													<label for="radio1">Laki-Laki</label>
+            												</div>
+            												<div class="radio">
+            													<input id="radio2" name="radioDemo" type="radio" checked>
+            													<label for="radio2">Perempuan</label>
+            												</div>
+            											</div>
+            										</div>
+            										<div class="modal-footer">
+            											<button type="button" class="btn btn-danger text-white mr-2" data-dismiss="modal">Tutup</button>
+            											<button type="button" class="btn btn-success">Simpan</button>
+            										</div>
+            									</div>
+            								</div>
+            							</div> -->
