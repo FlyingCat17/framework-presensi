@@ -5,6 +5,8 @@ namespace Riyu\Database\Connection;
 use Riyu\Database\Utils\ConnectionManager;
 use PDO;
 use PDOException;
+use Riyu\Helpers\Errors\AppException;
+use Riyu\Helpers\Errors\Message;
 
 class Manager implements ConnectionManager
 {
@@ -25,7 +27,7 @@ class Manager implements ConnectionManager
         try {
             $this->connection = $connection;
         } catch (\Throwable $th) {
-            throw new \Exception($th->getMessage());
+            throw new AppException(Message::exception(1, $th->getMessage()));
         }
     }
 
@@ -46,7 +48,7 @@ class Manager implements ConnectionManager
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (\Throwable $th) {
-            throw new \Exception($th->getMessage());
+            throw new AppException(Message::exception(1, $th->getMessage()));
         }
     }
 
@@ -67,7 +69,7 @@ class Manager implements ConnectionManager
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $th) {
-            throw new \Exception($th->getMessage());
+            throw new AppException(Message::exception(1, $th->getMessage()));
         }
     }
 
@@ -88,7 +90,7 @@ class Manager implements ConnectionManager
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_OBJ);
         } catch (PDOException $th) {
-            throw new ($th->getMessage());
+            throw new AppException(Message::exception(1, $th->getMessage()));
         }
     }
 
@@ -109,7 +111,7 @@ class Manager implements ConnectionManager
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (\Throwable $th) {
-            throw new \Exception($th->getMessage());
+            throw new AppException(Message::exception(1, $th->getMessage()));
         }
     }
 
@@ -130,7 +132,7 @@ class Manager implements ConnectionManager
             $stmt->execute();
             return $stmt->rowCount();
         } catch (\Throwable $th) {
-            throw new \Exception($th->getMessage());
+            throw new AppException(Message::exception(1, $th->getMessage()));
         }
     }
 
@@ -162,7 +164,7 @@ class Manager implements ConnectionManager
                 }
             }
         } catch (\Throwable $th) {
-            throw new \Exception($th->getMessage());
+            throw new AppException(Message::exception(1, $th->getMessage()));
         }
     }
 }

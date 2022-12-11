@@ -1,0 +1,21 @@
+//
+// features.scss
+//
+
+.features-count {
+  h5 {
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    text-align: center;
+    border: 1px solid $primary;
+    border-radius: 50%;
+    line-height: 38px;
+  }
+}
+
+.features-icon {
+  i {
+    font-size: 40px;
+  }
+}

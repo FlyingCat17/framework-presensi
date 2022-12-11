@@ -33,17 +33,15 @@ class Matches extends Storage
                 try {
                     return $this->callback($route, $method);
                 } catch (\Throwable $th) {
-                    throw new AppException(Message::callback(500), 500);
+                    throw new AppException(Message::exception(501, [$route, $method]));
                 }
             }
-            $rout = preg_replace('/\//', '\/', $route);
-            $rout = preg_replace('/\{[a-zA-Z0-9]+\}/', '([a-zA-Z0-9]+)', $rout);
-            $rout = '/^' . $rout . '$/';
+            $rout = $this->pregReplaceRoute($route);
             if (preg_match($rout, $url)) {
                 try {
                     return $this->callback($route, $method);
                 } catch (\Throwable $th) {
-                    throw new AppException(Message::callback(500, $route), 500);
+                    throw new AppException(Message::exception(501, [$route, $method]));
                 }
             }
         }
@@ -62,17 +60,14 @@ class Matches extends Storage
                 try {
                     return $this->callback($route, $method);
                 } catch (\Throwable $th) {
-                    throw new AppException(Message::callback(500, $route), 500);
+                    throw new AppException(Message::exception(501, [$route, $method]));
                 }
             }
-            $rout = preg_replace('/\//', '\/', $route);
-            $rout = preg_replace('/\{[a-zA-Z0-9]+\}/', '([a-zA-Z0-9]+)', $rout);
-            $rout = '/^' . $rout . '$/';
+            $rout = $this->pregReplaceRoute($route);
             if (preg_match($rout, $url)) {
                 return $this->callback($route, $method);
             }
         }
-        // print_r($routes);
         return ViewError::code(404);
     }
 
@@ -87,7 +82,7 @@ class Matches extends Storage
             Storage::clearAll();
             return Callback::call($callback, $params);
         } catch (\Throwable $th) {
-            throw new AppException(Message::callback(500, $route), 500);
+            throw new AppException(Message::exception(501, [$callback, $params]));
         }
     }
 
@@ -97,5 +92,13 @@ class Matches extends Storage
         $uri = preg_replace('/\{[a-zA-Z0-9]+\}/', '([a-zA-Z0-9]+)', $uri);
         $uri = '/^' . $uri . '$/';
         return $uri;
+    }
+
+    public function pregReplaceRoute($route)
+    {
+        $route = preg_replace('/\//', '\/', $route);
+        $route = preg_replace('/\{[a-zA-Z0-9]+\}/', '([a-zA-Z0-9]+)', $route);
+        $route = '/^' . $route . '$/';
+        return $route;
     }
 }
