@@ -55,8 +55,16 @@ Route::group('/siswa', function () {
     Route::get('/tambah', [Siswa::class, 'tambah']);
     Route::post('/tambah', [Siswa::class, 'insert']);
     Route::get('/ubah', function () {
-        echo 'siswa/ubah';
+        header('Location: ' . base_url . 'siswa');
+        exit();
     });
+    Route::get('/ubah/{nis}', [Siswa::class, 'ubah']);
+    Route::post('/ubah/{nis}', [Siswa::class, 'update']);
+    Route::post('/hapus/{nis}', [Siswa::class, 'delete']);
+});
+
+Route::group('/kelas', function () { 
+    Route::get('', [Siswa::class, 'index']);
 });
 // Route::post('/login', [Login::class, 'auth']);
 // Route::get('/login', [Login::class, 'index']);
