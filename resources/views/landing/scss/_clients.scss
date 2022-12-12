@@ -1,0 +1,108 @@
+//
+// clients.scss
+//
+
+.client-desc {
+  padding: 25px 30px;
+  border: 1px solid $gray-200;
+  position: relative;
+  z-index: 1;
+  &:after {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background-color: $white;
+    border: 1px solid $gray-200;
+    transform: rotate(45deg);
+    border-color: transparent $gray-200 $gray-200 transparent;
+    left: 60px;
+    margin: 0px auto;
+    margin-top: 13px;
+    z-index: 2;
+  }
+}
+
+.client-img {
+  img {
+    width: 55px;
+    height: 55px;
+  }
+}
+
+.testi-icon {
+  i {
+    font-size: 40px;
+  }
+}
+
+.client-user {
+  position: relative;
+  margin-left: 50px;
+}
+
+.tns-outer {
+  position: relative;
+  .tns-controls {
+    position: absolute;
+    text-align: center;
+    left: 0;
+    right: 0;
+
+    button {
+      margin: 0 0 0px 10px;
+      border-radius: 50%;
+      border: none;
+      background-color: rgba($primary, 0.2) !important;
+      color: $primary;
+      transition: all 0.3s;
+      font-size: 18px;
+      width: 34px;
+      height: 34px;
+      &:focus,
+      &:hover,
+      &:active {
+        outline: none;
+        background-color: $primary !important;
+        color: $white;
+      }
+    }
+    &:focus {
+      outline: none !important;
+    }
+  }
+  .tns-nav {
+    text-align: center;
+    margin-top: 16px;
+    button {
+      border: none;
+      background-color: rgba($primary, 0.2) !important;
+      padding: 0px;
+      margin: 0px 6px;
+      border-radius: 50%;
+      &:focus,
+      &:hover,
+      &:active,
+      &.active {
+        outline: none;
+        background-color: $primary !important;
+      }
+      &.tns-nav-active {
+        background-color: $primary !important;
+      }
+    }
+  }
+}
+
+// client img
+
+.client-images {
+  img {
+    height: 40px;
+    opacity: 0.3;
+    transition: all 0.5s;
+    &:hover {
+      opacity: 0.5;
+    }
+  }
+}

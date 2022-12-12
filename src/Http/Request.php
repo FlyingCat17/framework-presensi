@@ -2,43 +2,26 @@
 
 namespace Riyu\Http;
 
-class Request
+use ReflectionClass;
+use ReflectionObject;
+
+class Request extends Foundation
 {
-    protected static $path;
-
-    protected static $query;
-
-    protected static $method;
-
-    protected static $uri;
-
-    protected static $fullUrl;
-
-    protected static $fragment;
-
     public static function uri()
     {
         $uri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
-        self::$uri = $uri;
         return $uri;
     }
 
     public static function method()
     {
         $method = $_SERVER['REQUEST_METHOD'];
-        self::$method = $method;
         return $method;
-    }
-
-    public function __construct()
-    {
-        $this->booting($this);
     }
 
     public static function fullUrl()
     {
         $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-        self::$fullUrl = $url;
         return $url;
     }
 
@@ -51,7 +34,6 @@ class Request
     public static function getPath()
     {
         $path = parse_url(self::fullUrl(), PHP_URL_PATH);
-        self::$path = $path;
         return $path;
     }
 
@@ -59,7 +41,6 @@ class Request
     {
         $query = parse_url(self::fullUrl(), PHP_URL_QUERY);
         $query = $query ? $query : null;
-        self::$query = $query;
         return $query;
     }
 
@@ -67,7 +48,6 @@ class Request
     {
         $fragment = parse_url(self::fullUrl(), PHP_URL_FRAGMENT);
         $fragment = $fragment ? $fragment : null;
-        self::$fragment = $fragment;
         return $fragment;
     }
 
@@ -84,6 +64,7 @@ class Request
     public function set($value = null)
     {
         if (is_array($value)) {
+            static::$storage = array_merge(static::$storage, $value);
             foreach ($value as $key => $val) {
                 $this->$key = $val;
             }
@@ -153,49 +134,10 @@ class Request
         if (isset($_FILES)) {
             $request = array_merge($request, $_FILES);
         }
+        
+        $request = array_merge($request, self::$storage);
 
         return $request;
-    }
-
-    public static function booting(Request $request)
-    {
-        if (isset($_POST)) {
-            $request->set($_POST);
-        }
-
-        $json = file_get_contents('php://input');
-        if ($json) {
-            $request->set(json_decode($json, true));
-        }
-
-        if (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'multipart/form-data') !== false) {
-            $request->set($_POST);
-        }
-
-        if (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/x-www-form-urlencoded') !== false) {
-            $request->set($_POST);
-        }
-
-        if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PUT') {
-            parse_str(file_get_contents('php://input'), $put);
-            $request->set($put);
-        }
-
-        if (isset($_GET)) {
-            $request->set($_GET);
-        }
-
-        if (isset($_FILES)) {
-            $request->set($_FILES);
-        }
-
-        if (isset($_COOKIE)) {
-            $request->set($_COOKIE);
-        }
-
-        if (isset($_SESSION)) {
-            $request->set($_SESSION);
-        }
     }
 
     public static function __callStatic($name, $arguments)
@@ -207,5 +149,10 @@ class Request
     public function __call($name, $arguments)
     {
         return $this->$name(...$arguments);
+    }
+
+    public function __get($name)
+    {
+        return $this->$name;
     }
 }

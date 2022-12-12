@@ -3,39 +3,61 @@
 namespace Riyu\Router\Utils;
 
 use Riyu\Router\Utils\Storage;
-use Riyu\Router\Utils\Foundation;
 
 abstract class Router
 {
+    private static $prefix = "";
+
     public static function get($uri, $callback)
     {
+        if (self::$prefix !== "") {
+            ($uri == "/") ? $uri = self::$prefix : $uri = self::$prefix . $uri;
+        }
         Storage::addRoute($uri, "GET", $callback);
     }
 
     public static function post($uri, $callback)
     {
+        if (self::$prefix !== "") {
+            ($uri == "/") ? $uri = self::$prefix : $uri = self::$prefix . $uri;
+        }
         Storage::addRoute($uri, "POST", $callback);
     }
 
     public static function put($uri, $callback)
     {
+        if (self::$prefix !== "") {
+            ($uri == "/") ? $uri = self::$prefix : $uri = self::$prefix . $uri;
+        }
         Storage::addRoute($uri, "PUT", $callback);
     }
 
     public static function delete($uri, $callback)
     {
+        if (self::$prefix !== "") {
+            ($uri == "/") ? $uri = self::$prefix : $uri = self::$prefix . $uri;
+        }
         Storage::addRoute($uri, "DELETE", $callback);
     }
 
     public static function patch($uri, $callback)
     {
+        if (self::$prefix !== "") {
+            ($uri == "/") ? $uri = self::$prefix : $uri = self::$prefix . $uri;
+        }
         Storage::addRoute($uri, "PATCH", $callback);
+    }
+
+    public static function group($prefix, $callback)
+    {
+        self::$prefix = $prefix;
+        $callback(new static);
+        self::$prefix = "";
     }
 
     public static function prefix($prefix)
     {
-        Storage::addPrefix($prefix);
-        return new static;
+        self::$prefix = $prefix;
     }
 
     public static function __callStatic($name, $arguments)

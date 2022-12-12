@@ -24,12 +24,12 @@
         ];
 
         protected static $callback = [
-            500 => 'Callback %s not found',
+            500 => 'Callback not found',
             501 => 'Callback %s not found in %s',
             505 => 'Callback %s not found in %s',
         ];
 
-        public static function Routing($code, $data = [])
+        public static function Routing($code, $data)
         {
             return sprintf(self::$routing[$code], $data);
         }
@@ -45,10 +45,39 @@
         public static function exception($code, $args = null)
         {
             if (is_null($args)) {
-                return self::$message[$code];
+                if (array_key_exists($code, self::$message)) {
+                    return self::$message[$code];
+                }
+
+                if (array_key_exists($code, self::$connection)) {
+                    return self::$connection[$code];
+                }
+
+                if (array_key_exists($code, self::$routing)) {
+                    return self::$routing[$code];
+                }
+
+                if (array_key_exists($code, self::$callback)) {
+                    return self::$callback[$code];
+                }
             } else {
-                return sprintf(self::$message[$code], $args);
+                if (array_key_exists($code, self::$message)) {
+                    return sprintf(self::$message[$code], $args);
+                }
+
+                if (array_key_exists($code, self::$connection)) {
+                    return sprintf(self::$connection[$code], $args);
+                }
+
+                if (array_key_exists($code, self::$routing)) {
+                    return sprintf(self::$routing[$code], $args);
+                }
+
+                if (array_key_exists($code, self::$callback)) {
+                    return sprintf(self::$callback[$code], $args);
+                }
             }
+            return 'code not found';
         }
 
         public static function connectionError($code, $args = null)

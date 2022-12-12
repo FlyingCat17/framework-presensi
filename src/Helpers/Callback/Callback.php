@@ -38,7 +38,7 @@ class Callback
                 self::object($callback, $data);
             }
         } catch (\Throwable $th) {
-            throw new AppException(Message::exception(500));
+            throw new AppException(Message::exception(500, $callback));
         }
     }
 
@@ -51,7 +51,7 @@ class Callback
                 self::callable($callback, $data);
             }
         } catch (\Throwable $th) {
-            throw new AppException(Message::exception(500));
+            throw new AppException(Message::exception(500, $callback));
         }
     }
 
@@ -62,13 +62,13 @@ class Callback
                 try {
                     return $callback($data);
                 } catch (\Throwable $th) {
-                    throw new AppException($th->getMessage(), $th->getCode());
+                    throw new AppException(Message::exception(500, $callback));
                 }
             } else {
                 try {
                     return $callback();
                 } catch (\Throwable $th) {
-                    throw new AppException($th->getMessage(), $th->getCode());
+                    throw new AppException(Message::exception(500, $callback));
                 }
             }
         } else {
@@ -85,7 +85,7 @@ class Callback
                     return $callback();
                 }
             } catch (\Throwable $th) {
-                throw new AppException($th->getMessage(), $th->getCode());
+                throw new AppException(Message::exception(500, $callback));
             }
         }
     }

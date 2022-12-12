@@ -30,7 +30,11 @@ class Storage
 
     public static function getRoute($name)
     {
-        return self::$methods[$name] . ' => ' .self::$routes[$name];
+        if (in_array($name, self::$routes['GET'])) {
+            return self::$routes['GET'][$name];
+        } else {
+            echo "Route not found";
+        }
     }
 
     public static function getRoutesGroup()

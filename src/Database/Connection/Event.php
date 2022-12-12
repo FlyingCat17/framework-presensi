@@ -73,7 +73,7 @@ class Event
         try {
             $this->connection = new PDO($this->dsn, $this->config[2], $this->config[3]);
         } catch (PDOException $e) {
-            new AppException(Message::get('database_connection_error'), $e->getMessage());
+            new AppException(Message::exception(1, $e->getMessage()), 1);
         }
     }
 }
