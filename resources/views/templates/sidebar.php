@@ -9,14 +9,6 @@
                     <span class="title">Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item dropdown <?= strtolower($data['title']) === "tahun ajaran" ? 'active' : '' ?>" id="liNav">
-                <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>tahun_ajaran">
-                    <span class="icon-holder">
-                        <i class="material-icons" style="font-size: 18px;">event</i>
-                    </span>
-                    <span class="title">Tahun Ajaran</span>
-                </a>
-            </li>
             <li class="nav-item dropdown <?= strtolower($data['title']) === "siswa" ? 'active' : '' ?>" id="liNav">
                 <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>siswa">
                     <span class="icon-holder">
@@ -25,12 +17,22 @@
                     <span class="title">Siswa</span>
                 </a>
             </li>
-            <li class="nav-item dropdown <?= (strtolower($data['title']) === "kelas" ? 'active' : (strtolower($data['title']) === "detail kelas" ? 'active' : '')) ?>" id="liNav">
+            <li class="nav-item dropdown <?=(strtolower($data['title']) === "kelas" ? 'active' : (strtolower($data['title']) === "detail kelas" ? 'active' : '')) ?>"
+                id="liNav">
                 <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>kelas">
                     <span class="icon-holder">
                         <i class="material-icons" style="font-size: 18px;">groups</i>
                     </span>
                     <span class="title">Kelas</span>
+                </a>
+            </li>
+            <li class="nav-item dropdown <?= strtolower($data['title']) === "tahun ajaran" ? 'active' : '' ?>"
+                id="liNav">
+                <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>tahun_ajaran">
+                    <span class="icon-holder">
+                        <i class="material-icons" style="font-size: 18px;">event</i>
+                    </span>
+                    <span class="title">Tahun Ajaran</span>
                 </a>
             </li>
             <li class="nav-item dropdown <?= strtolower($data['title']) === "guru" ? 'active' : '' ?>" id="liNav">
@@ -41,7 +43,8 @@
                     <span class="title">Guru</span>
                 </a>
             </li>
-            <li class="nav-item dropdown <?= strtolower($data['title']) === "mata pelajaran" ? 'active' : '' ?>" id="liNav">
+            <li class="nav-item dropdown <?= strtolower($data['title']) === "mata pelajaran" ? 'active' : '' ?>"
+                id="liNav">
                 <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>mapel">
                     <span class="icon-holder">
                         <i class="material-icons" style="font-size: 18px;">book</i>
@@ -49,7 +52,8 @@
                     <span class="title">Mata Pelajaran</span>
                 </a>
             </li>
-            <li class="nav-item dropdown <?= (strtolower($data['title']) === "jadwal" ? 'active' : (strtolower($data['title']) === "tambah jadwal" ? 'active' : (strtolower($data['title']) === "ubah jadwal" ? 'active' : ''))) ?>" id="liNav">
+            <li class="nav-item dropdown <?=(strtolower($data['title']) === "jadwal" ? 'active' : (strtolower($data['title']) === "tambah jadwal" ? 'active' : (strtolower($data['title']) === "ubah jadwal" ? 'active' : ''))) ?>"
+                id="liNav">
                 <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>jadwal">
                     <span class="icon-holder">
                         <i class="material-icons" style="font-size: 18px;">calendar_month</i>
@@ -57,7 +61,8 @@
                     <span class="title">Jadwal</span>
                 </a>
             </li>
-            <li class="nav-item dropdown <?= (strtolower($data['title']) === "presensi" ? 'active' : (strtolower($data['title']) === "tambah presensi" ? 'active' : (strtolower($data['title']) === "detail presensi" ? 'active' : ''))) ?>" id="liNav">
+            <li class="nav-item dropdown <?=(strtolower($data['title']) === "presensi" ? 'active' : (strtolower($data['title']) === "tambah presensi" ? 'active' : (strtolower($data['title']) === "detail presensi" ? 'active' : ''))) ?>"
+                id="liNav">
                 <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>presensi">
                     <span class="icon-holder">
                         <i class="material-icons" style="font-size: 18px;">checklist_rtl</i>
