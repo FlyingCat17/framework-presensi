@@ -27,7 +27,7 @@ class Admin extends Controller
     {
         $data['title'] = "Dashboard";
         $data['admin'] = User::where('id_admin', Session::get('user'))->first();
-        $data['siswa'] = Siswa::select('COUNT(nis) AS jumlah_siswa')->first();
+        $data['siswa'] = Siswa::select('COUNT(nis) AS jumlah_siswa')->where('status', '1')->first();
         $data['guru'] = Guru::select('COUNT(nuptk) AS jumlah_guru')->first();
         return view(['templates/header', 'templates/sidebar', 'home/index', 'templates/footer'], $data);
     }

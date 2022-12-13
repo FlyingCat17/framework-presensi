@@ -37,6 +37,12 @@ class Kelas extends Controller
 
     public function insert(Request $request)
     {
+        $check = ModelsKelas::where('nama_kelas', $request->kelas)->first();
+        if ($check) {
+            Flasher::setFlash('Nama Kelas sudah tersedia!', 'danger');
+            header('location: ' . base_url . 'kelas/tambah');
+            exit();
+        }
         $val = Validation::make($request->all(), [
             'kelas' => 'required|max:12'
         ]);
@@ -71,13 +77,40 @@ class Kelas extends Controller
     }
     public function update(Request $request)
     {
+        $check = ModelsKelas::where('nama_kelas', $request->kelas)->first();
+        if ($check) {
+            Flasher::setFlash('Nama Kelas sudah tersedia!', 'danger');
+            header('location: ' . base_url . 'kelas/tambah');
+            exit();
+        }
         $val = Validation::make($request->all(), [
             'kelas' => 'required|max:12'
         ]);
         if ($val) {
             Flasher::setFlash('Gagal Diubah!', 'danger');
-            header('location: ' . base_url . 'kelas/ubah/'.$request->id);
+            header('location: ' . base_url . 'kelas/ubah/' . $request->id);
             exit();
         }
+        $validatechar = [
+            'kelas' => htmlspecialchars($request->kelas)
+        ];
+
+        ModelsKelas::update([
+            'nama_kelas' => $validatechar['kelas']
+        ])->where('id_kelas', $request->id)->save();
+
+        Flasher::setFlash('Berhasil Diubah!', 'success');
+        header('location: ' . base_url . 'kelas/ubah/' . $request->id);
+        exit();
+    }
+
+    public function delete(Request $request)
+    {
+        ModelsKelas::update([
+            'status' => 0,
+        ])->where('id_kelas', $request->id)->save();
+        Flasher::setFlash('Berhasil Dihapus!', 'success');
+        header('location: ' . base_url . 'kelas');
+        exit();
     }
 }

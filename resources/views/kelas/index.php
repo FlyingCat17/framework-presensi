@@ -49,13 +49,12 @@
                             <?= $kelas['nama_kelas']; ?>
                           </td>
                           <td>
-                            <button type="button" data-nis="<?= $siswa['nis'] ?>" class="btn btn-icon btn-warning"
-                              id="btn-ubah-siswa"
+                            <button type="button" class="btn btn-icon btn-warning" id="btn-ubah-siswa"
                               onclick="location.href='<?= base_url; ?>kelas/ubah/<?= $kelas['id_kelas'] ?>'">
                               <i class="anticon anticon-edit"></i>
                             </button>
-                            <button type="button" data-nis="<?= $siswa['nis'] ?>"
-                              data-nama="<?= $siswa['nama_siswa'] ?>" class="btn btn-icon btn-danger tampilModalHapus"
+                            <button type="button" data-id="<?= $kelas['id_kelas'] ?>"
+                              data-nama="<?= $kelas['nama_kelas'] ?>" class="btn btn-icon btn-danger tampilModalHapus"
                               data-toggle="modal" data-target="#hapusModal">
                               <i class="anticon anticon-delete"></i>
                             </button>
@@ -71,27 +70,7 @@
                 </div>
               </div>
 
-              <!-- Hapus Kelas Modal -->
 
-              <div class="modal fade" id="hapusModal">
-                <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalCenterTitle">Hapus Kelas</h5>
-                      <button type="button" class="close" data-dismiss="modal">
-                        <i class="anticon anticon-close"></i>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn text-danger" data-dismiss="modal">Tutup</button>
-                      <button type="submit" class="btn btn-danger">Hapus</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
               <!-- Ubah Kelas Modal -->
               <!-- <div class="modal fade" id="ubah-kelas">
@@ -130,19 +109,35 @@
     </div>
     <!-- Content Wrapper END -->
   </div>
+  <!-- Hapus Kelas Modal -->
+
+  <div class="modal fade" id="hapusModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <form action="<?= base_url; ?>hapus" method="post">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">Hapus Kelas</h5>
+            <button type="button" class="close" data-dismiss="modal">
+              <i class="anticon anticon-close"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="id_kelas" id="id_kelas">
+            <h6>Yakin ingin menghapus Kelas ini?</h6>
+            <p id="name_kelas">nama_kelas</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn text-danger" id="tutupModal" data-dismiss="modal">Tutup</button>
+            <button type="submit" class="btn btn-danger">Hapus</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
   $(document).ready(function () {
-
-
-    $('.tampilModalTambah').on('click', function () {
-      // console.log('CLICKED');
-      $('#formModalLabel').html('Tambah Kelas');
-      $('#txtNamaKelas').val("");
-      $('#id_kelas').val("");
-    });
-
     $('.tampilModalUbah').on('click', function () {
       // console.log('CLICKED');
       $('#formModalLabel').html('Ubah Kelas');
@@ -162,6 +157,15 @@
           $('#id_kelas').val(data.id_kelas);
         }
       });
+    });
+    $('.tampilModalHapus').on('click', function () {
+      $('.modal-content form').attr('action', '<?= base_url; ?>kelas/hapus/' + $(this).data('id'));
+      $('#name_kelas').html($(this).data('nama'));
+      $('#id_kelas').val($(this).data('id'));
+    });
+    $('#tutupModal').on('click', function () {
+      $('.modal-content form').attr('action', '<?= base_url; ?>hapus/');
+      $('#id_kelas').val('');
     });
   });
 </script>

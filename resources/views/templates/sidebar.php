@@ -54,6 +54,15 @@
             </li>
             <li class="nav-item dropdown <?=(strtolower($data['title']) === "jadwal" ? 'active' : (strtolower($data['title']) === "tambah jadwal" ? 'active' : (strtolower($data['title']) === "ubah jadwal" ? 'active' : ''))) ?>"
                 id="liNav">
+                <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>kelas/pembagian">
+                    <span class="icon-holder">
+                        <i class="material-icons" style="font-size: 18px;">groups</i>
+                    </span>
+                    <span class="title">Pembagian Kelas</span>
+                </a>
+            </li>
+            <li class="nav-item dropdown <?=(strtolower($data['title']) === "jadwal" ? 'active' : (strtolower($data['title']) === "tambah jadwal" ? 'active' : (strtolower($data['title']) === "ubah jadwal" ? 'active' : ''))) ?>"
+                id="liNav">
                 <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>jadwal">
                     <span class="icon-holder">
                         <i class="material-icons" style="font-size: 18px;">calendar_month</i>

@@ -9,6 +9,7 @@ use App\Controllers\Login;
 use App\Controllers\Admin;
 use App\Controllers\Tahun_Ajaran;
 use App\Controllers\Siswa;
+use App\Controllers\MapelController;
 use Riyu\Http\Request;
 use Riyu\Router\Route;
 
@@ -47,9 +48,6 @@ Route::post('/tahun_ajaran/setActive', [Tahun_Ajaran::class, 'setActive']);
 
 
 Route::get('/profile', [HomeController::class, 'profile']);
-
-Route::get('/guru', [Guru::class]);
-
 //siswa
 Route::group('/siswa', function () {
     Route::get('', [Siswa::class, 'index']);
@@ -80,6 +78,37 @@ Route::group('/kelas', function () {
     );
     Route::get('/ubah/{id}', [Kelas::class, 'ubah']);
     Route::post('/ubah/{id}', [Kelas::class, 'update']);
+    Route::get(
+        '/hapus',
+        function () {
+            header('Location: ' . base_url . 'kelas');
+            exit();
+        }
+    );
+    Route::get(
+        '/hapus/{id}',
+        function () {
+            header('Location: ' . base_url . 'kelas');
+            exit();
+        }
+    );
+    Route::post('/hapus/{id}', [Kelas::class, 'delete']);
+});
+
+Route::group('/guru', function () {
+    Route::get('', [Guru::class, 'index']);
+    Route::get('/tambah', [Guru::class, 'tambah']);
+    Route::post('/tambah', [Guru::class, 'insert']);
+    Route::get(
+        '/ubah',
+        function () {
+            header('Location: ' . base_url . 'guru');
+            exit();
+        }
+    );
+    Route::get('/ubah/{nuptk}', [Guru::class, 'ubah']);
+    Route::post('/ubah/{nuptk}', [Guru::class, 'update']);
+    Route::post('/hapus/{nuptk}', [Guru::class, 'delete']);
 });
 // Route::post('/login', [Login::class, 'auth']);
 // Route::get('/login', [Login::class, 'index']);
@@ -115,3 +144,18 @@ Route::group('/kelas', function () {
 //     });
 //     Route::get('/profile', [HomeController::class, 'profile']);
 // });
+Route::group('/mapel', function () {
+    Route::get('/', [MapelController::class, 'index']);
+    Route::get('/tambah', [MapelController::class, 'tambah']);
+    Route::post('/tambah', [MapelController::class, 'insert']);
+    Route::get(
+        '/ubah',
+        function () {
+            header('Location: ' . base_url . 'mapel');
+            exit();
+        }
+    );
+    Route::get('/ubah/{id}', [MapelController::class, 'ubah']);
+    Route::post('/ubah/{id}', [MapelController::class, 'update']);
+    Route::post('/hapus/{id}', [MapelController::class, 'delete']);
+});
