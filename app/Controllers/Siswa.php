@@ -38,7 +38,6 @@ class Siswa extends Controller
 
     public function insert(Request $request)
     {
-
         // try {
         $data['check'] = ModelsSiswa::where('nis', $request->nis)->first();
         if (isset($data['check']->nis)) {

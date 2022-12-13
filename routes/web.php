@@ -4,6 +4,7 @@ use App\Config\Controller;
 use App\Config\Session;
 use App\Controllers\Guru;
 use App\Controllers\HomeController;
+use App\Controllers\Kelas;
 use App\Controllers\Login;
 use App\Controllers\Admin;
 use App\Controllers\Tahun_Ajaran;
@@ -54,17 +55,31 @@ Route::group('/siswa', function () {
     Route::get('', [Siswa::class, 'index']);
     Route::get('/tambah', [Siswa::class, 'tambah']);
     Route::post('/tambah', [Siswa::class, 'insert']);
-    Route::get('/ubah', function () {
-        header('Location: ' . base_url . 'siswa');
-        exit();
-    });
+    Route::get(
+        '/ubah',
+        function () {
+            header('Location: ' . base_url . 'siswa');
+            exit();
+        }
+    );
     Route::get('/ubah/{nis}', [Siswa::class, 'ubah']);
     Route::post('/ubah/{nis}', [Siswa::class, 'update']);
     Route::post('/hapus/{nis}', [Siswa::class, 'delete']);
 });
 
-Route::group('/kelas', function () { 
-    Route::get('', [Siswa::class, 'index']);
+Route::group('/kelas', function () {
+    Route::get('', [Kelas::class, 'index']);
+    Route::get('/tambah', [Kelas::class, 'tambah']);
+    Route::post('/tambah', [Kelas::class, 'insert']);
+    Route::get(
+        '/ubah',
+        function () {
+            header('Location: ' . base_url . 'kelas');
+            exit();
+        }
+    );
+    Route::get('/ubah/{id}', [Kelas::class, 'ubah']);
+    Route::post('/ubah/{id}', [Kelas::class, 'update']);
 });
 // Route::post('/login', [Login::class, 'auth']);
 // Route::get('/login', [Login::class, 'index']);
