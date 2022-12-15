@@ -15,9 +15,9 @@ class BuildQuery
     protected $joins;
     
     /**
-     * @var string
+     * @var array
      */
-    protected $where;
+    protected $where = [];
     
     /**
      * @var string
@@ -106,8 +106,8 @@ class BuildQuery
             $query .= ' ' . implode(' ', $this->joins);
         }
 
-        if (!is_null($this->where)) {
-            $query .= ' ' . $this->where;
+        if (count($this->where) > 0) {
+            $query .= $this->buildWheres();
         }
 
         if (!is_null($this->groupBy)) {
@@ -146,8 +146,8 @@ class BuildQuery
 
         $query .= " " . $this->insert;
 
-        if (!is_null($this->where)) {
-            $query .=" ".$this->where;
+        if (count($this->where) > 0) {
+            $query .= $this->buildWheres();
         }
 
         $query .= ";";
@@ -166,8 +166,8 @@ class BuildQuery
         
         $query .=" ".$this->update;
 
-        if (!is_null($this->where)) {
-            $query .=" ".$this->where;
+        if (count($this->where) > 0) {
+            $query .= $this->buildWheres();
         }
 
         $query .= ";";
@@ -184,12 +184,8 @@ class BuildQuery
 
         $query .= $this->table;
 
-        if (!is_null($this->where)) {
-            $query .=" ".$this->where;
-        }
-
-        if (!is_null($this->resetIncrement)) {
-            $query .= "; ALTER TABLE " . $this->table . " AUTO_INCREMENT = 1;";
+        if (count($this->where) > 0) {
+            $query .= $this->buildWheres();
         }
 
         $query .= ";";
@@ -202,5 +198,44 @@ class BuildQuery
         $query = "ALTER TABLE " . $this->table . " AUTO_INCREMENT = 1;";
 
         return $query;
+    }
+
+    public function buildWheres()
+    {
+        $where = $this->where;
+
+        if (count($where) == 0) {
+            return '';
+        }
+
+        if (count($where) == 1) {
+            if (!is_array($where[0])) {
+                return 'WHERE ' . $where[0] . ' ';
+            } else {
+                return 'WHERE `' . $where[0]['column'] . '` ' . $where[0]['operator'] . ' ' . $where[0]['value'] . ' ';
+            }
+        } else {
+            $query = '';
+            foreach ($where as $key => $value) {
+                if ($key == 0) {
+                    if (!is_array($value)) {
+                        $query .= $value . ' ';
+                    } else {
+                        $query .= '`' . $value['column'] . '` ' . $value['operator'] . ' ' . $value['value'] . ' ';
+                    }
+                } else {
+                    if (!is_array($value)) {
+                        $query .= $value . ' ';
+                    } else {
+                        $query .= $value['boolean'] . ' `' . $value['column'] . '` ' . $value['operator'] . ' ' . $value['value'] . ' ';
+                    }
+                }
+            }
+            if ($query != '') {
+                return ' WHERE ' . $query;
+            } else {
+                return '';
+            }
+        }
     }
 }

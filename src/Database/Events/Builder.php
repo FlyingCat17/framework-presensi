@@ -151,36 +151,58 @@ class Builder extends Execute implements QueryInterface
     /**
      * Arrange query delete
      * 
-     * @param string $where
+     * @param string $column
      * @param string $operator
      * @param string $value
+     * @param string $boolean
      * @return this
      */
-    public function where($where, $operator = null, $value = null)
+    public function where($column, $operator = null, $value = null, $boolean = 'and')
     {
-        $key = "wheres";
-        if (isset($operator)) {
-            if (in_array($operator, $this->operator)) {
-                $this->where = "WHERE `" . $where . "` " . $operator . " :" . $key . "";
-            } else {
-                $this->where = "WHERE `" . $where . "` = :" . $key . "";
-            }
-        } else {
-            $this->where = "WHERE `" . $where."`";
+        if (func_num_args() == 1) {
+            $this->where[] = $column;
+            return $this;
         }
 
-        if (is_array($this->options) > 0) {
-            if (in_array($operator, $this->operator)) {
-                $this->options .= array($key => $value);
-            } else {
-                $this->options = array_merge(array($key => $operator), $this->options);
-            }
+        // check if the operator is null
+        if (func_num_args() == 2) {
+            list($value, $operator) = [$operator, '='];
+        }
+
+        // check if the value is null
+        if (is_null($value)) {
+            $operator = '=';
+        }
+
+        $binding = $value;
+        $value = ":$column".count($this->where);
+
+        $this->where[] = compact('column', 'operator', 'value', 'boolean');
+
+        $this->binding($value, $binding);
+
+        return $this;
+    }
+
+    /**
+     * Bind value to query
+     * 
+     * @param string $key
+     * @param string $value
+     * @return object $this
+     */
+    public function binding($key, $value)
+    {
+        if (is_array($key) && is_array($value)) {
+            $this->options = array_merge(array_combine($key, $value), $this->options);
+        } else if (is_array($key) && !is_array($value)) {
+            $this->options = array_merge(array_combine($key, array_fill(0, count($key), $value)), $this->options);
+        } else if (!is_array($key) && is_array($value)) {
+            $this->options = array_merge(array_combine(array_fill(0, count($value), $key), $value), $this->options);
+        } else if (!is_array($key) && !is_array($value)) {
+            $this->options = array_merge(array($key => $value), $this->options);
         } else {
-            if (in_array($operator, $this->operator)) {
-                $this->options = array($key => $value);
-            } else {
-                $this->options = array($key => $operator);
-            }
+            $this->options = array_merge(array($key => $value), $this->options);
         }
         return $this;
     }
@@ -352,8 +374,8 @@ class Builder extends Execute implements QueryInterface
     {
         if (!is_null($this->fillable)) {
             foreach ($this->fillable as $key => $value) {
-                if (!in_array($key, $this->fillable)) {
-                    throw new \Exception("Fillable " . $key . " is not defined");
+                if (!in_array($value, $this->fillable)) {
+                    throw new \Exception("Fillable " . $value . " is not defined");
                 }
             };
             $this->isDelete = true;
