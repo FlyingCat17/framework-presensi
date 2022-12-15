@@ -8,17 +8,17 @@ class BuildQuery
      * @var string
      */
     protected $insert;
-    
+
     /**
      * @var array
      */
     protected $joins;
-    
+
     /**
      * @var array
      */
     protected $where = [];
-    
+
     /**
      * @var string
      */
@@ -33,37 +33,37 @@ class BuildQuery
      * @var bool
      */
     protected $isDelete;
-    
+
     /**
      * @var string
      */
     protected $groups;
-    
+
     /**
      * @var string
      */
     protected $orders;
-    
+
     /**
      * @var string
      */
     protected $update;
-    
+
     /**
      * @var string
      */
     protected $having;
-    
+
     /**
      * @var array
      */
     protected $selects;
-    
+
     /**
      * @var int
      */
     protected $limit;
-    
+
     /**
      * @var string
      */
@@ -100,7 +100,7 @@ class BuildQuery
             $query .= ' *';
         }
 
-        $query .= ' FROM `' . $this->table.'`';
+        $query .= ' FROM `' . $this->table . '`';
 
         if (!is_null($this->joins)) {
             $query .= ' ' . implode(' ', $this->joins);
@@ -120,7 +120,7 @@ class BuildQuery
 
         if (!is_null($this->orderBy)) {
             $query .= ' ' . $this->orderBy;
-        }   
+        }
 
         if (!is_null($this->limit)) {
             $query .= ' ' . $this->limit;
@@ -131,7 +131,7 @@ class BuildQuery
         }
 
         $query .= ";";
-        
+
         return $query;
     }
 
@@ -142,7 +142,7 @@ class BuildQuery
     {
         $query = "INSERT INTO ";
 
-        $query .= '`'.$this->table.'`';
+        $query .= '`' . $this->table . '`';
 
         $query .= " " . $this->insert;
 
@@ -162,9 +162,9 @@ class BuildQuery
     {
         $query = "UPDATE ";
 
-        $query .= '`'.$this->table . "` SET";
-        
-        $query .=" ".$this->update;
+        $query .= '`' . $this->table . "` SET";
+
+        $query .= " " . $this->update;
 
         if (count($this->where) > 0) {
             $query .= $this->buildWheres();
@@ -210,9 +210,9 @@ class BuildQuery
 
         if (count($where) == 1) {
             if (!is_array($where[0])) {
-                return 'WHERE ' . $where[0] . ' ';
+                return ' WHERE ' . $where[0] . ' ';
             } else {
-                return 'WHERE `' . $where[0]['column'] . '` ' . $where[0]['operator'] . ' ' . $where[0]['value'] . ' ';
+                return ' WHERE ' . $where[0]['column'] . ' ' . $where[0]['operator'] . ' ' . $where[0]['value'] . ' ';
             }
         } else {
             $query = '';
@@ -221,13 +221,13 @@ class BuildQuery
                     if (!is_array($value)) {
                         $query .= $value . ' ';
                     } else {
-                        $query .= '`' . $value['column'] . '` ' . $value['operator'] . ' ' . $value['value'] . ' ';
+                        $query .= '' . $value['column'] . ' ' . $value['operator'] . ' ' . $value['value'] . ' ';
                     }
                 } else {
                     if (!is_array($value)) {
                         $query .= $value . ' ';
                     } else {
-                        $query .= $value['boolean'] . ' `' . $value['column'] . '` ' . $value['operator'] . ' ' . $value['value'] . ' ';
+                        $query .= $value['boolean'] . ' ' . $value['column'] . ' ' . $value['operator'] . ' ' . $value['value'] . ' ';
                     }
                 }
             }

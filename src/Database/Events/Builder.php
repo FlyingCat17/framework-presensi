@@ -20,10 +20,18 @@ class Builder extends Execute implements QueryInterface
      * @var array
      */
     protected $operator = [
-        '=', '>', '<',
-        '>=', '<=', '!=',
-        '<>', 'AND', 'OR',
-        'NOT', 'IN', 'LIKE',
+        '=',
+        '>',
+        '<',
+        '>=',
+        '<=',
+        '!=',
+        '<>',
+        'AND',
+        'OR',
+        'NOT',
+        'IN',
+        'LIKE',
         'BETWEEN',
     ];
 
@@ -33,8 +41,10 @@ class Builder extends Execute implements QueryInterface
      * @var array
      */
     protected $optionJoin = [
-        'LEFT', 'RIGHT',
-        'INNER', 'OUTER',
+        'LEFT',
+        'RIGHT',
+        'INNER',
+        'OUTER',
         'FULL',
     ];
 
@@ -73,7 +83,8 @@ class Builder extends Execute implements QueryInterface
                 if (!in_array($key, $this->fillable)) {
                     throw new \Exception("Fillable " . $key . " is not defined");
                 }
-            };
+            }
+            ;
             $data = array_intersect_key($data, array_flip($this->fillable));
 
             if ($this->timestamp) {
@@ -126,11 +137,12 @@ class Builder extends Execute implements QueryInterface
                 if (!in_array($key, $this->fillable)) {
                     throw new \Exception("Fillable " . $key . " is not defined");
                 }
-            };
+            }
+            ;
             $data = array_intersect_key($data, array_flip($this->fillable));
 
             $this->update = implode(', ', array_map(function ($key, $value) {
-                return "`".$key . "` = :" . $key;
+                return "`" . $key . "` = :" . $key;
             }, array_keys($data), array_values($data)));
 
             if ($this->timestamp) {
@@ -175,7 +187,7 @@ class Builder extends Execute implements QueryInterface
         }
 
         $binding = $value;
-        $value = ":$column".count($this->where);
+        $value = ":where" . count($this->where);
 
         $this->where[] = compact('column', 'operator', 'value', 'boolean');
 
@@ -377,7 +389,8 @@ class Builder extends Execute implements QueryInterface
                 if (!in_array($value, $this->fillable)) {
                     throw new \Exception("Fillable " . $value . " is not defined");
                 }
-            };
+            }
+            ;
             $this->isDelete = true;
             return $this;
         } else {

@@ -47,8 +47,8 @@
                                                     </h5>
                                                     <div>
 
-                                                        <a href="" class="mr-2" title="Buka"><i
-                                                                class="far fa-folder-open"
+                                                        <a href="<?= base_url; ?>kelas/bagi/<?= $id ?>" class="mr-2"
+                                                            title="Buka"><i class="far fa-folder-open"
                                                                 style="font-size: 17px;"></i></a>
                                                         <a href="" class="tampilModalHapus" title="Hapus Kelas"
                                                             id="btn-ubah-kelas" data-toggle="modal"
