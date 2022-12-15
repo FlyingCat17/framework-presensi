@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\Controller;
 use App\Config\Session;
+use App\Models\User;
 use Riyu\Http\Request;
 use Utils\Flasher;
 use Riyu\Validation\Validation;
@@ -26,6 +27,7 @@ class Kelas extends Controller
     {
         $data['title'] = "Kelas";
         $data['kelas'] = ModelsKelas::where('status', '1')->all();
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         return view(['templates/header', 'templates/sidebar', 'kelas/index', 'templates/footer'], $data);
     }
 
@@ -66,6 +68,8 @@ class Kelas extends Controller
     public function ubah(Request $request)
     {
         $check = ModelsKelas::where('id_kelas', $request->id)->get();
+
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         if (!$check) {
             header('Location: ' . base_url . 'kelas');
             exit();

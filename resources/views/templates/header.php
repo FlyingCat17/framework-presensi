@@ -19,14 +19,15 @@
         echo '';
     }
     ?>
-
+    
     <!-- page js -->
     <script src="<?= base_url ?>resources/js/vendors.min.js"></script>
     <script src="<?= base_url ?>resources/js/app.min.js"></script>
     <script src="<?= base_url ?>resources/js/main.js"></script>
     <script src="<?= base_url ?>resources/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
     <script src="<?= base_url ?>resources/vendors/jquery-validation/jquery.validate.min.js"></script>
-    <title>E Presensi | <?= $data['title'] ?></title>
+    <title>E Presensi | <?= $data['title'] ?>
+    </title>
 </head>
 
 <body>
@@ -35,8 +36,10 @@
             <div class="header">
                 <div class="logo logo-dark">
                     <a href="<?= base_url ?>">
-                        <img src="<?= base_url ?>resources/img/logo/new_logo/logo.png" width="150px" class="mt-3" alt="Logo">
-                        <img class="logo-fold mt-2 ml-3" src="<?= base_url ?>resources/img/logo/new_logo/logo-fold.png" width="40px" alt="Logo">
+                        <img src="<?= base_url ?>resources/img/logo/new_logo/logo.png" width="150px" class="mt-3"
+                            alt="Logo">
+                        <img class="logo-fold mt-2 ml-3" src="<?= base_url ?>resources/img/logo/new_logo/logo-fold.png"
+                            width="40px" alt="Logo">
                     </a>
                 </div>
                 <div class="nav-wrap">
@@ -61,12 +64,18 @@
                                             <img src="<?= base_url ?>resources/images/profile/fathan.jpg" alt="">
                                         </div>
                                         <div class="m-l-10">
-                                            <p class="m-b-0 text-dark font-weight-semibold"><?= (!isset($data['admin']->nama_admin) ? '' : $data['admin']->nama_admin) ?></p>
-                                            <p class="m-b-0 opacity-07"><?= (!isset($_SESSION['type']) ? '' : strtoupper($_SESSION['type'])) ?></p>
+                                            <p class="m-b-0 text-dark font-weight-semibold">
+                                                <?=(!isset($data['admin']->nama_admin) ? '' :
+            $data['admin']->nama_admin) ?>
+                                            </p>
+                                            <p class="m-b-0 opacity-07">
+                                                <?=(!isset($_SESSION['type']) ? '' : strtoupper($_SESSION['type'])) ?>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
-                                <a href="user/edit" data-edit="<?= base_url ?>/user/edit" id="header-edit" class="dropdown-item d-block p-h-15 p-v-10">
+                                <a href="user/edit" data-edit="<?= base_url ?>/user/edit" id="header-edit"
+                                    class="dropdown-item d-block p-h-15 p-v-10">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>
                                             <i class="anticon opacity-04 font-size-16 anticon-user"></i>
@@ -75,7 +84,8 @@
                                         <i class="anticon font-size-10 anticon-right"></i>
                                     </div>
                                 </a>
-                                <a href="<?= base_url; ?>auth/logout" id="header-logout" data-logout="<?= base_url ?>logout" class="dropdown-item d-block p-h-15 p-v-10">
+                                <a href="<?= base_url; ?>auth/logout" id="header-logout"
+                                    data-logout="<?= base_url ?>logout" class="dropdown-item d-block p-h-15 p-v-10">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>
                                             <i class="anticon opacity-04 font-size-16 anticon-logout"></i>

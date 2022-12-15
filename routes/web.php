@@ -5,9 +5,10 @@ use App\Config\Session;
 use App\Controllers\Guru;
 use App\Controllers\HomeController;
 use App\Controllers\Kelas;
+use App\Controllers\KelasAjaran;
+use App\Controllers\Tahun_Ajaran;
 use App\Controllers\Login;
 use App\Controllers\Admin;
-use App\Controllers\Tahun_Ajaran;
 use App\Controllers\Siswa;
 use App\Controllers\MapelController;
 use Riyu\Http\Request;
@@ -30,6 +31,9 @@ Route::get('/dashboard', [Admin::class, 'index']);
 Route::get('/dashboard/guru', [Guru::class, 'index']);
 // tahun ajaran
 Route::get('/tahun_ajaran', [Tahun_Ajaran::class, 'index']);
+// // Route::get('/tahun_ajaran', function () {
+// //     echo 'okew';
+// // });
 Route::post('/tahun_ajaran', [Tahun_Ajaran::class, 'delete']);
 Route::get('/tahun_ajaran/tambah', [Tahun_Ajaran::class, 'tambah']);
 Route::post('/tahun_ajaran/tambah', [Tahun_Ajaran::class, 'insert']);
@@ -45,6 +49,7 @@ Route::get('/tahun_ajaran/ubah/{id}', [Tahun_Ajaran::class, 'ubah']);
 Route::post('/tahun_ajaran/ubah/{id}', [Tahun_Ajaran::class, 'update']);
 Route::post('/tahun_ajaran/hapus/{id}', [Tahun_Ajaran::class, 'delete']);
 Route::post('/tahun_ajaran/setActive', [Tahun_Ajaran::class, 'setActive']);
+
 
 
 Route::get('/profile', [HomeController::class, 'profile']);
@@ -93,6 +98,20 @@ Route::group('/kelas', function () {
         }
     );
     Route::post('/hapus/{id}', [Kelas::class, 'delete']);
+    Route::get('/bagi', [KelasAjaran::class, 'index']);
+    Route::get('/bagi/tambah', [KelasAjaran::class, 'tambah']);
+    Route::post('/bagi/tambah/{id}', [KelasAjaran::class, 'insert']);
+    Route::post('/bagi/hapus/{id}', [KelasAjaran::class, 'delete']);
+    // Route::get('/bagi/check', [KelasAjaran::class, 'check']);
+    Route::get(
+        '/bagi/detail',
+        function () {
+            header('location: ' . base_url . 'kelas/bagi');
+            exit();
+        }
+    );
+    Route::get('/bagi/detail/{id}', [KelasAjaran::class, 'detail']);
+
 });
 
 Route::group('/guru', function () {
