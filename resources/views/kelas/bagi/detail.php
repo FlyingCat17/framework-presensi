@@ -23,7 +23,8 @@
                         <div class="row">
 
                             <div class="col-lg-1 col-md-12 my-2">
-                                <button type="button" onclick="location.href='<?= base_url; ?>kelas/tambah'"
+                                <button type="button"
+                                    onclick="location.href='<?= base_url; ?>kelas/bagi/<?= $data['id_kelas'] ?>/tambah'"
                                     class="btn btn-success tampilModalTambah" style="width: 100%;">
                                     <i class=" anticon anticon-plus" style="width: 100%;"></i>
                                 </button>

@@ -13,6 +13,7 @@ class Siswa extends Model
         'nama_siswa',
         'alamat_siswa',
         'notelp_siswa',
+        'id_kelas_ajaran',
         'jenis_kelamin',
         'tempat_lahir',
         'tanggal_lahir',

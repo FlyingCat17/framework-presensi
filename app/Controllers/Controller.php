@@ -13,4 +13,14 @@ class Controller
         //     return redirect('/login');
         // }
     }
+
+    public function respond($view, $data)
+    {
+        return view([
+            'templates/header',
+            'templates/sidebar',
+            $view,
+            'templates/footer',
+        ], $data);
+    }
 }

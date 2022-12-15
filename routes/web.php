@@ -104,14 +104,17 @@ Route::group('/kelas', function () {
     Route::post('/bagi/hapus/{id}', [KelasAjaran::class, 'delete']);
     // Route::get('/bagi/check', [KelasAjaran::class, 'check']);
     Route::get(
-        '/bagi/detail',
+        '/bagi',
         function () {
             header('location: ' . base_url . 'kelas/bagi');
             exit();
         }
     );
-    Route::get('/bagi/detail/{id}', [KelasAjaran::class, 'detail']);
-
+    Route::get('/bagi/{id}', [KelasAjaran::class, 'detail']);
+    Route::get(
+        '/bagi/{id}/tambah',[KelasAjaran::class, 'tambah_siswa']);
+    Route::post(
+        '/bagi/{id}/tambah',[KelasAjaran::class, 'insert_siswa']);
 });
 
 Route::group('/guru', function () {

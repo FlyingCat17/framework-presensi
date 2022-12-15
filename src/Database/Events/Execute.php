@@ -39,6 +39,7 @@ class Execute extends BuildQuery
     public function all()
     {
         $this->query = $this->buildSelect();
+        // print_r($this->query);
         return $this->responseAll();
     }
 
@@ -61,6 +62,7 @@ class Execute extends BuildQuery
     public function first()
     {
         $this->query = $this->buildSelect(1);
+        // print_r($this->query);
         return $this->responseSingle();
     }
 
