@@ -52,9 +52,9 @@
                     <span class="title">Mata Pelajaran</span>
                 </a>
             </li>
-            <li class="nav-item dropdown <?=(strtolower($data['title']) === "jadwal" ? 'active' : (strtolower($data['title']) === "tambah jadwal" ? 'active' : (strtolower($data['title']) === "ubah jadwal" ? 'active' : ''))) ?>"
+            <li class="nav-item dropdown <?=(strtolower($data['title']) === "pembagian kelas" ? 'active' : '') ?>"
                 id="liNav">
-                <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>kelas/pembagian">
+                <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>kelas/bagi">
                     <span class="icon-holder">
                         <i class="material-icons" style="font-size: 18px;">groups</i>
                     </span>

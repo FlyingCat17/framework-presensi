@@ -4,14 +4,9 @@ namespace App\Controllers;
 
 use App\Config\Session;
 use Riyu\Http\Request;
-use App\Models\Informasi;
-use App\Models\User;
-use App\Models\Siswa;
-use App\Models\Guru;
 use App\Models\Tahun_Ajaran as ModelsTahunAjaran;
 use Utils\Flasher;
 use Riyu\Validation\Validation;
-use Riyu\Helpers\Errors\ViewError;
 
 class Tahun_Ajaran extends Controller
 {
@@ -29,6 +24,7 @@ class Tahun_Ajaran extends Controller
 
     public function index()
     {
+        // echo 'kajsd';
         $data['title'] = "Tahun Ajaran";
         $data['tahun_ajaran'] = ModelsTahunAjaran::where('status', 1)->all();
         return view(['templates/header', 'templates/sidebar', 'tahun_ajaran/index', 'templates/footer'], $data);

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Guru as ModelsGuru;
+use App\Models\User;
 use Riyu\Helpers\Errors\ViewError;
 use Riyu\Http\Request;
 use App\Controllers\Controller;
@@ -27,6 +28,7 @@ class Guru extends Controller
     {
         $data['title'] = "Guru";
         $data['guru'] = ModelsGuru::where('isActive', '1')->all();
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         return view(['templates/header', 'templates/sidebar', 'guru/index', 'templates/footer'], $data);
 
     }
@@ -34,6 +36,7 @@ class Guru extends Controller
     public function tambah()
     {
         $data['title'] = "Guru";
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         return view(['templates/header', 'templates/sidebar', 'guru/tambah', 'templates/footer'], $data);
     }
 
@@ -212,6 +215,8 @@ class Guru extends Controller
     public function ubah(Request $request)
     {
         $data['guru'] = ModelsGuru::where('nuptk', $request->nuptk)->first();
+
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         if (!$data['guru']) {
             header('location: ' . base_url . 'guru');
             exit();
