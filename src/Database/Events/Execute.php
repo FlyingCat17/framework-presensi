@@ -11,7 +11,7 @@ class Execute extends BuildQuery
      * 
      * @var string
      */
-    protected $options;
+    protected $options = [];
 
     /**
      * Connection for query
