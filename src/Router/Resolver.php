@@ -6,6 +6,7 @@ use Closure;
 use ReflectionClass;
 use ReflectionFunction;
 use ReflectionMethod;
+use Riyu\App\Config;
 use Riyu\Helpers\Errors\AppException;
 use Riyu\Helpers\Errors\Message;
 use Riyu\Http\Request;
@@ -37,7 +38,12 @@ class Resolver
             $class = new $class;
             return $class->$method();
         } catch (\Throwable $th) {
-            throw new AppException(Message::exception(500, $class));
+            $config = Config::get('app');
+            if ($config['debug']) {
+                echo $th;
+            } else {
+                throw new AppException(Message::exception(500, json_encode($class)));
+            }
         }
     }
 
@@ -69,7 +75,12 @@ class Resolver
             }
             return $class->$method(...$params);
         } catch (\Throwable $th) {
-            throw new AppException(Message::exception(500, $class));
+            $config = Config::get('app');
+            if ($config['debug']) {
+                echo $th;
+            } else {
+                throw new AppException(Message::exception(500, json_encode($class)));
+            }
         }
     }
 
@@ -80,7 +91,12 @@ class Resolver
             $class = new $class;
             return $class->$method($data, $params);
         } catch (\Throwable $th) {
-            throw new AppException(Message::exception(500, $class));
+            $config = Config::get('app');
+            if ($config['debug']) {
+                echo $th;
+            } else {
+                throw new AppException(Message::exception(500, json_encode($class)));
+            }
         }
     }
 
@@ -95,7 +111,12 @@ class Resolver
                 return $class->$method(json_encode($params));
             }
         } catch (\Throwable $th) {
-            throw new AppException(Message::exception(500, $class));
+            $config = Config::get('app');
+            if ($config['debug']) {
+                echo $th;
+            } else {
+                throw new AppException(Message::exception(500, json_encode($class)));
+            }
         }
     }
 
@@ -128,14 +149,19 @@ class Resolver
                     } else {
                         $params[] = $data[$value];
                     }
-                }                
+                }
                 return $callback(...$params);
             } else {
                 $class = new ReflectionClass($callback);
                 $class = $class->name;
             }
         } catch (\Throwable $th) {
-            throw new AppException(Message::exception(500, $callback));
+            $config = Config::get('app');
+            if ($config['debug']) {
+                echo $th;
+            } else {
+                throw new AppException(Message::exception(500, json_encode($callback)));
+            }
         }
     }
 
@@ -149,7 +175,12 @@ class Resolver
             }
             return $class;
         } catch (\Throwable $th) {
-            throw new AppException(Message::exception(500));
+            $config = Config::get('app');
+            if ($config['debug']) {
+                echo $th;
+            } else {
+                throw new AppException(Message::exception(500, json_encode($closure)));
+            }
         }
     }
 

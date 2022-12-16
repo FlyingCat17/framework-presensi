@@ -1,8 +1,10 @@
 <?php
+
 namespace Riyu\Commands;
 
 use Riyu\Commands\Helpers\Color;
 use Riyu\Commands\Helpers\listcmd;
+use Riyu\Helpers\Storage\GlobalStorage;
 
 class cmd
 {
@@ -16,15 +18,33 @@ class cmd
         'create:model', 'create:controller', 'create:route', 'create:database',
     ];
 
+    private $route = [
+        'route:list', 'list:routes', 'routes:list', 'list:route', 'route:list',
+    ];
+
+    private $db = [
+        'db:up', 'db:down', 'db:create'
+    ];
+
     public function __construct($command)
     {
         if (isset($command[1])) {
-            if (in_array($command[1], $this->help)) {
-                $this->help($command);
-            } else if (in_array($command[1], $this->create)) {
-                $this->run($command);
-            } else {
-                $this->run($command);
+            switch ($command[1]) {
+                case in_array($command[1], $this->help):
+                    $this->help($command);
+                    break;
+                case in_array($command[1], $this->create):
+                    $this->run($command);
+                    break;
+                case in_array($command[1], $this->route):
+                    $this->routes();
+                    break;
+                case in_array($command[1], $this->db):
+                    $this->database($command);
+                    break;
+                default:
+                    $this->run($command);
+                    break;
             }
         } else {
             $this->help($command);
@@ -58,7 +78,48 @@ class cmd
         if (file_exists(__DIR__ . '/Helpers/' . $class . '.php')) {
             $class = 'Riyu\Commands\Helpers\\' . $class;
             $class = new $class;
-            return $class->$method(...$params);
+            if (method_exists($class, $method)) {
+                return $class->$method(...$params);
+            } else {
+                echo "\n";
+                echo (new Color)->red("Command not found");
+                echo "\n";
+                echo "\n";
+            }
+        } else {
+            echo "\n";
+            echo (new Color)->red("Command not found");
+            echo "\n";
+            echo "\n";
+        }
+    }
+
+    public function routes()
+    {
+        echo "\n";
+        $routes = GlobalStorage::get('routes');
+        $get = $routes['GET'];
+        $post = $routes['POST'];
+        $put = $routes['PUT'];
+        $delete = $routes['DELETE'];
+        $line = (new Color)->blue('---------------------------------');
+        echo $line . " ", (new Color)->yellow('Routes') . " " . $line;
+        echo "\n";
+        foreach ($get as $key => $value) {
+            echo (new Color)->green("GET") . " " . (new Color)->white($value);
+            echo "\n";
+        }
+    }
+
+    public function database($command)
+    {
+        $class = 'Riyu\Commands\Helpers\Database';
+        $class = new $class;
+        $cmd = explode(':', $command[1]);
+        $method = $cmd[1];
+        $params = $command[2] ?? null;
+        if (method_exists($class, $method)) {
+            return $class->$method($params);
         } else {
             echo "\n";
             echo (new Color)->red("Command not found");

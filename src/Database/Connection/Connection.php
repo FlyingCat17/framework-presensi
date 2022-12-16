@@ -41,5 +41,6 @@ class Connection
         }
         Storage::setConfig($data);
         GlobalStorage::set('db_config', $data);
+        GlobalStorage::set('db', $config);
     }
 }

@@ -13,7 +13,7 @@ abstract class Router
         if (self::$prefix !== "") {
             ($uri == "/") ? $uri = self::$prefix : $uri = self::$prefix . $uri;
         }
-        Storage::addRoute($uri, "GET", $callback);
+        Storage::addRoute("GET", $uri, $callback);
     }
 
     public static function post($uri, $callback)
@@ -21,7 +21,7 @@ abstract class Router
         if (self::$prefix !== "") {
             ($uri == "/") ? $uri = self::$prefix : $uri = self::$prefix . $uri;
         }
-        Storage::addRoute($uri, "POST", $callback);
+        Storage::addRoute("POST", $uri, $callback);
     }
 
     public static function put($uri, $callback)
@@ -29,7 +29,7 @@ abstract class Router
         if (self::$prefix !== "") {
             ($uri == "/") ? $uri = self::$prefix : $uri = self::$prefix . $uri;
         }
-        Storage::addRoute($uri, "PUT", $callback);
+        Storage::addRoute("PUT", $uri, $callback);
     }
 
     public static function delete($uri, $callback)
@@ -37,7 +37,7 @@ abstract class Router
         if (self::$prefix !== "") {
             ($uri == "/") ? $uri = self::$prefix : $uri = self::$prefix . $uri;
         }
-        Storage::addRoute($uri, "DELETE", $callback);
+        Storage::addRoute("DELETE", $uri, $callback);
     }
 
     public static function patch($uri, $callback)
@@ -45,7 +45,7 @@ abstract class Router
         if (self::$prefix !== "") {
             ($uri == "/") ? $uri = self::$prefix : $uri = self::$prefix . $uri;
         }
-        Storage::addRoute($uri, "PATCH", $callback);
+        Storage::addRoute("PATCH", $uri,$callback);
     }
 
     public static function group($prefix, $callback)
@@ -97,7 +97,7 @@ abstract class Router
 
     public static function addRoute($uri, $method, $callback)
     {
-        Storage::addRoute($uri, $method, $callback);
+        Storage::addRoute($method, $uri, $callback);
     }
 
     public static function addPrefix($prefix)
@@ -111,7 +111,7 @@ abstract class Router
         $callback(new static);
     }
 
-    public static function toRoute($uri, $method)
+    public static function to($uri)
     {
     }
 }

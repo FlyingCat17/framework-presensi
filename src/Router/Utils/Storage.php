@@ -2,6 +2,8 @@
 
 namespace Riyu\Router\Utils;
 
+use Riyu\Helpers\Storage\GlobalStorage;
+
 class Storage
 {
     private static $routes = [];
@@ -57,7 +59,7 @@ class Storage
         self::$prefix = $prefix;
     }
 
-    public static function addRoute($uri, $method, $callback)
+    public static function addRoute($method, $uri, $callback)
     {
         if (array_key_exists($method, self::$routes)) {
             self::$routes[$method][] = $uri;
@@ -66,6 +68,7 @@ class Storage
             self::$routes[$method] = [$uri];
             self::$methods[$method] = [$callback];
         }
+        GlobalStorage::set("routes", self::$routes);
     }
 
     public static function addPrefix($prefix)

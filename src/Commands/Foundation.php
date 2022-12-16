@@ -61,6 +61,38 @@ class Foundation
         echo "\n";
     }
 
+    public function migrate()
+    {
+        $schema = scandir(__DIR__ . '/../../app/Database/Schema/');
+        $schema = array_diff($schema, ['.', '..']);
+        $schema = array_values($schema);
+        echo "\n";
+        foreach ($schema as $key => $value) {
+            $value = str_replace('.php', '', $value);
+            $value = 'App\\Database\\Schema\\' . $value;
+            $value = new $value;
+            echo (new Color)->green($value->up());
+        }
+        echo "\n";
+        echo "\n";
+    }
+
+    public function drop()
+    {
+        $schema = scandir(__DIR__ . '/../../app/Database/Schema/');
+        $schema = array_diff($schema, ['.', '..']);
+        $schema = array_values($schema);
+        echo "\n";
+        foreach ($schema as $key => $value) {
+            $value = str_replace('.php', '', $value);
+            $value = 'App\\Database\\Schema\\' . $value;
+            $value = new $value;
+            echo (new Color)->red($value->down());
+        }
+        echo "\n";
+        echo "\n";
+    }
+
     public function all($name)
     {
         echo "\n";
@@ -93,7 +125,9 @@ class Foundation
         echo "\n";
 
         $file = fopen('routes/web.php', 'a');
-        $content = "Route::group('/". $names ."', function () {
+        $content = "
+
+Route::group('/". $names ."', function () {
     Route::get('/', [".$nameC."::class,'index']);
     Route::get('/create', [".$nameC ."::class, 'create']);
     Route::post('/', [".$nameC."::class, 'store']);
@@ -110,15 +144,6 @@ class Foundation
         } else {
             echo (new Color)->green("Route created successfully");
         }
-
-
-        // $this->route("get", "/".$names, "[".$nameC."::class,'index']");
-        // $this->route("get", "/".$names . "/create", "[".$nameC ."::class, 'create']");
-        // $this->route("post", "/".$names, "[".$nameC."::class, 'store']");
-        // $this->route("get", "/".$names . "/{id}", "[".$nameC."::class, 'show']");
-        // $this->route("get", "/".$names . "/{id}/edit", "[".$nameC."::class, 'edit']");
-        // $this->route("put", "/".$names . "/{id}", "[".$nameC . "::class, 'update']");
-        // $this->route("delete", "/".$names . "/{id}", "[".$nameC ."::class, 'destroy']");
         echo "\n";
         echo "\n";
     }
@@ -183,6 +208,36 @@ class $name extends Controller
     public function index()
     {
         return view('$names');
+    }
+
+    public function create()
+    {
+        return view('$names/create');
+    }
+
+    public function store(Request $"."request)
+    {
+        //
+    }
+
+    public function show($"."id)
+    {
+        //
+    }
+
+    public function edit($"."id)
+    {
+        //
+    }
+
+    public function update(Request $"."request, $"."id)
+    {
+        //
+    }
+
+    public function destroy(Request $"."request, $"."id)
+    {
+        //
     }
 }";
     }
