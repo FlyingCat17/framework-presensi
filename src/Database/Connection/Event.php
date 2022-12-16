@@ -43,7 +43,7 @@ class Event
     /**
      * Connect to database
      * 
-     * @return object
+     * @return object pdo
      */
     public static function connect()
     {
@@ -72,8 +72,19 @@ class Event
     {
         try {
             $this->connection = new PDO($this->dsn, $this->config[2], $this->config[3]);
+            return $this->connection;
         } catch (PDOException $e) {
             new AppException(Message::exception(1, $e->getMessage()), 1);
         }
+    }
+
+    public function raw()
+    {
+        $dsn = $this->config[0] . ':host=' . $this->config[1] . ';charset=' . $this->config[5] . ';port=' . $this->config[6];
+        $this->setDsn();
+        $connection = $this->dsn;
+        $connection = new PDO($dsn, $this->config[2], $this->config[3]);
+        $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $connection;
     }
 }

@@ -1,56 +1,104 @@
 <?php
 namespace Riyu\Database\Utils;
 
-use Riyu\Database\Events\Builder;
-use Riyu\Database\Connection\Connection;
-use Riyu\Database\Connection\Event;
-use Riyu\Database\Connection\Manager;
-use Riyu\Database\Connection\Storage;
-use Riyu\Helpers\Errors\AppException;
-use Riyu\Helpers\Errors\Message;
-use Riyu\Helpers\Storage\GlobalStorage;
+use Riyu\Database\Utils\Query\Builder;
 
 abstract class Model
 {
+    /**
+     * Name of table in database
+     * 
+     * @var string
+     */
     protected $table;
 
+    /**
+     * Fillable column in database
+     * 
+     * @var array
+     */
     protected $fillable;
 
+    /**
+     * Prefix table
+     * 
+     * @var string
+     */
     protected $prefix;
 
+    /**
+     * Timestamp column
+     * 
+     * @var bool
+     */
     protected $timestamp;
 
-    protected static $builder;
+    /**
+     * Created at column
+     * 
+     * @var string
+     */
+    const CREATED_AT = 'created_at';
 
-    private $connection;
+    /**
+     * Updated at column
+     * 
+     * @var string
+     */
+    const UPDATED_AT = 'updated_at';
 
-    protected static $errorHandle;
+    /**
+     * Primary key column default is id
+     * 
+     * @var string
+     */
+    protected $primaryKey = 'id';
 
-    public function __construct()
+    /**
+     * Attributes
+     * 
+     * @var array
+     */
+    protected $attributes = [];
+
+    /**
+     * @var Riyu\Database\Events\Builders
+     */
+    protected $builder;
+
+    public function __construct(array $attributes = [])
     {
-        self::$builder = new Builder();
+        $this->builder = new Builder;
+        $this->setAttributes($attributes);
         $this->booting();
     }
 
-    public static function __callStatic($method, $args)
+    /**
+     * Booting model
+     * 
+     * @return void
+     */
+    public function booting()
     {
-        return (new static)->$method(...$args);
+        $config = [
+            'table' => $this->table,
+            'fillable' => $this->fillable,
+            'timestamp' => $this->timestamp,
+            'primaryKey' => $this->primaryKey,
+            'created_at' => self::CREATED_AT,
+            'updated_at' => self::UPDATED_AT
+        ];
+        $this->builder->setConfig($config);
+        $this->setTimestamp();
     }
 
-    public function __call($method, $args)
-    {
-        if (method_exists($this, $method)) {
-            return $this->$method(...$args);
-        }
-
-        if (method_exists(self::$builder, $method)) {
-            return self::$builder->$method(...$args);
-        }
-
-        throw new AppException(Message::exception(4, $method), 4);
-    }
-
-    private function booting()
+    /**
+     * Set attributes
+     * 
+     * @param array $attributes
+     * @return void
+     */
+    public function setAttributes(array $attributes)
     {
         if (is_null($this->table)) {
             $this->table = strtolower((new \ReflectionClass($this))->getShortName());
@@ -59,36 +107,160 @@ abstract class Model
         if (!is_null($this->prefix)) {
             $this->table = $this->prefix . $this->table;
         }
-        
-        self::$builder->setTable($this->table);
-        self::$builder->setFillable($this->fillable);
-        self::$errorHandle = new Message();
-        $this->isBooting();
-        $this->connection();
-    }
 
-    public function isBooting()
-    {
-        if ($this->timestamp == true) {
-            self::$builder->setTimestamp(true);
-        } else {
-            self::$builder->setTimestamp(false);
+        foreach ($attributes as $key => $value) {
+            $this->setAttribute($key, $value);
         }
     }
 
-    private function connection()
+    /**
+     * Set attribute
+     * 
+     * @param string $key
+     * @param mixed $value
+     * @return void
+     */
+    public function setAttribute($key, $value)
     {
-        $this->connection = (new Event)->connect();
-        self::$builder->connection(new Manager($this->connection));
+        $this->attributes[$key] = $value;
+        $this->{$key} = $value;
     }
 
-    public function __sleep()
+    /**
+     * Get attribute
+     * 
+     * @param string $key
+     * @return mixed
+     */
+    public function getAttribute($key)
     {
-        $this->connection = null;
+        return $this->{$key};
     }
 
-    public function __wakeup()
+    /**
+     * Get all attributes
+     * 
+     * @return array
+     */
+    public function getAttributes()
     {
-        $this->connection();
+        return $this->attributes;
+    }
+
+    /**
+     * Set timestamp
+     * 
+     * @return void
+     */
+    private function setTimestamp()
+    {
+        if ($this->timestamp) {
+            $this->builder->setTimestamp(array(
+                'created_at' => self::CREATED_AT,
+                'updated_at' => self::UPDATED_AT,
+            ));
+        }
+    }
+
+    /**
+     * Build query with attributes
+     * 
+     * @return void
+     */
+    public function save()
+    {
+        // get all property
+        $this->getProperty();
+
+        // build query insert with attributes
+        return $this->execInsert($this->attributes);
+    }
+
+    /**
+     * Get all property
+     * 
+     * @return void
+     */
+    public function getProperty()
+    {
+        // get all property
+        $property = get_object_vars($this);
+
+        $primaryKey = $this->primaryKey;
+
+        // default property
+        $default = [
+            'table',
+            'fillable',
+            'prefix',
+            'timestamp',
+            'primaryKey',
+            'attributes',
+            'builder',
+        ];
+
+        // remove default property
+        $property = array_diff_key($property, array_flip($default));
+
+
+        // remove object property
+        $property = array_filter($property, function ($value) {
+            return !is_object($value);
+        });
+
+        // set attributes
+        $this->attributes = array_merge($this->attributes, $property);
+    }
+
+    public function __call($method, $arguments)
+    {
+        new static;
+        if (method_exists($this, $method)) {
+            return $this->$method(...$arguments);
+        }
+
+        if (method_exists($this->builder, $method)) {
+            return $this->builder->$method(...$arguments);
+        }
+    }
+
+    public static function __callStatic($method, $arguments)
+    {
+        return (new static)->$method(...$arguments);
+    }
+
+    public function __get($name)
+    {
+        return $this->$name;
+    }
+
+    public function __set($name, $value)
+    {
+        $this->setAtr($name, $value);
+    }
+
+    public function setAtr($name, $value)
+    {
+        $this->attributes[$name] = $value;
+    }
+
+    public function __invoke()
+    {
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->toJson();
+    }
+
+    public function __debugInfo()
+    {
+        return $this->attributes;
+    }
+
+    public function toJson()
+    {
+        return json_encode($this->attributes);
     }
 }

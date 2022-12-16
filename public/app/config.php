@@ -6,7 +6,6 @@
 //                               //
 //-------------------------------//
 
-
 new \App\Config\Session;
 new \Riyu\Http\Request;
 new \Riyu\Validation\Validation;

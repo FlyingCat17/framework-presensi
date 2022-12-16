@@ -46,6 +46,13 @@ class Help
         echo "  - " . (new Color)->green("create:route") . "         " . (new Color)->white("Create a route");
         echo "\n";
         echo "\n";
+        echo "  - " . (new Color)->green("db:create") . "            " . (new Color)->white("Create a database");
+        echo "\n";
+        echo "  - " . (new Color)->green("db:up") . "                " . (new Color)->white("Upload all schema to database");
+        echo "\n";
+        echo "  - " . (new Color)->green("db:down") . "              " . (new Color)->white("Delete all schema from database");
+        echo "\n";
+        echo "\n";
     }
 
     public function help($name)

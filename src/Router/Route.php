@@ -3,6 +3,7 @@
 namespace Riyu\Router;
 
 use Riyu\Router\Utils\Router;
+// use Riyu\Router\Utils\Group;
 
 /**
  * @method static \Riyu\Router\Utils\Router get(string $uri, callable $callback)
@@ -23,5 +24,5 @@ use Riyu\Router\Utils\Router;
  */
 class Route extends Router
 {
-    // Routing methods
+    // use Group;
 }

@@ -5,6 +5,7 @@ namespace Riyu\Database\Connection;
 use Riyu\Database\Utils\ConnectionManager;
 use PDO;
 use PDOException;
+use Riyu\App\Config;
 use Riyu\Helpers\Errors\AppException;
 use Riyu\Helpers\Errors\Message;
 
@@ -27,7 +28,12 @@ class Manager implements ConnectionManager
         try {
             $this->connection = $connection;
         } catch (\Throwable $th) {
-            throw new AppException(Message::exception(1, $th->getMessage()));
+            $config = Config::get('app');
+            if ($config['debug']) {
+                echo $th->getMessage();
+            } else {
+                throw new AppException(Message::exception(1, $th->getMessage()));
+            }
         }
     }
 
@@ -48,7 +54,12 @@ class Manager implements ConnectionManager
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (\Throwable $th) {
-            throw new AppException(Message::exception(1, $th->getMessage()));
+            $config = Config::get('app');
+            if ($config['debug']) {
+                echo $th->getMessage();
+            } else {
+                throw new AppException(Message::exception(1, $th->getMessage()));
+            }
         }
     }
 
@@ -69,7 +80,12 @@ class Manager implements ConnectionManager
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $th) {
-            throw new AppException(Message::exception(1, $th->getMessage()));
+            $config = Config::get('app');
+            if ($config['debug']) {
+                echo $th->getMessage();
+            } else {
+                throw new AppException(Message::exception(1, $th->getMessage()));
+            }
         }
     }
 
@@ -90,7 +106,12 @@ class Manager implements ConnectionManager
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_OBJ);
         } catch (PDOException $th) {
-            throw new AppException(Message::exception(1, $th->getMessage()));
+            $config = Config::get('app');
+            if ($config['debug']) {
+                echo $th->getMessage();
+            } else {
+                throw new AppException(Message::exception(1, $th->getMessage()));
+            }
         }
     }
 
@@ -111,7 +132,31 @@ class Manager implements ConnectionManager
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (\Throwable $th) {
-            throw new AppException(Message::exception(1, $th->getMessage()));
+            $config = Config::get('app');
+            if ($config['debug']) {
+                echo $th->getMessage();
+            } else {
+                throw new AppException(Message::exception(1, $th->getMessage()));
+            }
+        }
+    }
+
+    public function exec($query, $options = null)
+    {
+        try {
+            $stmt = $this->connection->prepare($query);
+            if (!is_null($options)) {
+                $this->bindValue($stmt, $query, $options);
+            }
+            $stmt->execute();
+            return $stmt->rowCount();
+        } catch (\Throwable $th) {
+            $config = Config::get('app');
+            if ($config['debug']) {
+                echo $th->getMessage();
+            } else {
+                throw new AppException(Message::exception(1, $th->getMessage()));
+            }
         }
     }
 
@@ -132,7 +177,38 @@ class Manager implements ConnectionManager
             $stmt->execute();
             return $stmt->rowCount();
         } catch (\Throwable $th) {
-            throw new AppException(Message::exception(1, $th->getMessage()));
+            $config = Config::get('app');
+            if ($config['debug']) {
+                echo $th->getMessage();
+            } else {
+                throw new AppException(Message::exception(1, $th->getMessage()));
+            }
+        }
+    }
+
+    /**
+     * Execute query for count
+     * 
+     * @param string $query
+     * @param array $options
+     * @return int
+     */
+    public function queryCount($query, $options = null)
+    {
+        try {
+            $stmt = $this->connection->prepare($query);
+            if (!is_null($options)) {
+                $this->bindValue($stmt, $query, $options);
+            }
+            $stmt->execute();
+            return $stmt->rowCount();
+        } catch (\Throwable $th) {
+            $config = Config::get('app');
+            if ($config['debug']) {
+                echo $th->getMessage();
+            } else {
+                throw new AppException(Message::exception(1, $th->getMessage()));
+            }
         }
     }
 
@@ -164,7 +240,12 @@ class Manager implements ConnectionManager
                 }
             }
         } catch (\Throwable $th) {
-            throw new AppException(Message::exception(1, $th->getMessage()));
+            $config = Config::get('app');
+            if ($config['debug']) {
+                echo $th->getMessage();
+            } else {
+                throw new AppException(Message::exception(1, $th->getMessage()));
+            }
         }
     }
 }
