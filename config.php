@@ -4,7 +4,7 @@ return [
     'app' => [
         'debug' => true,
         'name' => 'Riyu',
-        'url' => 'http://localhost/framework',
+        'url' => 'http://localhost/framework/',
         'timezone' => 'Asia/Jakarta',
         'locale' => 'id',
     ],
@@ -26,5 +26,11 @@ return [
         //     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
         //     PDO::ATTR_EMULATE_PREPARES => false,
         // ],
+    ],
+
+    "directory" => __DIR__,
+
+    "view" => [
+        "path" => __DIR__ . "/../resources/views/",
     ],
 ];
