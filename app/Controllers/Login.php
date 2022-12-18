@@ -15,17 +15,16 @@ class Login
 {
     public function __construct()
     {
-        // if (isset($_SESSION['user']) || $_SESSION['user'] != null) {
-        //     header('Location: ' . base_url . 'dashboard');
-        //     exit();
-        // }
+
     }
 
     public function index()
     {
-        return view(['auth/login'], [
-            'title' => 'Login'
-        ]);
+        if (isset($_SESSION['user'])) {
+            header('Location: ' . base_url . 'dashboard');
+            exit();
+        }
+        return view(['auth/login']);
     }
 
     public function register()
@@ -38,11 +37,16 @@ class Login
 
     public function auth(Request $request)
     {
+        $username = $request->username;
+        $password = $request->password;
+        if (empty($username) || empty($password)) {
+            header('Location: ' . base_url . 'auth/login');
+            exit();
+        }
         if ((Session::get('user') != null) && (Session::get('user') != '')) {
             return redirect(base_url);
         }
-        $username = $request->username;
-        $password = $request->password;
+
 
         try {
             $errors = Validation::make($request->all(), [
@@ -116,14 +120,19 @@ class Login
 
     public function logout()
     {
-        Session::unset('user');
-        Session::unset('type');
-        Session::destroyAll();
+        // Session::unset('user');
+        // Session::unset('type');
+        // Session::destroyAll();
         // print_r($_SESSION);
         // session_destroy();
         // unset($_SESSION['user']);
         // unset($_SESSION['type']);
         // var_dump($_SESSION);
-        return redirect(base_url . 'auth/login');
+        unset($_SESSION['user']);
+        unset($_SESSION['type']);
+        session_destroy();
+        header("Location: " . base_url . 'auth/login');
+        exit();
+        // return redirect(base_url . 'auth/login');
     }
 }

@@ -344,6 +344,9 @@ class Grammar
     {
         $group = $this->groups;
         $sql = '';
+        if (empty($group) || count($group) == 0) {
+            return '';
+        }
         foreach ($group as $key => $value) {
             $sql .= $value . ' ';
         }
@@ -362,6 +365,9 @@ class Grammar
     {
         $having = $this->having;
         $sql = '';
+        if (empty($having) || count($having) == 0) {
+            return '';
+        }
         foreach ($having as $key => $value) {
             $sql .= $value['type'] . ' ' . $value['column'] . ' ' . $value['operator'] . ' ' . $value['value'];
         }
@@ -380,6 +386,9 @@ class Grammar
     {
         $order = $this->orders;
         $sql = '';
+        if (empty($order) || count($order) == 0) {
+            return '';
+        }
         foreach ($order as $key => $value) {
             $sql .= $value . ' ';
         }
@@ -445,17 +454,17 @@ class Grammar
         }
 
         $query = '(';
-        foreach($columns as $column) {
-            $query .= "`". $column ."`, ";
+        foreach ($columns as $column) {
+            $query .= "`" . $column . "`, ";
         }
 
 
         if (count($this->timestamp) > 0) {
             if (isset($this->timestamp['created_at'])) {
-                $query .= "`". $this->timestamp['created_at'] ."`, ";
+                $query .= "`" . $this->timestamp['created_at'] . "`, ";
             }
             if (isset($this->timestamp['updated_at'])) {
-                $query .= "`". $this->timestamp['updated_at'] ."`, ";
+                $query .= "`" . $this->timestamp['updated_at'] . "`, ";
             }
         }
 
@@ -478,8 +487,8 @@ class Grammar
         }
 
         $query = '(';
-        foreach($values as $value) {
-            $query .= $value .", ";
+        foreach ($values as $value) {
+            $query .= $value . ", ";
         }
 
         if (count($this->timestamp) > 0) {
@@ -506,12 +515,12 @@ class Grammar
         }
 
         $query = 'SET ';
-        foreach($set as $value) {
-            $query .= $value .", ";
+        foreach ($set as $value) {
+            $query .= $value . ", ";
         }
 
         if (count($this->timestamp) > 0) {
-            $query .= "`". $this->timestamp['updated_at'] ."` = NOW(), ";
+            $query .= "`" . $this->timestamp['updated_at'] . "` = NOW(), ";
         }
 
         $query = substr($query, 0, -2);
