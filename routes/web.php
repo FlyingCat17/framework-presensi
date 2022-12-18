@@ -11,6 +11,7 @@ use App\Controllers\Login;
 use App\Controllers\Admin;
 use App\Controllers\Siswa;
 use App\Controllers\MapelController;
+use App\Controllers\JadwalController;
 use Riyu\Http\Request;
 use Riyu\Router\Route;
 
@@ -112,9 +113,13 @@ Route::group('/kelas', function () {
     );
     Route::get('/bagi/{id}', [KelasAjaran::class, 'detail']);
     Route::get(
-        '/bagi/{id}/tambah',[KelasAjaran::class, 'tambah_siswa']);
+        '/bagi/{id}/tambah',
+        [KelasAjaran::class, 'tambah_siswa']
+    );
     Route::post(
-        '/bagi/{id}/tambah',[KelasAjaran::class, 'insert_siswa']);
+        '/bagi/{id}/tambah',
+        [KelasAjaran::class, 'insert_siswa']
+    );
 });
 
 Route::group('/guru', function () {
@@ -131,6 +136,14 @@ Route::group('/guru', function () {
     Route::get('/ubah/{nuptk}', [Guru::class, 'ubah']);
     Route::post('/ubah/{nuptk}', [Guru::class, 'update']);
     Route::post('/hapus/{nuptk}', [Guru::class, 'delete']);
+});
+
+Route::group('/jadwal', function () {
+    Route::get('', [JadwalController::class, 'index']);
+    Route::get('/detail/{id}', [JadwalController::class, 'detail']);
+    Route::get('/tambah', [JadwalController::class, 'tambah']);
+    Route::post('/tambah', [JadwalController::class, 'insert']);
+    Route::get('/edit/{id}', [JadwalController::class, 'ubah']);
 });
 // Route::post('/login', [Login::class, 'auth']);
 // Route::get('/login', [Login::class, 'index']);

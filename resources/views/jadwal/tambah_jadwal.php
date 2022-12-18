@@ -11,18 +11,27 @@
                                 </div>
                                 <div>
                                     <p class="text-right">Tahun Ajaran</p>
-                                    <h5 class="text-right"><?= $data['tahun_ajaran']->tahun_ajaran ?></h5>
+                                    <h5 class="text-right">
+                                        <?= $data['tahun_ajaran']->tahun_ajaran ?>
+                                    </h5>
                                 </div>
                             </div>
-                            <form action="<?= base_url; ?>jadwal/tambah_jadwal_act" method="post">
+                            <?php
+                            use Utils\Flasher;
+
+                            Flasher::flash();
+                            ?>
+                            <form action="<?= base_url; ?>jadwal/tambah" method="post">
                                 <div class="form-group">
                                     <label for="inputAddress">Kelas</label>
                                     <select id="inputState" class="form-control" name="get_kelas">
                                         <option selected value="null">Pilih Kelas</option>
                                         <?php
-                                        foreach ($data['kelas'] as $kelas) :
+                                        foreach ($data['kelas'] as $kelas):
                                         ?>
-                                            <option value="<?= $kelas['id_kelas'] ?>"><?= $kelas['nama_kelas'] ?></option>
+                                        <option value="<?= $kelas['id_kelas_ajaran'] ?>">
+                                            <?= $kelas['nama_kelas'] ?>
+                                        </option>
                                         <?php
                                         endforeach;
                                         ?>
@@ -32,10 +41,11 @@
                                     <label for="inputAddress">Mata Pelajaran</label>
                                     <select class="form-control" id="inputState" name="get_mapel">
                                         <option value="null" selected>Pilih Mata Pelajaran</option>
-                                        <?php
-                                        foreach ($data['mapel'] as $mapel) :
+                                        <?php foreach ($data['mapel'] as $mapel):
                                         ?>
-                                            <option value="<?= $mapel['id_mapel'] ?>"><?= $mapel['nama_mapel'] ?></option>
+                                        <option value="<?= $mapel['id_mapel'] ?>">
+                                            <?= $mapel['nama_mapel'] ?>
+                                        </option>
                                         <?php
                                         endforeach;
                                         ?>
@@ -45,10 +55,11 @@
                                     <label for="inputState">Guru Pengampu</label>
                                     <select class="form-control" id="inputState" name="get_guru">
                                         <option value="null" selected>Pilih Guru</option>
-                                        <?php
-                                        foreach ($data['guru'] as $guru) :
+                                        <?php foreach ($data['guru'] as $guru):
                                         ?>
-                                            <option value="<?= $guru['nuptk'] ?>"><?= $guru['nama_guru'] ?></option>
+                                        <option value="<?= $guru['nuptk'] ?>">
+                                            <?= $guru['nama_guru'] ?>
+                                        </option>
                                         <?php
                                         endforeach;
                                         ?>
@@ -70,17 +81,20 @@
                                     <div class="row">
                                         <div class="col-lg-6 col-md-12">
                                             <label for="jam_awal">Jam Awal</label>
-                                            <input type="text" class="form-control" id="jam_awal" placeholder="07:00" name="get_jam_awal">
+                                            <input type="text" class="form-control" id="jam_awal" placeholder="07:00"
+                                                name="get_jam_awal">
                                         </div>
                                         <div class="col-lg-6 col-md-12">
                                             <label for="jam_akhir">Jam Akhir</label>
-                                            <input type="text" class="form-control" id="jam_akhir" placeholder="09:00" name="get_jam_akhir">
+                                            <input type="text" class="form-control" id="jam_akhir" placeholder="09:00"
+                                                name="get_jam_akhir">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="jamke">Jam-ke</label>
-                                    <input type="text" class="form-control" id="jamke" placeholder="2" name="get_jam_ke">
+                                    <input type="text" class="form-control" id="jamke" placeholder="2"
+                                        name="get_jam_ke">
                                 </div>
                                 <div class="form-group clearfix">
                                     <button type="submit" class="btn btn-success float-right" name="simpan_jadwal">

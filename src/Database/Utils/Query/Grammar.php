@@ -454,17 +454,17 @@ class Grammar
         }
 
         $query = '(';
-        foreach($columns as $column) {
-            $query .= "`". $column ."`, ";
+        foreach ($columns as $column) {
+            $query .= "`" . $column . "`, ";
         }
 
 
         if (count($this->timestamp) > 0) {
             if (isset($this->timestamp['created_at'])) {
-                $query .= "`". $this->timestamp['created_at'] ."`, ";
+                $query .= "`" . $this->timestamp['created_at'] . "`, ";
             }
             if (isset($this->timestamp['updated_at'])) {
-                $query .= "`". $this->timestamp['updated_at'] ."`, ";
+                $query .= "`" . $this->timestamp['updated_at'] . "`, ";
             }
         }
 
@@ -487,8 +487,8 @@ class Grammar
         }
 
         $query = '(';
-        foreach($values as $value) {
-            $query .= $value .", ";
+        foreach ($values as $value) {
+            $query .= $value . ", ";
         }
 
         if (count($this->timestamp) > 0) {
@@ -515,12 +515,12 @@ class Grammar
         }
 
         $query = 'SET ';
-        foreach($set as $value) {
-            $query .= $value .", ";
+        foreach ($set as $value) {
+            $query .= $value . ", ";
         }
 
         if (count($this->timestamp) > 0) {
-            $query .= "`". $this->timestamp['updated_at'] ."` = NOW(), ";
+            $query .= "`" . $this->timestamp['updated_at'] . "` = NOW(), ";
         }
 
         $query = substr($query, 0, -2);

@@ -314,7 +314,7 @@ class Builder extends Grammar
         }
         $this->where($column, $id);
         return $this->first();
-    
+
     }
 
     public function findorfail($id, $column = 'id', Closure $callback = null)
