@@ -1,4 +1,7 @@
 <?php
+namespace App\Models;
+
+use Riyu\Database\Utils\Model;
 
 namespace App\Models;
 use Riyu\Database\Utils\Model;

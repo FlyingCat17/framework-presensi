@@ -28,15 +28,12 @@ class ForgotPassword
         $username = $request->username;
 
         try {
-            $user = Siswa::where('nis', $username)->first();
+            $user = Siswa::findorfail($username, 'nis', function () {
+                return Response::json(404, 'Username salah');
+            });
+            return Response::json(200, 'Username ditemukan', $this->map($user));
         } catch (\Throwable $th) {
             return Response::json(500, 'Terjadi kesalahan');
-        }
-
-        if (!$user) {
-            return Response::json(404, 'Username tidak ditemukan');
-        } else {
-            return Response::json(200, 'Username ditemukan', $this->map($user));
         }
     }
 
@@ -63,20 +60,16 @@ class ForgotPassword
         $otp = $request->otp;
 
         try {
-            $user = Siswa::where('nis', $username)->first();
+            $user = Siswa::findorfail($username, 'nis', function () {
+                return Response::json(404, 'Username salah');
+            });
         } catch (\Throwable $th) {
             return Response::json(500, 'Terjadi kesalahan');
-        }
-
-        if (!$user) {
-            return Response::json(404, 'Username tidak ditemukan');
         }
 
         if ($user->otp != $otp) {
             return Response::json(400, 'Kode OTP salah');
         }
-
-        date_default_timezone_set("Asia/Jakarta");
 
         if ($user->otp_expired < date('Y-m-d H:i:s', strtotime('+1 minutes'))) {
             return Response::json(400, 'Kode OTP sudah kadaluarsa');
@@ -109,13 +102,11 @@ class ForgotPassword
         $password = $request->password;
 
         try {
-            $user = Siswa::where('nis', $username)->first();
+            $user = Siswa::findordail($username, 'nis', function () {
+                return Response::json(404, 'Username salah');
+            });
         } catch (\Throwable $th) {
             return Response::json(500, 'Terjadi kesalahan');
-        }
-
-        if (!$user) {
-            return Response::json(404, 'Username tidak ditemukan');
         }
 
         try {

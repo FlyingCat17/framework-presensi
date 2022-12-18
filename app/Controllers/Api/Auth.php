@@ -16,26 +16,28 @@ class Auth
         $password = $request->password;
         $deviceId = $request->deviceId;
 
+        
         try {
-            $user = Siswa::where('nis', $username)->first();
+            $user = Siswa::findOrFail($username, 'nis', function() {
+                return Response::json(404, 'Username salah');
+            });
         } catch (\Throwable $th) {
             return Response::json(500, 'Terjadi kesalahan');
         }
 
-        if (!$user) {
-            return Response::json(404, 'Username salah');
-        }
-
-        if (!password_verify($password, $user->password)) {
+        if ($user->password != $password) {
             return Response::json(403, 'Password salah');
         }
+        // if (!password_verify($password, $user->password)) {
+        //     return Response::json(403, 'Password salah');
+        // }
 
         if ($user->isLogin == 0) {
             try {
                 Siswa::where('nis', $username)->update([
                     'isLogin' => 1,
                     'deviceId' => $deviceId
-                ]);
+                ])->save();
                 return Response::json(200, 'Berhasil login', $this->map($user));
             } catch (\Throwable $th) {
                 return Response::json(500, 'Terjadi kesalahan');
@@ -60,13 +62,11 @@ class Auth
         $deviceId = $request->deviceId;
 
         try {
-            $user = Siswa::where('nis', $username)->first();
+            $user = Siswa::findorfail($username, 'nis', function () {
+                return Response::json(404, 'Username salah');
+            });
         } catch (\Throwable $th) {
             return Response::json(500, 'Terjadi kesalahan');
-        }
-
-        if (!$user) {
-            return Response::json(404, 'Username salah');
         }
 
         if (!password_verify($password, $user->password)) {
@@ -106,13 +106,11 @@ class Auth
         $deviceId = $request->deviceId;
 
         try {
-            $user = Siswa::where('nis', $username)->first();
+            $user = Siswa::findorfail($username, 'nis', function () {
+                return Response::json(404, 'Username salah');
+            });
         } catch (\Throwable $th) {
             return Response::json(500, 'Terjadi kesalahan');
-        }
-
-        if (!$user) {
-            return Response::json(404, 'Username salah');
         }
 
         if ($user->isLogin == 0) {

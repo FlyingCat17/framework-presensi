@@ -4,9 +4,9 @@ return [
     'app' => [
         'debug' => true,
         'name' => 'Riyu',
-        'url' => 'http://localhost/framework/',
+        'url' => 'http://localhost/framework-presensi/',
         'timezone' => 'Asia/Jakarta',
-        'locale' => 'id',
+        'locale' => 'id_ID.utf8',
     ],
 
     'database' => [

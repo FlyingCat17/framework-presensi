@@ -162,10 +162,8 @@ class Builder extends Grammar
     public function get()
     {
         $query = $this->buildQuery();
-        $last = preg_replace_callback('/:(\w+)/', function ($matches) {
-            return $this->bindings[$matches[0]];
-        }, $query);
-        GlobalStorage::set('last_query', $last);
+        
+        $this->setStorage($query);
 
         $connection = new Event();
         $connection = $connection->connect();
@@ -182,10 +180,8 @@ class Builder extends Grammar
     public function all()
     {
         $query = $this->buildQuery();
-        $last = preg_replace_callback('/:(\w+)/', function ($matches) {
-            return $this->bindings[$matches[0]];
-        }, $query);
-        GlobalStorage::set('last_query', $last);
+        
+        $this->setStorage($query);
 
         $connection = new Event();
         $connection = $connection->connect();
@@ -203,11 +199,8 @@ class Builder extends Grammar
     {
         $this->limit(1);
         $query = $this->buildQuery();
-        // print_r($query);
-        $last = preg_replace_callback('/:(\w+)/', function ($matches) {
-            return $this->bindings[$matches[0]];
-        }, $query);
-        GlobalStorage::set('last_query', $last);
+        
+        $this->setStorage($query);
 
         $connection = new Event();
         $connection = $connection->connect();
@@ -223,12 +216,9 @@ class Builder extends Grammar
 
     public function count()
     {
-        $this->select('COUNT(*) as count');
         $query = $this->buildQuery();
-        $last = preg_replace_callback('/:(\w+)/', function ($matches) {
-            return $this->bindings[$matches[0]];
-        }, $query);
-        GlobalStorage::set('last_query', $last);
+        
+        $this->setStorage($query);
 
         $connection = new Event();
         $connection = $connection->connect();
@@ -245,10 +235,8 @@ class Builder extends Grammar
     public function save()
     {
         $query = $this->buildQuery();
-        $last = preg_replace_callback('/:(\w+)/', function ($matches) {
-            return $this->bindings[$matches[0]];
-        }, $query);
-        GlobalStorage::set('last_query', $last);
+        
+        $this->setStorage($query);
 
         $connection = new Event();
         $connection = $connection->connect();
@@ -266,10 +254,8 @@ class Builder extends Grammar
     {
         $this->insert($attributes);
         $query = $this->buildQuery();
-        $last = preg_replace_callback('/:(\w+)/', function ($matches) {
-            return $this->bindings[$matches[0]];
-        }, $query);
-        GlobalStorage::set('last_query', $last);
+        
+        $this->setStorage($query);
 
         $connection = new Event();
         $connection = $connection->connect();
@@ -288,10 +274,8 @@ class Builder extends Grammar
         $this->limit($limit);
         $this->offset(($page - 1) * $limit);
         $query = $this->buildQuery();
-        $last = preg_replace_callback('/:(\w+)/', function ($matches) {
-            return $this->bindings[$matches[0]];
-        }, $query);
-        GlobalStorage::set('last_query', $last);
+
+        $this->setStorage($query);
 
         $connection = new Event();
         $connection = $connection->connect();
@@ -305,6 +289,17 @@ class Builder extends Grammar
         }
     }
 
+    protected function setStorage($query)
+    {
+        $last = preg_replace_callback('/:(\w+)/', function ($matches) {
+            if (isset($this->bindings[$matches[0]])) {
+                return $this->bindings[$matches[0]];
+            } else {
+                return $this->bindings[$matches[1]];
+            }
+        }, $query);
+        GlobalStorage::set('last_query', $last);
+    }
 
     public function lastQuery()
     {
@@ -318,7 +313,6 @@ class Builder extends Grammar
             return $this->first();
         }
         $this->where($column, $id);
-        $this->queryType = 'select';
         return $this->first();
 
     }

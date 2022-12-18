@@ -9,22 +9,22 @@
     <meta name="keywords" content="" />
     <meta name="author" content="NekoIDdesign" />
 
-    <link rel="shortcut icon" href="images/smanplus.png">
+    <link rel="shortcut icon" href="<?=base_url;?>resources/views/landing/images/smanplus.png">
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="<?=base_url;?>resources/views/landing/css/bootstrap.min.css" type="text/css">
 
     <!--Material Icon -->
-    <link rel="stylesheet" type="text/css" href="css/materialdesignicons.min.css" />
+    <link rel="stylesheet" type="text/css" href="<?=base_url;?>resources/views/landing/css/materialdesignicons.min.css" />
 
     <!-- Pe-icon-7 icon -->
-    <link rel="stylesheet" type="text/css" href="css/pe-icon-7-stroke.css">
+    <link rel="stylesheet" type="text/css" href="<?=base_url;?>resources/views/landing/css/pe-icon-7-stroke.css">
 
     <!-- tinyslider -->
-    <link rel="stylesheet" href="css/tiny-slider.css">
+    <link rel="stylesheet" href="<?=base_url;?>resources/views/landing/css/tiny-slider.css">
 
     <!-- Custom  Css -->
-    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="<?=base_url;?>resources/views/landing/css/style.css" />
 
 </head>
 
@@ -38,8 +38,8 @@
 
                 <!-- LOGO -->
                 <a class="navbar-brand logo text-uppercase" href="index.html">
-                    <img src="images/dark.png" class="logo-light" alt="" height="46">
-                    <img src="images/light.png" class="logo-dark" alt="" height="46">
+                    <img src="<?=base_url;?>resources/views/landing/images/dark.png" class="logo-light" alt="" height="46">
+                    <img src="<?=base_url;?>resources/views/landing/images/light.png" class="logo-dark" alt="" height="46">
                 </a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
@@ -87,16 +87,16 @@
                                 </h1>
                                 <div class="tutup">
                                     <div class=" welcome-area d-block hover-effect">
-                                        <img src="images/features/img-1-min.png" class="" alt="" srcset="" height="300">
-                                        <a href="https://nekoid.my.id/admin/auth/login">
-                                            <img src="images/play3.png" class="mt-5 hover-effect mx-auto" alt=""
+                                        <img src="<?=base_url;?>resources/views/landing/images/features/img-1-min.png" class="" alt="" srcset="" height="300">
+                                        <a href="<?= base_url; ?>auth/login">
+                                            <img src="<?=base_url;?>resources/views/landing/images/play3.png" class="mt-5 hover-effect mx-auto" alt=""
                                                 srcset="" height="60">
                                         </a>
                                     </div>
                                 </div>
                                 <div class="mt-5 hover-effect">
-                                    <a href="https://nekoid.my.id/admin/auth/login">
-                                        <img src="images/play3.png" class="mx-auto buka" alt="" srcset="" height="70">
+                                    <a href="<?= base_url; ?>auth/login">
+                                        <img src="<?=base_url;?>resources/views/landing/images/play3.png" class="mx-auto buka" alt="" srcset="" height="70">
                                     </a>
                                 </div>
                             </div>
@@ -106,7 +106,7 @@
                 <!-- Modal -->
                 <div class="hp">
                     <div class=" welcome-area d-block hover-effect">
-                        <img src="images/features/img-1-min.png" class="img-fluid" alt="">
+                        <img src="<?=base_url;?>resources/views/landing/images/features/img-1-min.png" class="img-fluid" alt="">
                     </div>
                 </div>
             </div>
@@ -142,7 +142,7 @@
                     <div class="col-lg-6 offset-lg-1 tutup">
                         <div class="mt-4 p-4">
 
-                            <img src="images/features/mobile2.png" class=" img-fluid" alt="">
+                            <img src="<?=base_url;?>resources/views/landing/images/features/mobile2.png" class=" img-fluid" alt="">
 
                         </div>
                     </div>
@@ -206,7 +206,7 @@
                     </div>
                     <div class="col-lg-6 offset-lg-1 buka">
                         <div class="mt-4 p-4">
-                            <img src="images/features/mobile2.png" class=" img-fluid" alt="">
+                            <img src="<?=base_url;?>resources/views/landing/images/features/mobile2.png" class=" img-fluid" alt="">
                         </div>
                     </div>
 
@@ -217,7 +217,7 @@
 
                     <div class="col-lg-6">
                         <div class="mt-4 p-4">
-                            <img src="images/features/web.png" class="img-fluid" alt="">
+                            <img src="<?=base_url;?>resources/views/landing/images/features/web.png" class="img-fluid" alt="">
                         </div>
                     </div>
 
@@ -298,7 +298,7 @@
                                 <div class="client-user mt-5 d-flex">
                                     <div class="client-img pe-3">
                                         <a href="https://www.instagram.com/m.sulaimann_/?hl=id" target="_blank">
-                                            <img src="images/users/imagesulaiman.png" style="object-fit: cover;"
+                                            <img src="<?=base_url;?>resources/views/landing/images/users/imagesulaiman.png" style="object-fit: cover;"
                                                 class="img-fluid rounded-circle" alt="">
                                         </a>
                                     </div>
@@ -327,7 +327,7 @@
                                 <div class="client-user mt-5 d-flex">
                                     <div class="client-img pe-3">
                                         <a href="https://www.instagram.com/lutfi_sobri/?hl=id" target="_blank">
-                                            <img src="images/users/lutfi3.png" style="object-fit: cover;"
+                                            <img src="<?=base_url;?>resources/views/landing/images/users/lutfi3.png" style="object-fit: cover;"
                                                 class="img-fluid rounded-circle" alt="">
                                         </a>
                                     </div>
@@ -358,7 +358,7 @@
                                 <div class="client-user mt-5 d-flex">
                                     <div class="client-img pe-3">
                                         <a href="https://www.instagram.com/flyingcat.me/?hl=id" target="_blank">
-                                            <img src="images/users/fathan3.png" style="object-fit: cover;"
+                                            <img src="<?=base_url;?>/esources/views/landing/images/users/fathan3.png" style="object-fit: cover;"
                                                 class="img-fluid rounded-circle" alt="">
                                         </a>
                                     </div>
@@ -389,7 +389,7 @@
                                 <div class="client-user mt-5 d-flex">
                                     <div class="client-img pe-3">
                                         <a href="https://www.instagram.com/_andiniputriii/?hl=id" target="_blank">
-                                            <img src="images/users/andin 2.png" style="object-fit: cover;"
+                                            <img src="<?=base_url;?>resources/views/landing/images/users/andin 2.png" style="object-fit: cover;"
                                                 class="img-fluid rounded-circle" alt="">
                                         </a>
                                     </div>
@@ -419,7 +419,7 @@
                                 <div class="client-user mt-5 d-flex">
                                     <div class="client-img pe-3">
                                         <a href="https://www.instagram.com/ismiatioktfia_/?hl=id " target="_blank">
-                                            <img src="images/users/ismi.png" style="object-fit: cover;"
+                                            <img src="<?=base_url;?>resources/views/landing/images/users/ismi.png" style="object-fit: cover;"
                                                 class="img-fluid rounded-circle" alt="">
                                         </a>
                                     </div>
@@ -457,7 +457,7 @@
                     <div class="col-lg-3">
                         <div class="client-images mt-4">
                             <a href="https://polije.ac.id/" target="_blank">
-                                <img src="images/clients/logopolije.png" alt="logo-img"
+                                <img src="<?=base_url;?>resources/views/landing/images/clients/logopolije.png" alt="logo-img"
                                     class="mx-auto img-fluid d-block">
                             </a>
                         </div>
@@ -465,21 +465,21 @@
                     <div class="col-lg-3">
                         <div class="client-images mt-4">
                             <a href="https://smanplussukowono.sch.id/" target="_blank">
-                                <img src="images/clients/logosma.png" alt="logo-img" class="mx-auto img-fluid d-block">
+                                <img src="<?=base_url;?>resources/views/landing/images/clients/logosma.png" alt="logo-img" class="mx-auto img-fluid d-block">
                             </a>
                         </div>
                     </div>
                     <div class="col-lg-3 ">
                         <div class="client-modif mt-4">
                             <a href="http://jti.polije.ac.id/" target="_blank">
-                                <img src="images/clients/logojti.png" alt="logo-img" class="mx-auto img-fluid d-block">
+                                <img src="<?=base_url;?>resources/views/landing/images/clients/logojti.png" alt="logo-img" class="mx-auto img-fluid d-block">
                             </a>
                         </div>
                     </div>
                     <div class="col-lg-3">
                         <div class="client-images mt-4">
                             <a href="https://www.instagram.com/produktif_polije/?hl=id" target="_blank">
-                                <img src="images/clients/logotif1.png" alt="logo-img" class="mx-auto img-fluid d-block">
+                                <img src="<?=base_url;?>resources/views/landing/images/clients/logotif1.png" alt="logo-img" class="mx-auto img-fluid d-block">
                             </a>
                         </div>
                     </div>
@@ -523,7 +523,7 @@
                 <div class="row text-center">
                     <div class="col-md-6">
                         <div class="text-sm-start mt-3 mt-sm-0">
-                            <img src="images/neokid.png" alt="" height="48" />
+                            <img src="<?=base_url;?>resources/views/landing/images/neokid.png" alt="" height="48" />
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -538,13 +538,13 @@
     <!-- END FOOTER -->
 
     <!-- bootstrap -->
-    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="<?=base_url;?>resources/views/landing/js/bootstrap.bundle.min.js"></script>
     <!-- JAVASCRIPTS -->
-    <script src="js/smooth-scroll.polyfills.min.js"></script>
-    <script src="js/gumshoe.polyfills.min.js"></script>
-    <script src="js/tiny-slider.js"></script>
+    <script src="<?=base_url;?>resources/views/landing/js/smooth-scroll.polyfills.min.js"></script>
+    <script src="<?=base_url;?>resources/views/landing/js/gumshoe.polyfills.min.js"></script>
+    <script src="<?=base_url;?>resources/views/landing/js/tiny-slider.js"></script>
     <!-- CUSTOM JS -->
-    <script src="js/app.js"></script>
+    <script src="<?=base_url;?>resources/views/landing/js/app.js"></script>
 </body>
 
 </html>
