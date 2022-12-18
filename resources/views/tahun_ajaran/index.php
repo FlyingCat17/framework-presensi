@@ -23,7 +23,10 @@
                                                 <a class="dropdown-item" href="#">2022/2023</a>
                                             </div>
                                         </div> -->
-                            <button class="btn btn-success tambah-tahun-ajaran" onclick="location.href='<?= base_url; ?>tahun_ajaran/tambah';"><span><i class="anticon anticon-plus" style="margin-left: -5px;"></i></span> Tambah</button>
+                            <button class="btn btn-success tambah-tahun-ajaran"
+                                onclick="location.href='<?= base_url; ?>tahun_ajaran/tambah';"><span><i
+                                        class="anticon anticon-plus" style="margin-left: -5px;"></i></span>
+                                Tambah</button>
                             <div class="m-t-10">
                                 <div class="table-responsive">
                                     <table class="table">
@@ -40,41 +43,58 @@
                                             <?php
                                             $no = 1;
                                             if (!empty($data['tahun_ajaran'])) {
-                                                foreach ($data['tahun_ajaran'] as $ajaran) : ?>
-                                                    <tr>
+                                                foreach ($data['tahun_ajaran'] as $ajaran): ?>
+                                            <tr>
 
-                                                        <th scope="row"><?= $no ?></th>
-                                                        <td><?= $ajaran['id_tahun_ajaran']; ?></td>
-                                                        <td><?= $ajaran['tahun_ajaran']; ?></td>
-                                                        <td><?php
-                                                            if ($ajaran['isActive'] != 1) {
-                                                                echo '<span class="badge badge-danger">Tidak Aktif</span>';
-                                                            } else {
-                                                                echo '<span class="badge badge-success">Aktif</span>';
-                                                            }
+                                                <th scope="row">
+                                                    <?= $no ?>
+                                                </th>
+                                                <td>
+                                                    <?= $ajaran['id_tahun_ajaran']; ?>
+                                                </td>
+                                                <td>
+                                                    <?= $ajaran['tahun_ajaran']; ?>
+                                                </td>
+                                                <td>
+                                                    <?php
+                                                    if ($ajaran['isActive'] != 1) {
+                                                        echo '<span class="badge badge-danger">Tidak Aktif</span>';
+                                                    } else {
+                                                        echo '<span class="badge badge-success">Aktif</span>';
+                                                    }
 
-                                                            ?></td>
-                                                        <td>
-                                                            <?php
-                                                            if ($ajaran['isActive'] != 1) {
-                                                                echo '<button type="button" data-id="' . $ajaran['id_tahun_ajaran'] . '" data-tahun="' . $ajaran['tahun_ajaran'] . '" class="btn btn-success w-40 btnActive" data-toggle="modal" data-target="#modal_aktif">
+                                                    ?>
+                                                </td>
+                                                <td>
+                                                    <?php
+                                                    if ($ajaran['isActive'] != 1) {
+                                                        echo '<button type="button" data-id="' . $ajaran['id_tahun_ajaran'] . '" data-tahun="' . $ajaran['tahun_ajaran'] . '" class="btn btn-success w-40 btnActive my-2" data-toggle="modal" data-target="#modal_aktif" 
+                                                                style="width: 120px;
+                                                                overflow: hidden;
+                                                                white-space: nowrap;
+                                                                text-overflow: ellipsis;">
                                                                 Aktifkan
                                                             </button>';
-                                                            } else {
-                                                                echo '<button type="disable" class="btn btn-success w-40 disabled text-success" style="cursor: not-allowed;" disabled>
-                                                                Sudah Aktif
-                                                            </button>';
-                                                            }
-                                                            ?>
-                                                            <button type="button" class="btn btn-warning" onclick="location.href='<?= base_url; ?>tahun_ajaran/ubah/<?= $ajaran['id_tahun_ajaran'] ?>';" name="active" data-id="<?= $ajaran['id_tahun_ajaran'] ?>">
-                                                                <i class="anticon anticon-edit"></i>
-                                                            </button>
-                                                            <button type="button" class="btn btn-danger tampilModalHapus" data-id="<?= $ajaran['id_tahun_ajaran'] ?>" data-toggle="modal" data-target="#modal-hapus">
-                                                                <i class="anticon anticon-delete"></i>
-                                                            </button>
-                                                        </td>
+                                                    } else {
+                                                        echo '<button type="disable" class="btn btn-success w-40 disabled text-success" style="cursor: not-allowed; width: 120px;
+                                                        overflow: hidden;
+                                                        white-space: nowrap;
+                                                        text-overflow: ellipsis;" disabled>Teraktifkan</button>';
+                                                    }
+                                                    ?>
+                                                    <button type="button" class="btn btn-warning"
+                                                        onclick="location.href='<?= base_url; ?>tahun_ajaran/ubah/<?= $ajaran['id_tahun_ajaran'] ?>';"
+                                                        name="active" data-id="<?= $ajaran['id_tahun_ajaran'] ?>">
+                                                        <i class="anticon anticon-edit"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-danger tampilModalHapus"
+                                                        data-id="<?= $ajaran['id_tahun_ajaran'] ?>" data-toggle="modal"
+                                                        data-target="#modal-hapus">
+                                                        <i class="anticon anticon-delete"></i>
+                                                    </button>
+                                                </td>
 
-                                                    </tr>
+                                            </tr>
                                             <?php $no++;
                                                 endforeach;
                                             } else {
@@ -102,7 +122,7 @@
                       </button>
                     </div>
                     <form action="<?php //base_url; 
-                                    ?>/kelas/update" method="POST" enctype="multipart/form-data">
+                    ?>/kelas/update" method="POST" enctype="multipart/form-data">
                       <div class="modal-body">
                         <div class="input-group mb-3">
                           <div class="input-group-prepend">
@@ -167,7 +187,8 @@
                             <p>Yakin ingin menghapus Tahun Ajaran ini?</p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default text-danger" data-dismiss="modal">Tutup</button>
+                            <button type="button" class="btn btn-default text-danger"
+                                data-dismiss="modal">Tutup</button>
                             <button type="submit" name="submit_hapus" class="btn btn-danger">Hapus</button>
                         </div>
                     </form>
@@ -179,13 +200,13 @@
 </div>
 
 <script>
-    $(document).ready(function() {
-        $('.tambah-tahun-ajaran').on('click', function() {
+    $(document).ready(function () {
+        $('.tambah-tahun-ajaran').on('click', function () {
             $('#modal-tambah-ubah-label').html("Tambah Tahun Ajaran");
             $('.modal-content form').attr('action', '<?= base_url; ?>' + 'tahun_ajaran/insert');
             $('#txt_tahun_ajaran').val("");
         });
-        $('.btn-ubah-tahun-ajaran').on('click', function() {
+        $('.btn-ubah-tahun-ajaran').on('click', function () {
             $('#modal-tambah-ubah-label').html("Ubah Tahun Ajaran");
             $('.modal-content form').attr('action', '<?= base_url; ?>' + 'tahun_ajaran/update');
             const id = $(this).data('id');
@@ -196,7 +217,7 @@
                 },
                 method: 'post',
                 dataType: 'json',
-                success: function(data) {
+                success: function (data) {
                     // console.log(data);
                     $('#txt_tahun_ajaran').val(data.tahun_ajaran);
                     $('#id_tahun_ajaran').val(data.id_tahun_ajaran);
@@ -204,11 +225,11 @@
             });
         });
 
-        $('.tampilModalHapus').on('click', function() {
+        $('.tampilModalHapus').on('click', function () {
             $('#hapus-tahun').attr('action', '<?= base_url; ?>tahun_ajaran/hapus/' + $(this).data('id'));
         });
 
-        $('.btnActive').on('click', function() {
+        $('.btnActive').on('click', function () {
             const id = $(this).data('id');
             const tahun = $(this).data('tahun');
             $('#get_id_tahun_modal').val(id);

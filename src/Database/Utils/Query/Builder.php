@@ -163,7 +163,7 @@ class Builder extends Grammar
     {
         $query = $this->buildQuery();
         $last = preg_replace_callback('/:(\w+)/', function ($matches) {
-            return $this->bindings[$matches[1]];
+            return $this->bindings[$matches[0]];
         }, $query);
         GlobalStorage::set('last_query', $last);
 
@@ -183,7 +183,7 @@ class Builder extends Grammar
     {
         $query = $this->buildQuery();
         $last = preg_replace_callback('/:(\w+)/', function ($matches) {
-            return $this->bindings[$matches[1]];
+            return $this->bindings[$matches[0]];
         }, $query);
         GlobalStorage::set('last_query', $last);
 
@@ -203,8 +203,9 @@ class Builder extends Grammar
     {
         $this->limit(1);
         $query = $this->buildQuery();
+        // print_r($query);
         $last = preg_replace_callback('/:(\w+)/', function ($matches) {
-            return $this->bindings[$matches[1]];
+            return $this->bindings[$matches[0]];
         }, $query);
         GlobalStorage::set('last_query', $last);
 
@@ -225,7 +226,7 @@ class Builder extends Grammar
         $this->select('COUNT(*) as count');
         $query = $this->buildQuery();
         $last = preg_replace_callback('/:(\w+)/', function ($matches) {
-            return $this->bindings[$matches[1]];
+            return $this->bindings[$matches[0]];
         }, $query);
         GlobalStorage::set('last_query', $last);
 
@@ -245,7 +246,7 @@ class Builder extends Grammar
     {
         $query = $this->buildQuery();
         $last = preg_replace_callback('/:(\w+)/', function ($matches) {
-            return $this->bindings[$matches[1]];
+            return $this->bindings[$matches[0]];
         }, $query);
         GlobalStorage::set('last_query', $last);
 
@@ -266,7 +267,7 @@ class Builder extends Grammar
         $this->insert($attributes);
         $query = $this->buildQuery();
         $last = preg_replace_callback('/:(\w+)/', function ($matches) {
-            return $this->bindings[$matches[1]];
+            return $this->bindings[$matches[0]];
         }, $query);
         GlobalStorage::set('last_query', $last);
 
@@ -288,7 +289,7 @@ class Builder extends Grammar
         $this->offset(($page - 1) * $limit);
         $query = $this->buildQuery();
         $last = preg_replace_callback('/:(\w+)/', function ($matches) {
-            return $this->bindings[$matches[1]];
+            return $this->bindings[$matches[0]];
         }, $query);
         GlobalStorage::set('last_query', $last);
 
@@ -319,7 +320,7 @@ class Builder extends Grammar
         $this->where($column, $id);
         $this->queryType = 'select';
         return $this->first();
-    
+
     }
 
     public function findorfail($id, $column = 'id', Closure $callback = null)
