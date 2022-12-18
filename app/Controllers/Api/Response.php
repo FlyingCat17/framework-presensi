@@ -44,11 +44,4 @@ class Response
     {
         return json_encode($data, JSON_PRETTY_PRINT);
     }
-
-    public static function getFile($file)
-    {
-        $file = file_get_contents('php://input');
-        $file = json_decode($file, true);
-        return $file[$file];
-    }
 }

@@ -344,6 +344,9 @@ class Grammar
     {
         $group = $this->groups;
         $sql = '';
+        if (empty($group) || count($group) == 0) {
+            return '';
+        }
         foreach ($group as $key => $value) {
             $sql .= $value . ' ';
         }
@@ -362,6 +365,9 @@ class Grammar
     {
         $having = $this->having;
         $sql = '';
+        if (empty($having) || count($having) == 0) {
+            return '';
+        }
         foreach ($having as $key => $value) {
             $sql .= $value['type'] . ' ' . $value['column'] . ' ' . $value['operator'] . ' ' . $value['value'];
         }
@@ -380,6 +386,9 @@ class Grammar
     {
         $order = $this->orders;
         $sql = '';
+        if (empty($order) || count($order) == 0) {
+            return '';
+        }
         foreach ($order as $key => $value) {
             $sql .= $value . ' ';
         }

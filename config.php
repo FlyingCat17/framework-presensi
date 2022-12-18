@@ -4,16 +4,16 @@ return [
     'app' => [
         'debug' => true,
         'name' => 'Riyu',
-        'url' => 'http://localhost/framework/',
+        'url' => 'http://localhost/framework-presensi/',
         'timezone' => 'Asia/Jakarta',
-        'locale' => 'id',
+        'locale' => 'id_ID.utf8',
     ],
 
     'database' => [
         'driver' => 'mysql',
         'host' => 'localhost',
         'port' => 3306,
-        'database' => 'db_new_presensi',
+        'dbname' => 'db_new_presensi',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',

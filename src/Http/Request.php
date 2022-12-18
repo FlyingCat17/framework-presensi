@@ -2,8 +2,11 @@
 
 namespace Riyu\Http;
 
-use ReflectionClass;
-use ReflectionObject;
+use Riyu\App\Config;
+
+date_default_timezone_set(Config::get('app')['timezone']);
+
+setlocale(LC_ALL, Config::get('app')['locale']);
 
 class Request extends Foundation
 {
@@ -75,13 +78,69 @@ class Request extends Foundation
 
     public static function getRoute()
     {
+        $script_name = self::scriptName();
+        $request_uri = self::getUri();
+
+        if ($script_name == $request_uri) {
+            return self::match();
+        } else {
+            $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+            $url = explode('/', $url);
+            $url = array_filter($url);
+            $url = array_values($url);
+            $url = implode('/', $url);
+            return "/" . $url;
+        }
+    }
+
+    public static function match()
+    {
         $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $url = explode('/', $url);
         $url = array_filter($url);
         $url = array_values($url);
-        $url = array_slice($url, 1);
+        return self::matchAgain($url);
+    }
+
+    public static function matchAgain($url)
+    {
+        $script_name = self::scriptName();
+        $script_name = explode('/', $script_name);
+        $script_name = array_filter($script_name);
+        $script_name = array_values($script_name);
+        $url = array_diff($url, $script_name);
         $url = implode('/', $url);
         return "/" . $url;
+    }
+
+    public static function getUri()
+    {
+        $request_uri = $_SERVER['REQUEST_URI'];
+        $request_uri = explode('/', $request_uri);
+        $request_uri = array_filter($request_uri);
+        $request_uri = array_values($request_uri);
+        if (isset($request_uri[0])) {
+            $request_uri = $request_uri[0];
+        }
+        if (is_array($request_uri)) {
+            $request_uri = implode('/', $request_uri);
+        } else {
+            $request_uri = "/" . $request_uri;
+        }
+        $request_uri = $request_uri . "/";
+        return $request_uri;
+    }
+
+    public static function scriptName()
+    {
+        $script_name = $_SERVER['SCRIPT_NAME'];
+        $script_name = explode('/', $script_name);
+        $script_name = array_filter($script_name);
+        $script_name = array_values($script_name);
+        $script_name = implode('/', $script_name);
+        $script_name = "/" . $script_name;
+        $script_name = str_replace('index.php', '', $script_name);
+        return $script_name;
     }
 
     public function __debugInfo()
@@ -134,7 +193,7 @@ class Request extends Foundation
         if (isset($_FILES)) {
             $request = array_merge($request, $_FILES);
         }
-        
+
         $request = array_merge($request, self::$storage);
 
         return $request;

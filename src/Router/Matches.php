@@ -28,6 +28,9 @@ class Matches extends Storage
         $routes = self::getRoutes();
         $url = $uri;
         $uri = $this->pregReplace($uri);
+        if ($method == "HEAD") {
+            $method = "GET";
+        }
         foreach ($routes[$method] as $route) {
             if (preg_match($uri, $route)) {
                 try {
@@ -55,6 +58,9 @@ class Matches extends Storage
         $url = $uri;
         $uri = $prefix . $uri;
         $uri = $this->pregReplace($uri);
+        if ($method == "HEAD") {
+            $method = "GET";
+        }
         foreach ($routes[$method] as $route) {
             if (preg_match($uri, $route)) {
                 try {
