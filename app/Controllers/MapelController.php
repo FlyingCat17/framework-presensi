@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers;
 
+use App\Config\Session;
 use App\Controllers\Controller;
 use Riyu\Http\Request;
 use App\Models\Mapel as ModelsMapel;
@@ -9,6 +10,17 @@ use Utils\Flasher;
 
 class MapelController extends Controller
 {
+    public function __construct()
+    {
+        if (!isset($_SESSION['user'])) {
+            header('Location: ' . base_url . 'auth/login');
+            exit();
+        }
+        if (Session::get('type') == "guru") {
+            header('Location: ' . base_url . 'dashboard/guru');
+            exit();
+        }
+    }
     public function index()
     {
         $data['title'] = "Mata Pelajaran";
