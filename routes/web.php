@@ -6,6 +6,7 @@ use App\Controllers\Guru;
 use App\Controllers\HomeController;
 use App\Controllers\Kelas;
 use App\Controllers\KelasAjaran;
+use App\Controllers\PresensiController;
 use App\Controllers\Tahun_Ajaran;
 use App\Controllers\Login;
 use App\Controllers\Admin;
@@ -141,44 +142,32 @@ Route::group('/guru', function () {
 Route::group('/jadwal', function () {
     Route::get('', [JadwalController::class, 'index']);
     Route::get('/detail/{id}', [JadwalController::class, 'detail']);
-    Route::get('/tambah', [JadwalController::class, 'tambah']);
-    Route::post('/tambah', [JadwalController::class, 'insert']);
-    Route::get('/edit/{id}', [JadwalController::class, 'ubah']);
+    // Route::get('/tambah', [JadwalController::class, 'tambah']);
+    // Route::post('/tambah', [JadwalController::class, 'insert']);
+    // Route::get('/edit/{id}', [JadwalController::class, 'ubah']);
+    // Route::post('/edit/{id}', [JadwalController::class, 'update']);
+    
+    Route::get('/kelas/{idKelasAjaran}', [JadwalController::class, 'jadwalKelas']);
+    Route::get('/kelas/{idKelasAjaran}/tambah', [JadwalController::class, 'tambah']);
+    Route::post('/kelas/{idKelasAjaran}/tambah', [JadwalController::class, 'insert']);
+    Route::get('/kelas/{idKelasAjaran}/ubah/{idJadwal}', [JadwalController::class, 'ubah']);
+    Route::post('/kelas/{idKelasAjaran}/ubah/{idJadwal}', [JadwalController::class, 'update']);
+    Route::post('/kelas/{idkelasAjaran}/hapus/{idJadwal}', [JadwalController::class, 'delete']);
 });
-// Route::post('/login', [Login::class, 'auth']);
-// Route::get('/login', [Login::class, 'index']);
-// Route::post('/logout', [Login::class, 'logout']);
-// Route::get('/register', [Login::class, 'register']);
-// Route::post('/register', [Login::class, 'authRegister']);
-// Route::get('/me', [HomeController::class, 'profile']);
-// Route::get('/form', [HomeController::class, 'form']);
-// Route::post('/insert', [HomeController::class, 'save']);
-// Route::put('/update', [HomeController::class, 'save']);
-// Route::get('/test/{test}', [HomeController::class, 'save']);
-// Route::get('/id/{id}', [HomeController::class, 'id']);
-// // Route::put('/akun/{id}', [HomeController::class, 'save']);
-// // Route::get('/akun/{id}', [HomeController::class, 'save']);
-// // Route::post('/akun/{id}', [HomeController::class, 'save']);
-// Route::get('/akun/{id}', function ($id) {
-//     return view(['templates/header', 'home'], [
-//         'title' => 'Home',
-//         'id' => $id
-//     ]);
+// Route::group('/presensi', function () {
+//     Route::get('', [PresensiController::class, 'index']);
+//     Route::get(
+//         '/kelas',
+//         function () {
+//             header('Location: ' . base_url . 'presensi');
+//         }
+//     );
+//     Route::get('/kelas/{idKelasAjaran}', [PresensiController::class, 'kelas']);
 // });
-// // Route::delete('/akun/{id}', [HomeController::class, 'save']);
-// Route::get('/post/{url}/where/{id}/k/{1}', function ($data) {
-//     $data = json_decode(json_encode($data));
-//     return view('home', [
-//         'title' => 'Home',
-//         'data' => $data
-//     ]);
-// });
-// Route::group('admin', function () {
-//     Route::get('/dashboard', function () {
-//         echo "Dashboard";
-//     });
-//     Route::get('/profile', [HomeController::class, 'profile']);
-// });
+
+
+
+
 Route::group('/mapel', function () {
     Route::get('/', [MapelController::class, 'index']);
     Route::get('/tambah', [MapelController::class, 'tambah']);

@@ -67,18 +67,18 @@
                     <span class="icon-holder">
                         <i class="material-icons" style="font-size: 18px;">calendar_month</i>
                     </span>
-                    <span class="title">Jadwal</span>
+                    <span class="title">Jadwal & Presensi</span>
                 </a>
             </li>
-            <li class="nav-item dropdown <?=(strtolower($data['title']) === "presensi" ? 'active' : (strtolower($data['title']) === "tambah presensi" ? 'active' : (strtolower($data['title']) === "detail presensi" ? 'active' : ''))) ?>"
+            <!-- <li class="nav-item dropdown <?php//(strtolower($data['title']) === "presensi" ? 'active' : (strtolower($data['title']) === "tambah presensi" ? 'active' : (strtolower($data['title']) === "detail presensi" ? 'active' : ''))) ?>"
                 id="liNav">
-                <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>presensi">
+                <a class="dropdown-toggle d-flex pt-3" href="<?php// base_url ?>presensi">
                     <span class="icon-holder">
                         <i class="material-icons" style="font-size: 18px;">checklist_rtl</i>
                     </span>
                     <span class="title">Presensi</span>
                 </a>
-            </li>
+            </li> -->
 
         </ul>
     </div>

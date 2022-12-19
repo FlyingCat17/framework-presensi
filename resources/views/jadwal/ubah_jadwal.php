@@ -16,23 +16,20 @@
                                     </h5>
                                 </div>
                             </div>
-                            <form action="<?= base_url; ?>jadwal/ubah_jadwal_act" method="post">
-                                <div class="form-group">
-                                    <label for="inputAddress">Kelas</label>
-                                    <select id="inputState" class="form-control" name="get_kelas">
-                                        <?php
-                                        foreach ($data['kelas'] as $kelas):
-                                        ?>
-                                        <option value="<?= $kelas['id_kelas_ajaran'] ?>"
-                                            <?=($data['jadwal']->id_kelas_ajaran==$kelas['id_kelas_ajaran'] ? 'selected'
-                                            : '') ?>>
-                                            <?= $kelas['nama_kelas'] ?>
-                                        </option>
+                            <?php
+                            use Utils\Flasher;
 
-                                        <?php
-                                        endforeach;
-                                        ?>
-                                    </select>
+                            Flasher::flash();
+                            ?>
+                            <form
+                                action="<?= base_url; ?>jadwal/kelas/<?= $data['check_kelas']->id_kelas_ajaran ?>/ubah/<?= $data['jadwal']->id_jadwal ?>"
+                                method="post">
+                                <div class="form-group">
+                                    <label for="kelas">Kelas</label>
+                                    <input type="text" class="form-control"
+                                        value="<?= $data['check_kelas']->nama_kelas ?>" disabled>
+                                    <input type="hidden" name="get_kelas"
+                                        value="<?= $data['check_kelas']->id_kelas_ajaran ?>">
                                 </div>
                                 <div class="form-group">
                                     <label for="inputAddress">Mata Pelajaran</label>
@@ -106,7 +103,8 @@
                                     <button type="submit" class="btn btn-success float-right" name="simpan_jadwal">
                                         Simpan
                                     </button>
-                                    <a href="<?= base_url; ?>jadwal" class="btn btn-danger float-right mx-2">
+                                    <a href="<?= base_url; ?>jadwal/kelas/<?= $data['jadwal']->id_kelas_ajaran ?>"
+                                        class="btn btn-danger float-right mx-2">
                                         Kembali </a>
                                 </div>
                             </form>

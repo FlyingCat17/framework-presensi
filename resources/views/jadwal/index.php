@@ -1,16 +1,21 @@
-<script type="text/javascript" src="<?= base_url; ?>app/views/jadwal/index.js"></script>
+<script type="text/javascript" src="<?= base_url; ?>resources/views/jadwal/index.js"></script>
 <div class="page-container">
   <div class="main-content">
     <div class="container-fluid">
-      <div>
-        <h1 class="mb-4 font-weight-bold">Jadwal</h1>
+      <div class="mb-2 ml-3">
+        <h1 class="font-weight-bold">Jadwal Kelas</h1>
+        <h3>
+          <?= $data['kelas']->nama_kelas ?>
+        </h3>
       </div>
       <div class="row">
         <div class="col-md-12">
           <div class="card">
             <div class="card-body">
-              <button type="button" onclick="location.href='<?= base_url; ?>jadwal/tambah'" class="btn btn-success mb-3"
-                id="tambah_jadwal"><span><i class="anticon anticon-plus" style="margin-left: -5px;"></i></span>
+              <button type="button"
+                onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $data['kelas']->id_kelas_ajaran ?>/tambah'"
+                class="btn btn-success mb-3" id="tambah_jadwal"><span><i class="anticon anticon-plus"
+                    style="margin-left: -5px;"></i></span>
                 Tambah</button>
               <?php
               use Utils\Flasher;
@@ -36,6 +41,7 @@
                       <?php
 
                       $no = 1;
+                      $kelas = $data['kelas']->id_kelas_ajaran;
                       if (!empty($data['jadwal'])) {
                         foreach ($data['jadwal'] as $jadwal): ?>
                       <tr>
@@ -89,16 +95,18 @@
                               style="font-size: 12px; margin-left: -5px;"></i></button>
                           <!-- <button class="btn btn-warning"><i class="far fa-edit"></i></button> -->
                           <button type="button"
-                            onclick="location.href='<?= base_url; ?>jadwal/edit/<?= $jadwal['id_jadwal'] ?>'"
+                            onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $kelas ?>/ubah/<?= $jadwal['id_jadwal'] ?>'"
                             class="btn btn-warning edit_jadwal m-1" data-toggle="tooltip" data-placement="top"
                             title="Ubah Jadwal" style="width: 30px;" data-id="<?= $jadwal['id_jadwal'] ?>"><i
                               class="far fa-edit" style="margin-left: -5px;"></i></button>
                           <button class="btn btn-danger m-1 tampilModalHapus" data-toggle="modal"
                             data-target="#hapus_jadwal" data-id="<?= $jadwal['id_jadwal'] ?>"
-                            data-kelas="<?= $jadwal['id_kelas_ajaran'] ?>" data-guru="<?= $jadwal['nuptk'] ?>"
+                            data-kelas="<?= $jadwal['nama_kelas'] ?>"
+                            data-idkelasajaran="<?= $jadwal['id_kelas_ajaran'] ?>"
+                            data-guru="<?= $jadwal['nama_guru'] ?>"
                             data-jam="<?= $jadwal['jam_awal'] . ' - ' . $jadwal['jam_akhir'] ?>"
                             data-hari="<?=($jadwal['hari'] == 1 ? 'Senin' : ($jadwal['hari'] == 2 ? 'Selasa' : ($jadwal['hari'] == 3 ? 'Rabu' : ($jadwal['hari'] == 4 ? 'Kamis' : ($jadwal['hari'] == 5 ? 'Jumat' : ($jadwal['hari'] == 6 ? 'Sabtu' : '')))))) ?>"
-                            data-mapel="<?= $jadwal['id_mapel'] ?>" style="width: 30px;"><i class="far fa-trash-alt"
+                            data-mapel="<?= $jadwal['nama_mapel'] ?>" style="width: 30px;"><i class="far fa-trash-alt"
                               style="margin-left: -5px;"></i></button>
                         </td>
                       </tr>
@@ -111,6 +119,13 @@
                       ?>
                     </tbody>
                   </table>
+                  <?php
+                  if (empty($data['jadwal'])) {
+                  ?>
+                  <p class="text-center">Tidak Ada Data</p>
+                  <?php
+                  }
+                  ?>
                 </div>
               </div>
             </div>
@@ -130,15 +145,21 @@
           <i class="anticon anticon-close"></i>
         </button>
       </div>
-      <form action="<?= base_url; ?>jadwal/hapus_jadwal_act" method="POST">
+      <form action="<?= base_url; ?>" method="POST" id="form_hapus">
         <div class="modal-body">
-          <h6>Yakin ingin menghapus jadwal ini?</h6>
-          <input type="hidden" name="hapus_id" id="hapus_id" value="">
-          <p class="d-inline" id="hapus_kelas">X 1</p><span> - </span>
-          <p class="d-inline" id="hapus_mapel">Bahasa Jepang</p><span> - </span>
-          <p class="d-inline" id="hapus_guru">Syamsul Arifin, S.Kom, M.Cs</p>
-          <div></div>
-          <p class="d-inline" id="hapus_hari">Senin</p><span id="hapus_jam"> - (07:00 - 08:00)</span>
+          <div class="mb-3">
+            <h6>Yakin ingin menghapus jadwal ini?</h6>
+            <input type="hidden" name="hapus_id" id="hapus_id" value="">
+            <p class="d-inline" id="hapus_kelas">X 1</p><span> - </span>
+            <p class="d-inline" id="hapus_mapel">Bahasa Jepang</p><span> - </span>
+            <p class="d-inline" id="hapus_guru">Syamsul Arifin, S.Kom, M.Cs</p>
+            <div></div>
+            <p class="d-inline" id="hapus_hari">Senin</p><span id="hapus_jam"> - (07:00 - 08:00)</span>
+          </div>
+          <div class="alert alert-danger">
+            <strong>PERHATIAN! </strong>JIka menghapus jadwal ini, maka seluruh presensi yang ada pada jadwal ini akan
+            otomatis terhapus!
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn text-danger" data-dismiss="modal">Tutup</button>
