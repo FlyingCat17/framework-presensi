@@ -1,7 +1,8 @@
 {
-    "name": "kateru/riyu",
+    "name": "riyu/riyu",
     "description": "simple framework",
     "type": "project",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Riyu\\": "src/",
