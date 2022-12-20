@@ -1,141 +1,58 @@
 <?php
+
 namespace App\Controllers\Api;
 
 use App\Models\Siswa;
 use Riyu\Http\Request;
 use Riyu\Validation\Validation;
 
-class ForgotPassword
+class ForgotPassword extends Controller
 {
     public function search(Request $request)
     {
-        $rule = [
-            'username' => 'required|numeric',
-        ];
+        $this->ruleSearch($request);
 
-        $message = [
-            'required' => ':field tidak boleh kosong',
-            'numeric' => ':field harus berupa angka',
-        ];
+        $user = $this->findSiswa($request->username);
 
-        $errors = Validation::message($request->all(), $rule, $message);
-        $errors = Validation::first($errors);
+        $user = $this->query($request->username);
 
-        if ($errors) {
-            return Response::json(400, $errors);
-        }
-
-        $username = $request->username;
-
-        try {
-            $user = Siswa::findorfail($username, 'nis', function () {
-                return Response::json(404, 'Username salah');
-            });
-            return Response::json(200, 'Username ditemukan', $this->map($user));
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
+        return Response::json(200, 'Username ditemukan', $this->mapUser($user));
     }
 
     public function verifyOtp(Request $request)
     {
-        $rule = [
-            'username' => 'required|numeric',
-            'otp' => 'required|numeric',
-        ];
-
-        $message = [
-            'required' => ':field tidak boleh kosong',
-            'numeric' => ':field harus berupa angka',
-        ];
-
-        $errors = Validation::message($request->all(), $rule, $message);
-        $errors = Validation::first($errors);
-
-        if ($errors) {
-            return Response::json(400, $errors);
-        }
+        $this->ruleVerifyOtp($request);
 
         $username = $request->username;
         $otp = $request->otp;
 
-        try {
-            $user = Siswa::findorfail($username, 'nis', function () {
-                return Response::json(404, 'Username salah');
-            });
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
+        $user = $this->findSiswa($username);
 
         if ($user->otp != $otp) {
-            return Response::json(400, 'Kode OTP salah');
+            return Response::json(401, 'Kode OTP salah');
         }
 
         if ($user->otp_expired < date('Y-m-d H:i:s', strtotime('+1 minutes'))) {
-            return Response::json(400, 'Kode OTP sudah kadaluarsa');
+            return Response::json(410, 'Kode OTP sudah kadaluarsa');
         }
 
-        return Response::json(200, 'Kode OTP benar', $this->map($user));
+        $user = $this->query($username);
+
+        return Response::json(200, 'Kode OTP benar', $this->mapUser($user));
     }
 
     public function resetPassword(Request $request)
     {
-        $rule = [
-            'username' => 'required|numeric',
-            'password' => 'required|min:8',
-        ];
+        $this->ruleResetPassword($request);
+        
+        $user = $this->findSiswa($request->username);
 
-        $message = [
-            'required' => ':field tidak boleh kosong',
-            'numeric' => ':field harus berupa angka',
-            'min' => ':field minimal :min karakter',
-        ];
-
-        $errors = Validation::message($request->all(), $rule, $message);
-        $errors = Validation::first($errors);
-
-        if ($errors) {
-            return Response::json(400, $errors);
+        if (password_verify($request->password, $user->password)) {
+            return Response::json(400, 'Password baru tidak boleh sama dengan password lama');
         }
 
-        $username = $request->username;
-        $password = $request->password;
+        $this->updatePassword($request->username, $request->password);
 
-        try {
-            $user = Siswa::findordail($username, 'nis', function () {
-                return Response::json(404, 'Username salah');
-            });
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
-
-        try {
-            Siswa::where('nis', $username)->update([
-                'password' => password_hash($password, PASSWORD_DEFAULT),
-                'otp' => null,
-                'otp_expired' => null,
-            ]);
-            return Response::json(200, 'Password berhasil diubah');
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
-    }
-
-    public function map(object $data)
-    {
-        return array(
-            'nis' => $data->nis,
-            'nama' => $data->nama_siswa,
-            'foto' => $data->foto_profil,
-            'email' => $data->email,
-            'kelas' => $data->nama_kelas,
-            'no_hp' => $data->notelp_siswa,
-            'alamat' => $data->alamat_siswa,
-            'isLogin' => $data->isLogin,
-            'id_kelas' => $data->id_kelas,
-            'deviceId' => $data->deviceId,
-            'nama_kelas' => $data->nama_kelas,
-            'tanggal_lahir' => $data->tgl_lahir,
-        );
+        return Response::json(200, 'Password berhasil diubah');
     }
 }

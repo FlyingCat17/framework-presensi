@@ -2,171 +2,70 @@
 
 namespace App\Controllers\Api;
 
-use App\Models\Siswa;
 use Riyu\Http\Request;
-use Riyu\Validation\Validation;
 
-class Auth
+class Auth extends Controller
 {
     public function login(Request $request)
     {
-        $this->rule($request);
+        $this->ruleLogin($request);
 
-        $username = $request->username;
-        $password = $request->password;
-        $deviceId = $request->deviceId;
-
-        
         try {
-            $user = Siswa::findOrFail($username, 'nis', function() {
-                return Response::json(404, 'Username salah');
-            });
+            $user = $this->findSiswa($request->username);
         } catch (\Throwable $th) {
             return Response::json(500, 'Terjadi kesalahan');
         }
 
-        if ($user->password != $password) {
+        if (!password_verify($request->password, $user->password)) {
             return Response::json(403, 'Password salah');
         }
-        // if (!password_verify($password, $user->password)) {
-        //     return Response::json(403, 'Password salah');
-        // }
 
         if ($user->isLogin == 0) {
-            try {
-                Siswa::where('nis', $username)->update([
-                    'isLogin' => 1,
-                    'deviceId' => $deviceId
-                ])->save();
-                return Response::json(200, 'Berhasil login', $this->map($user));
-            } catch (\Throwable $th) {
-                return Response::json(500, 'Terjadi kesalahan');
-            }
+            $this->updateLogin(1, $request->username, $request->deviceId);
+            $user = $this->query($request->username);
+
+            return Response::json(200, 'Berhasil login', $this->mapUser($user));
         }
 
         if ($user->isLogin == 1) {
-            if ($user->deviceId == $deviceId) {
-                return Response::json(200, 'Berhasil login', $this->map($user));
-            } else {
-                return Response::json(403, 'Akun sedang digunakan');
+            if ($user->deviceId == $request->deviceId) {
+                $user = $this->query($request->username);
+                return Response::json(200, 'Berhasil login', $this->mapUser($user));
             }
+
+            return Response::json(403, 'Akun sedang digunakan');
         }
     }
 
     public function newLogin(Request $request)
     {
-        $this->rule($request);
+        $this->ruleLogin($request);
 
-        $username = $request->username;
-        $password = $request->password;
-        $deviceId = $request->deviceId;
+        $user = $this->findSiswa($request->username);
 
-        try {
-            $user = Siswa::findorfail($username, 'nis', function () {
-                return Response::json(404, 'Username salah');
-            });
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
-
-        if (!password_verify($password, $user->password)) {
+        if (!password_verify($request->password, $user->password)) {
             return Response::json(403, 'Password salah');
         }
 
-        try {
-            Siswa::where('nis', $username)->update([
-                'isLogin' => 1,
-                'deviceId' => $deviceId
-            ]);
-            return Response::json(200, 'Berhasil login', $this->map($user));
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
+        $this->updateLogin(1, $request->username, $request->deviceId);
+        $user = $this->query($request->username);
+
+        return Response::json(200, 'Berhasil login', $this->mapUser($user));
     }
 
     public function logout(Request $request)
     {
-        $rule = [
-            'username' => 'required|numeric',
-            'deviceId' => 'required'
-        ];
+        $this->ruleLogout($request);
 
-        $message = [
-            'required' => ':field tidak boleh kosong',
-            'numeric' => ':field harus berupa angka'
-        ];
-
-        $errors = Validation::message($request->all(), $rule, $message);
-
-        if ($errors) {
-            return Response::json(400, $errors);
-        }
-
-        $username = $request->username;
-        $deviceId = $request->deviceId;
-
-        try {
-            $user = Siswa::findorfail($username, 'nis', function () {
-                return Response::json(404, 'Username salah');
-            });
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
+        $user = $this->findSiswa($request->username);
 
         if ($user->isLogin == 0) {
             return Response::json(403, 'Akun tidak sedang digunakan');
         }
 
         if ($user->isLogin == 1) {
-            try {
-                Siswa::where('nis', $username)->update([
-                    'isLogin' => 0,
-                    'deviceId' => null
-                ]);
-                return Response::json(200, 'Berhasil logout');
-            } catch (\Throwable $th) {
-                return Response::json(500, 'Terjadi kesalahan');
-            }
-        }
-    }
-
-    public function map(object $data)
-    {
-        return array(
-            'nis' => $data->nis,
-            'nama' => $data->nama_siswa,
-            'kelas' => $data->nama_kelas,
-            'id_kelas' => $data->id_kelas,
-            'tanggal_lahir' => $data->tgl_lahir,
-            'foto' => $data->foto_profil,
-            'email' => $data->email,
-            'no_hp' => $data->notelp_siswa,
-            'alamat' => $data->alamat_siswa,
-            'isLogin' => $data->isLogin,
-            'deviceId' => $data->deviceId,
-            'nama_kelas' => $data->nama_kelas,
-        );
-    }
-
-    public function rule(Request $request)
-    {
-        $rule = [
-            'username' => 'required|numeric',
-            'password' => 'required',
-            'deviceId' => 'required'
-        ];
-
-        $message = [
-            'required' => ':field tidak boleh kosong',
-            'numeric' => ':field harus berupa angka'
-        ];
-
-        $errors = Validation::message($request->all(), $rule, $message);
-
-        $errors = Validation::first($errors);
-        
-        if ($errors) {
-            return Response::json(400, $errors);
+            $this->updateLogin(0, $request->username, null);
+            return Response::json(200, 'Berhasil logout');
         }
     }
 }
