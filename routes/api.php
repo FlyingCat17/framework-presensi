@@ -9,10 +9,9 @@ use App\Controllers\Api\Jadwal;
 use App\Controllers\Api\Mail;
 use App\Controllers\Api\Settings;
 
-
 Route::group('/api/v3/user', function () {
     Route::post('/login', [Auth::class, 'login']);
-    Route::post('/newlogin', [Auth::class, 'newLogin']);
+    Route::post('/new-login', [Auth::class, 'newLogin']);
     Route::post('/logout', [Auth::class, 'logout']);
 
     Route::post('/update-profile', [Settings::class, 'updateProfile']);
@@ -35,5 +34,5 @@ Route::group('/api/v3/absensi', function () {
     Route::post('/presensi', [Absensi::class, 'presensi']);
 });
 
-Route::post('/api/v3/mail/send', [Mail::class]);
-Route::get('/api/v3/informasi', [Informasi::class]);
+Route::post('/api/v3/mail/send', [Mail::class, 'index']);
+Route::get('/api/v3/informasi', [Informasi::class, 'index']);

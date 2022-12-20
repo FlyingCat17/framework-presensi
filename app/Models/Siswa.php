@@ -18,6 +18,12 @@ class Siswa extends Model
         'tempat_lahir',
         'tanggal_lahir',
         'status',
-        'password'
+        'password',
+        'isLogin',
+        'deviceId',
+        'foto_profil',
+        'email',
+        'otp',
+        'otp_expired'
     ];
 }

@@ -2,53 +2,25 @@
 
 namespace App\Controllers\Api;
 
-use App\Models\Siswa;
 use Riyu\Http\Request;
-use Riyu\Validation\Validation;
 
-class Settings
+class Settings extends Controller
 {
     public function updateProfile(Request $request)
     {
-        $rule = [
-            'username' => 'required|numeric',
-            'email' => 'required|email',
-            'tanggal_lahir' => 'required|date',
-        ];
-
-        $message = [
-            'required' => ':field tidak boleh kosong',
-            'numeric' => ':field harus berupa angka',
-            'email' => ':field harus berupa email',
-            'date' => ':field harus berupa tanggal'
-        ];
-
-        $errors = Validation::message($request->all(), $rule, $message);
-        $errors = Validation::first($errors);
-
-        if ($errors) {
-            return Response::json(400, $errors);
-        }
+        $this->ruleUpdate($request);
 
         $username = $request->username;
         $email = $request->email;
         $tanggalLahir = $request->tanggal_lahir;
 
-        if (isset($request->foto) || !empty($request->foto) || $request->foto != null) {
+        if (isset($request->foto) && !empty($request->foto) || $request->foto != null) {
             $foto = $request->foto;
         } else {
             $foto = null;
         }
 
-        try {
-            $user = Siswa::where('nis', $username)->first();
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
-
-        if (!$user) {
-            return Response::json(404, 'Username salah');
-        }
+        $user = $this->findSiswa($username);
 
         if ($foto == null) {
             $foto = $user->foto_profil;
@@ -56,132 +28,65 @@ class Settings
             $foto = $this->foto($foto, $username);
         }
 
-        try {
-            Siswa::where('nis', $username)->update([
-                'email' => $email,
-                'tanggal_lahir' => $tanggalLahir,
-                'foto' => $foto
-            ]);
-            return Response::json(200, 'Berhasil update profile', $this->map($user));
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
+        $update = [
+            'email' => $email,
+            'tanggal_lahir' => $tanggalLahir,
+            'foto_profil' => $foto
+        ];
+
+        $this->queryUpdateProfile($username, $update);
+        $user = $this->query($username);
+
+        return Response::json(200, 'Berhasil update profile', $this->mapUser($user));
     }
 
     public function changePassword(Request $request)
     {
-        $rule = [
-            'username' => 'required|numeric',
-            'password' => 'required',
-            'new_password' => 'required|min:8'
-        ];
+        $this->ruleChangePassword($request);
 
-        $message = [
-            'required' => ':field tidak boleh kosong',
-            'numeric' => ':field harus berupa angka',
-            'min' => ':field minimal :min karakter'
-        ];
-
-        $errors = Validation::message($request->all(), $rule, $message);
-        $errors = Validation::first($errors);
-
-        if ($errors) {
-            return Response::json(400, $errors);
+        if ($request->password == $request->new_password) {
+            return Response::json(400, "Password baru tidak boleh sama dengan password lama");
         }
 
-        $username = $request->username;
-        $password = $request->password;
-        $newPassword = $request->new_password;
+        $user = $this->findsiswa($request->username);
 
-        try {
-            $user = Siswa::where('nis', $username)->first();
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
-
-        if (!$user) {
-            return Response::json(404, 'Username salah');
-        }
-
-        if (!password_verify($password, $user->password)) {
+        if (!password_verify($request->password, $user->password)) {
             return Response::json(400, 'Password salah');
         }
 
-        try {
-            Siswa::where('nis', $username)->update([
-                'password' => password_hash($newPassword, PASSWORD_DEFAULT)
-            ]);
-            return Response::json(200, 'Berhasil update password');
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
+        $this->updatePassword($request->username, $request->new_password);
+
+        return Response::json(200, 'Berhasil update password');
     }
 
     public function deleteFoto(Request $request)
     {
-        $rule = [
-            'username' => 'required|numeric',
-        ];
+        $this->ruleDeleteFoto($request);
 
-        $message = [
-            'required' => ':field tidak boleh kosong',
-            'numeric' => ':field harus berupa angka'
-        ];
+        $user = $this->findSiswa($request->username);
 
-        $errors = Validation::message($request->all(), $rule, $message);
-        $errors = Validation::first($errors);
-        
-        if ($errors) {
-            return Response::json(400, $errors);
-        }
+        $this->deleteFotoProfile($request->username);
 
-        $username = $request->username;
+        $user = $this->query($request->username);
 
-        try {
-            $user = Siswa::where('nis', $username)->first();
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
-
-        if (!$user) {
-            return Response::json(404, 'Username salah');
-        }
-
-        try {
-            Siswa::where('nis', $username)->update([
-                'foto' => null
-            ]);
-            return Response::json(200, 'Berhasil menghapus foto', $this->map($user));
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
-    }
-
-    public function map(object $data)
-    {
-        return array(
-            'nis' => $data->nis,
-            'nama' => $data->nama_siswa,
-            'kelas' => $data->nama_kelas,
-            'id_kelas' => $data->id_kelas,
-            'tanggal_lahir' => $data->tgl_lahir,
-            'foto' => $data->foto_profil,
-            'email' => $data->email,
-            'no_hp' => $data->notelp_siswa,
-            'alamat' => $data->alamat_siswa,
-            'isLogin' => $data->isLogin,
-            'deviceId' => $data->deviceId,
-            'nama_kelas' => $data->nama_kelas,
-        );
+        return Response::json(200, 'Berhasil menghapus foto', $this->mapUser($user));
     }
 
     public function foto($foto = array(), string $nis)
     {
+        // Get path info
         $ekstensi = pathinfo($foto['name'], PATHINFO_EXTENSION);
+
+        // Set format name foto
         $formatFile = $nis . "-profile." . $ekstensi;
-        $moveFile = "../../../image/profile/" . $formatFile;
+
+        // set for save
+        $moveFile = __DIR__ . "/../../../images/profile/" . $formatFile;
+
+        // compress image
         $this->compress($foto['tmp_name'], $moveFile, 75);
-        return base_url . '/image/profile/' . $formatFile;
+
+        return base_url . 'images/profile/' . $formatFile;
     }
 
     protected function compress($source, $destination, $quality)
