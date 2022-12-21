@@ -13,8 +13,10 @@ use App\Controllers\Admin;
 use App\Controllers\Siswa;
 use App\Controllers\MapelController;
 use App\Controllers\JadwalController;
+use App\Models\Presensi;
 use Riyu\Http\Request;
 use Riyu\Router\Route;
+use Utils\Flasher;
 
 
 
@@ -146,24 +148,38 @@ Route::group('/jadwal', function () {
     // Route::post('/tambah', [JadwalController::class, 'insert']);
     // Route::get('/edit/{id}', [JadwalController::class, 'ubah']);
     // Route::post('/edit/{id}', [JadwalController::class, 'update']);
-    
+
     Route::get('/kelas/{idKelasAjaran}', [JadwalController::class, 'jadwalKelas']);
     Route::get('/kelas/{idKelasAjaran}/tambah', [JadwalController::class, 'tambah']);
     Route::post('/kelas/{idKelasAjaran}/tambah', [JadwalController::class, 'insert']);
     Route::get('/kelas/{idKelasAjaran}/ubah/{idJadwal}', [JadwalController::class, 'ubah']);
     Route::post('/kelas/{idKelasAjaran}/ubah/{idJadwal}', [JadwalController::class, 'update']);
     Route::post('/kelas/{idkelasAjaran}/hapus/{idJadwal}', [JadwalController::class, 'delete']);
+
+    Route::get(
+        '/presensi/kelas',
+        function () {
+            header('Location: ' . base_url . 'jadwal');
+            exit;
+        }
+    );
 });
-// Route::group('/presensi', function () {
-//     Route::get('', [PresensiController::class, 'index']);
-//     Route::get(
-//         '/kelas',
-//         function () {
-//             header('Location: ' . base_url . 'presensi');
-//         }
-//     );
-//     Route::get('/kelas/{idKelasAjaran}', [PresensiController::class, 'kelas']);
-// });
+Route::group('/presensi', function () {
+    Route::get(
+        '',
+        function () {
+            Flasher::setFlash('Harap PIlih salah satu kelas!', 'info');
+            header('location: ' . base_url . 'jadwal');
+            exit();
+        }
+    );
+    Route::get('/{idJadwal}', [PresensiController::class, 'index']);
+    Route::get('/{idJadwal}/tambah', [PresensiController::class, 'tambah']);
+    Route::post('/{idJadwal}/tambah', [PresensiController::class, 'insert']);
+    Route::get('/{idJadwal}/ubah/{idPresensi}', [PresensiController::class, 'ubah']);
+    Route::post('/{idJadwal}/ubah/{idPresensi}', [PresensiController::class, 'update']);
+    Route::post('/{idJadwal}/hapus/{idPresensi}', [PresensiController::class, 'delete']);
+});
 
 
 

@@ -11,7 +11,7 @@
     <link href="<?= base_url ?>resources/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <?php
-    if ($data['title'] == 'Tambah Presensi' || $data['title'] == 'Ubah Presensi') {
+    if ($data['title'] == 'Presensi' || $data['title'] == 'Jadwal') {
         echo '<!-- FLATPICKR -->';
         echo '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">';
         echo '<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>';
@@ -19,7 +19,7 @@
         echo '';
     }
     ?>
-    
+
     <!-- page js -->
     <script src="<?= base_url ?>resources/js/vendors.min.js"></script>
     <script src="<?= base_url ?>resources/js/app.min.js"></script>

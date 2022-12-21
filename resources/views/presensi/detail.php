@@ -33,7 +33,9 @@
                                 </div>
                             </div>
                             <div class="mt-3">
-                                <?php Flasher::flash(); ?>
+                                <?php 
+                                use Utils\Flasher;
+                                Flasher::flash(); ?>
                             </div>
                         </div>
                     </div>
