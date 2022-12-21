@@ -75,13 +75,13 @@
                                     <div class="row">
                                         <div class="col-lg-6 col-md-12">
                                             <label for="jam_awal">Jam Awal</label>
-                                            <input type="text" class="form-control" id="jam_awal" placeholder="07:00"
-                                                name="get_jam_awal">
+                                            <input type="text" class="form-control time-local" id="jam_awal"
+                                                placeholder="07:00" name="get_jam_awal">
                                         </div>
                                         <div class="col-lg-6 col-md-12">
                                             <label for="jam_akhir">Jam Akhir</label>
-                                            <input type="text" class="form-control" id="jam_akhir" placeholder="09:00"
-                                                name="get_jam_akhir">
+                                            <input type="text" class="form-control time-local" id="jam_akhir"
+                                                placeholder="09:00" name="get_jam_akhir">
                                         </div>
                                     </div>
                                 </div>
@@ -107,3 +107,15 @@
     </div>
 </div>
 
+<script>
+    config_time = {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i"
+    }
+    flatpickr('.time-local', config_time);
+    config_date = {
+        dateFormat: "Y-m-d"
+    }
+    flatpickr('.date-local', config_date);
+</script>

@@ -89,8 +89,8 @@
                         </td>
                         <td>
                           <button type="button" class="btn btn-success align-items-center m-1"
-                            onclick="location.href='<?= base_url; ?>jadwal/detail/<?= $jadwal['id_jadwal'] ?>'"
-                            data-toggle="tooltip" data-placement="top" title="Detail Jadwal"
+                            onclick="location.href='<?= base_url; ?>presensi/<?= $jadwal['id_jadwal'] ?>'"
+                            data-toggle="tooltip" data-placement="top" title="Presensi"
                             data-id="<?= $jadwal['id_jadwal'] ?>" style="width: 20px;"><i class="far fa-folder-open"
                               style="font-size: 12px; margin-left: -5px;"></i></button>
                           <!-- <button class="btn btn-warning"><i class="far fa-edit"></i></button> -->
