@@ -8,6 +8,7 @@ use App\Models\Tahun_Ajaran as ModelsTahunAjaran;
 use App\Models\Jadwal as ModelsJadwal;
 use App\Models\Siswa as ModelsSiswa;
 use App\Models\Presensi as ModelsPresensi;
+use App\Models\Detail_Presensi as ModelsDetail;
 use App\Models\Presensi;
 use Riyu\Http\Request;
 use Riyu\Validation\Validation;
@@ -214,6 +215,68 @@ class PresensiController extends Controller
         Flasher::setFlash('Berhasil Dihapus', 'success');
         header('Location: ' . base_url . 'presensi/' . $request->idJadwal);
         exit();
+    }
+
+    public function detail(Request $request)
+    {
+        $data['title'] = "Presensi";
+        $data['tahun_ajaran'] = ModelsTahunAjaran::where('isActive', '1')->first();
+        $data['jadwal'] = ModelsJadwal::where('tb_jadwal.id_jadwal', $request->idJadwal)
+            ->select('*', 'DATE_FORMAT(tb_jadwal.jam_akhir, \'%H:%i\') AS jam_akhir_convert', 'DATE_FORMAT(tb_jadwal.jam_awal, \'%H:%i\') AS jam_awal_convert')
+            ->where('tb_kelas_ajaran.id_tahun_ajaran', $data['tahun_ajaran']->id_tahun_ajaran)
+            ->join('tb_kelas_ajaran', 'tb_kelas_ajaran.id_kelas_ajaran', 'tb_jadwal.id_kelas_ajaran')
+            ->join('tb_kelas', 'tb_kelas.id_kelas', 'tb_kelas_ajaran.id_kelas')
+            ->join('tb_guru', 'tb_guru.nuptk', 'tb_jadwal.nuptk')
+            ->join('tb_mapel', 'tb_mapel.id_mapel', 'tb_jadwal.id_mapel')
+            ->first();
+        $data['presensi'] = ModelsPresensi::where('tb_presensi.id_presensi', $request->idPresensi)
+            ->where('tb_presensi.id_jadwal', $data['jadwal']->id_jadwal)
+            ->select('id_presensi', 'id_jadwal', 'DATE_FORMAT(tb_presensi.mulai_presensi, \'%H:%i\') AS jam_awal_presensi', 'DATE_FORMAT(tb_presensi.akhir_presensi, \'%H:%i\') AS jam_akhir_presensi', 'DATE_FORMAT(tb_presensi.mulai_presensi, \'%d-%M-%Y\', \'id_ID\') AS tgl_awal_presensi', 'DATE_FORMAT(tb_presensi.akhir_presensi, \'%d-%M-%Y\', \'id_ID\') AS tgl_akhir_presensi')
+            ->first();
+
+        $data['detail_presensi'] = ModelsDetail::leftjoin('tb_siswa', 'tb_siswa.nis', '=', 'tb_detail_presensi.nis')
+            ->where('tb_detail_presensi.id_presensi', $data['presensi']->id_presensi)
+            ->all();
+        $data['siswa'] = ModelsSiswa::where('id_kelas_ajaran', $data['jadwal']->id_kelas_ajaran)
+            ->orderBy('tb_siswa.nama_siswa', 'asc')
+            ->select('tb_siswa.nis', 'tb_siswa.nama_siswa')
+            ->all();
+
+
+
+        // header('Content-Type: application/json');
+        foreach ($data['siswa'] as $siswa) {
+            // echo json_encode(['nis' => $siswa['nis']], JSON_PRETTY_PRINT);
+            // $data['check'] = ModelsDetail::select('kehadiran')
+            //     ->where('tb_detail_presensi.nis', $siswa['nis'])
+            //     ->where('tb_detail_presensi.id_presensi', $data['presensi']->id_presensi)
+            //     ->all();
+            // if ($data['check'] > 0) {
+            //     // echo json_encode($check['keha']);
+            //     foreach ($data['check'] as $checks) {
+            //         echo json_encode($checks['kehadiran']);
+            //     }
+            // }
+
+            // echo json_encode([
+            //     'nis' => $siswa['nis'],
+            //     'nama' => $siswa['nama_siswa'],
+            //     'Kehadiran' => $check
+            // ], JSON_PRETTY_PRINT);
+            // $data['kehadiran'] = [
+            //     $siswa['nis'], $siswa['nama_siswa'],
+            //     $data['check']
+            // ];
+            // echo json_encode($data['kehadiran']);
+        }
+        // header('Content-Type: application/json');
+        // echo json_encode($data['kehadiran'], JSON_PRETTY_PRINT);
+        return view([
+            'templates/header',
+            'templates/sidebar',
+            'presensi/detail',
+            'templates/footer',
+        ], $data);
     }
     public function kelas(Request $request)
     {

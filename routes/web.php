@@ -179,6 +179,8 @@ Route::group('/presensi', function () {
     Route::get('/{idJadwal}/ubah/{idPresensi}', [PresensiController::class, 'ubah']);
     Route::post('/{idJadwal}/ubah/{idPresensi}', [PresensiController::class, 'update']);
     Route::post('/{idJadwal}/hapus/{idPresensi}', [PresensiController::class, 'delete']);
+
+    Route::get('/{idJadwal}/detail/{idPresensi}', [PresensiController::class, 'detail']);
 });
 
 

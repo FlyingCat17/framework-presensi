@@ -36,7 +36,9 @@
                                         $nama = $mapel['nama_mapel'];
                                                     ?>
                                                     <h5 class="mt-2 font-weight-bold">
+                                                        <!-- <pre> -->
                                                         <?= $nama ?>
+                                                        <!-- </pre> -->
                                                     </h5>
                                                     <div>
                                                         <a href="<?= base_url; ?>mapel/ubah/<?= $id ?>" class="mr-2"
@@ -47,10 +49,9 @@
                                                                 style="font-size: 20px;"></i>
                                                         </a>
                                                         <a href="<?= base_url; ?>mapel/ubah/<?= $id ?>"
-                                                            class="tampilModalHapus" title="Ubah Nama"
-                                                            id="btn-ubah-kelas" data-nama="<?= $mapel['nama_mapel'] ?>"
-                                                            data-id="<?= $mapel['id_mapel']; ?>" data-toggle="modal"
-                                                            data-target="#modal-hapus-mapel">
+                                                            class="tampilModalHapus" title="Hapus" id="btn-ubah-kelas"
+                                                            data-nama="" data-id="<?= $mapel['id_mapel']; ?>"
+                                                            data-toggle="modal" data-target="#modal-hapus-mapel">
                                                             <i class="far fa-trash-alt text-danger"
                                                                 style="font-size: 17px;"></i>
                                                         </a>
@@ -87,8 +88,6 @@
                         <div class="modal-body">
                             <h6>Yakin ingin menghapus Mata Pelajaran ini?</h6>
                             <input type="hidden" name="id_mapel" id="id_mapel" value="">
-                            <p class="d-inline" id="id_mapel_hapus">id_mapel</p><span> - </span>
-                            <p class="d-inline" id="nama_mapel_hapus">nama_mapel</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn text-danger" data-dismiss="modal">Tutup</button>
@@ -106,8 +105,6 @@
     $(document).ready(function () {
 
         $('.tampilModalHapus').on('click', function () {
-            $('#id_mapel_hapus').html($(this).data('id'));
-            $('#nama_mapel_hapus').html($(this).data('nama'));
             $('#id_mapel').val($(this).data('id'));
             $('.modal-content form').attr('action', '<?= base_url; ?>mapel/hapus/' + $(this).data('id'));
         });
