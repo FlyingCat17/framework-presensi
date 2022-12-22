@@ -162,7 +162,7 @@ class Builder extends Grammar
     public function get()
     {
         $query = $this->buildQuery();
-        
+
         $this->setStorage($query);
 
         $connection = new Event();
@@ -180,7 +180,7 @@ class Builder extends Grammar
     public function all()
     {
         $query = $this->buildQuery();
-        
+        // print_r($query);
         $this->setStorage($query);
 
         $connection = new Event();
@@ -199,7 +199,7 @@ class Builder extends Grammar
     {
         $this->limit(1);
         $query = $this->buildQuery();
-        
+
         $this->setStorage($query);
 
         $connection = new Event();
@@ -217,7 +217,7 @@ class Builder extends Grammar
     public function count()
     {
         $query = $this->buildQuery();
-        
+
         $this->setStorage($query);
 
         $connection = new Event();
@@ -235,7 +235,7 @@ class Builder extends Grammar
     public function save()
     {
         $query = $this->buildQuery();
-        
+
         $this->setStorage($query);
 
         $connection = new Event();
@@ -254,7 +254,7 @@ class Builder extends Grammar
     {
         $this->insert($attributes);
         $query = $this->buildQuery();
-        
+
         $this->setStorage($query);
 
         $connection = new Event();

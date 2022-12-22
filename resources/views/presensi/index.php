@@ -9,7 +9,6 @@
                             <div class="row mb-2">
                                 <div class="col-lg-8 col-sm-12">
                                     <div class="d-flex justify-content-start align-items-start">
-
                                         <h6 class="d-inline">ID Jadwal : </h6>
                                         <h6 class="d-inline">
                                             <?= $data['jadwal']->id_jadwal ?>
@@ -78,7 +77,7 @@
                                                 <?= $presensi['akhir_presensi_convert'] ?>
                                             </td>
                                             <td class="text-right">
-                                                <a href="<?= base_url; ?>presensi/detail_presensi/<?= $presensi['id_presensi'] ?>"
+                                                <a href="<?= base_url; ?>presensi/<?= $data['jadwal']->id_jadwal ?>/detail/<?= $presensi['id_presensi'] ?>"
                                                     class="btn btn-success" data-toggle="tooltip" data-placement="top"
                                                     title="Buka Detail"><i class="fas fa-clipboard"></i></a>
                                                 <!-- /{idJadwal}/ubah/{idPresensi} -->

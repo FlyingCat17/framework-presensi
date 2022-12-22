@@ -1,4 +1,4 @@
-<script src="<?= base_url; ?>app/views/presensi/detail.js"></script>
+<?php use App\Models\Detail_Presensi as ModelsDetail; ?>
 <div class="page-container">
     <div class="main-content">
         <div class="container">
@@ -13,10 +13,12 @@
                             <div class="row">
                                 <div class="col-lg-7 col-md-12">
                                     <div class="my-2 ml-2">
-                                        <h4 class="d-inline font-weight-bold" id="_get_nama_mapel" data-nama_mapel="<?= $data['presensi']->nama_mapel ?>"><?= $data['presensi']->nama_mapel ?></h4>
+                                        <h4 class="d-inline font-weight-bold" id="_get_nama_mapel"
+                                            data-nama_mapel="<?= $data['jadwal']->nama_mapel ?>"><?= $data['jadwal']->nama_mapel ?></h4>
                                         <h4 class="d-inline font-weight-bold"> - </h4>
-                                        <h4 class="d-inline font-weight-bold" id="_get_nama_kelas" data-nama_kelas="<?= $data['presensi']->nama_kelas ?>"><?= $data['presensi']->nama_kelas ?></h4>
-                                        <h4 class="mt-2"><?= $data['presensi']->nama_guru ?></h4>
+                                        <h4 class="d-inline font-weight-bold" id="_get_nama_kelas"
+                                            data-nama_kelas="<?= $data['jadwal']->nama_kelas ?>"><?= $data['jadwal']->nama_kelas ?></h4>
+                                        <h4 class="mt-2"><?= $data['jadwal']->nama_guru ?></h4>
                                     </div>
                                 </div>
                                 <div class="col-lg-5 col-md-12">
@@ -26,15 +28,16 @@
                                             <h5 class="">Akhir Presensi : </h5>
                                         </div>
                                         <div>
-                                            <h5 class=""><?= $data['presensi']->mulai_presensi ?></h5>
-                                            <h5 class=""><?= $data['presensi']->akhir_presensi ?></h5>
+                                            <h5 class=""><?= $data['presensi']->tgl_awal_presensi . ' - ' . $data['presensi']->jam_awal_presensi ?></h5>
+                                            <h5 class=""><?= $data['presensi']->tgl_akhir_presensi . ' - ' . $data['presensi']->jam_akhir_presensi ?></h5>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="mt-3">
-                                <?php 
+                                <?php
                                 use Utils\Flasher;
+
                                 Flasher::flash(); ?>
                             </div>
                         </div>
@@ -55,35 +58,64 @@
                                     <tbody>
                                         <?php
                                         $no = 1;
-                                        foreach ($data['detail_presensi'] as $detail) : ?>
-                                            <tr style="max-height: 3rem;">
-                                                <td scope="row"><?= $no; ?></td>
-                                                <td><?= $detail['nis'] ?></td>
-                                                <td style="max-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?= $detail['nama_siswa']; ?></td>
-                                                <td><?= ($detail['status_kehadiran'] == "1" ? '<span class="badge badge-success">Hadir</span>' : ($detail['status_kehadiran'] == "2" ? '<span class="badge badge-info">Izin</span>' : ($detail['status_kehadiran'] == "3" ? '<span class="badge badge-warning">Sakit</span>' : '<span class="badge badge-danger">Tidak Hadir</span> '))) ?></td>
-                                                <td><?php
-                                                    if ($detail['status_kehadiran'] != NULL) {
-                                                    ?>
-                                                        <button class="btn btn-icon btn-primary d-flex align-items-center justify-content-center">
-                                                            <i class="material-icons">open_in_browser</i>
-                                                        </button>
-                                                    <?php
-                                                    } else {
-                                                    ?>
-                                                        <button class="btn btn-icon btn-success d-flex align-items-center justify-content-center tampilModalTambahPresensi" title="Isi Presensi Siswa" data-toggle="modal" data-target="#IsiPresensi" data-nis="<?= $detail['nis'] ?>" data-nama="<?= $detail['nama_siswa'] ?>">
-                                                            <i class="material-icons">edit_note</i>
-                                                        </button>
-                                                    <?php
-                                                    }
-                                                    ?>
-                                                </td>
-                                            </tr>
+                                        foreach ($data['siswa'] as $siswa): ?>
+                                        <?php
+                                            $check = ModelsDetail::select('kehadiran')
+                                                ->where('tb_detail_presensi.nis', $siswa['nis'])
+                                                ->where('tb_detail_presensi.id_presensi', $data['presensi']->id_presensi)
+                                                ->all();
+                                            $kehadiran = [
+                                                'nis' => $siswa['nis'],
+                                                'nama' => $siswa['nama_siswa'],
+                                                'kehadiran' => $check,
+                                            ];
+                                            if ($kehadiran['kehadiran'] != null) {
+                                                $hadir = $kehadiran['kehadiran'][0]['kehadiran'];
+                                                // echo json_encode($hadir);
+                                                print_r($hadir);
+                                            } else {
+                                                $hadir = 0;
+                                            }
+                                        ?>
+                                        <tr style="max-height: 3rem;">
+                                            <td scope="row"><?= $no; ?></td>
+                                            <td><?= $siswa['nis'] ?></td>
+                                            <td
+                                                style="max-width: 500px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                                <?= $siswa['nama_siswa']; ?></td>
+                                            <td><?=($hadir == "1" ? '<span class="badge badge-success">Hadir</span>' : ($hadir == "2" ? '<span class="badge badge-info">Izin</span>' : ($hadir == "3" ? '<span class="badge badge-warning">Sakit</span>' : '<span class="badge badge-danger">Tidak Hadir</span> '))) ?></td>
+                                            <td><?php
+                                            if ($siswa['nis'] != NULL) {
+                                            ?>
+                                                <button
+                                                    class="btn btn-icon btn-primary d-flex align-items-center justify-content-center">
+                                                    <i class="material-icons">open_in_browser</i>
+                                                </button>
+                                                <?php
+                                            } else {
+                                                ?>
+                                                <button
+                                                    class="btn btn-icon btn-success d-flex align-items-center justify-content-center tampilModalTambahPresensi"
+                                                    title="Isi Presensi Siswa" data-toggle="modal"
+                                                    data-target="#IsiPresensi" data-nis="<?= $detail['nis'] ?>"
+                                                    data-nama="<?= $detail['nama_siswa'] ?>">
+                                                    <i class="material-icons">edit_note</i>
+                                                </button>
+                                                <?php
+                                            }
+                                                ?>
+                                            </td>
+                                        </tr>
                                         <?php
                                             $no++;
                                         endforeach;
                                         ?>
+                                        <tr>
+
+                                        </tr>
                                     </tbody>
                                 </table>
+                                <?=(empty($data['siswa']) ? '<p class="text-center">Tidak Ada Data</p>' : '') ?>
                             </div>
                         </div>
                     </div>
@@ -93,8 +125,8 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="IsiPresensi">
+<!-- Modal --->
+<!-- <div class="modal fade" id="IsiPresensi">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <form action="" method="post">
@@ -130,10 +162,11 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default text-danger" id="tutupModalTambahPresensi" data-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-default text-danger" id="tutupModalTambahPresensi"
+                        data-dismiss="modal">Tutup</button>
                     <button type="button" id="btn_save_tambah" class="btn btn-success font-weight-bold">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
-</div>
+</div> -->
