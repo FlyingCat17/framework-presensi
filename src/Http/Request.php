@@ -143,9 +143,10 @@ class Request extends Foundation
         return $script_name;
     }
 
-    public static function header($authorization)
+    public static function header($arguments)
     {
-        print_r($_SERVER);
+        $arguments = strtoupper($arguments);
+        return $_SERVER['HTTP_'. $arguments];
     }
     
     public function getHeaders()

@@ -115,12 +115,18 @@ trait Query
      * @param string $type
      * @return $this
      */
-    public function join($table, $first, $operator = null, $second = null, $type = 'inner')
+    public function join($table, $first, $operator = null, $second = null, $type = 'INNER')
     {
         // check if the operator is null
         // and set the operator to equal
         if (func_num_args() == 3) {
             list($second, $operator) = [$operator, '='];
+        }
+
+        if ($type != 'inner' && in_array($type, $this->verbJoin)) {
+            if (func_get_args() == 4) {
+                list($second, $operator) = [$operator, '='];
+            }
         }
 
         // check if the value is null
@@ -143,7 +149,7 @@ trait Query
      */
     public function leftjoin($table, $first, $operator = null, $second = null)
     {
-        return $this->join($table, $first, $operator, $second, 'left');
+        return $this->join($table, $first, $operator, $second, 'LEFT');
     }
 
     /**
@@ -157,7 +163,7 @@ trait Query
      */
     public function rightjoin($table, $first, $operator = null, $second = null)
     {
-        return $this->join($table, $first, $operator, $second, 'right');
+        return $this->join($table, $first, $operator, $second, 'RIGHT');
     }
 
     /**
@@ -171,7 +177,7 @@ trait Query
      */
     public function fulljoin($table, $first, $operator = null, $second = null)
     {
-        return $this->join($table, $first, $operator, $second, 'right');
+        return $this->join($table, $first, $operator, $second, 'FULL');
     }
 
     /**
