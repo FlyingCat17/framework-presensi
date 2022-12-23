@@ -10,11 +10,7 @@ class Auth extends Controller
     {
         $this->ruleLogin($request);
 
-        try {
-            $user = $this->findSiswa($request->username);
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
+        $user = $this->findSiswa($request->username);
 
         if (!password_verify($request->password, $user->password)) {
             return Response::json(403, 'Password salah');

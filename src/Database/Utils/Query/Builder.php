@@ -109,6 +109,10 @@ class Builder extends Grammar
      */
     protected $query;
 
+    protected $verbJoin = [
+        'INNER', 'LEFT', 'RIGHT', 'FULL'
+    ];
+
     protected $timestamp = [];
 
     protected $fillable = [];
