@@ -45,14 +45,30 @@ class Siswa extends Controller
             header('location: ' . base_url . 'siswa/tambah');
             exit();
         }
-        $errors = Validation::make($request->all(), [
+        $rule = [
             'nis' => 'required|min:4|max:15',
             'nama' => 'required|min:3|max:120',
             'alamat' => 'required|min:10|max:120',
             'telepon' => 'required|min:10|max:14',
             'jk' => 'required',
             'tempat_lahir' => 'required|max:25',
-        ]);
+        ];
+        $messages = [
+            'required' => 'Kolom :field harus diisi!',
+            'min' => 'Kolom :field minimal :min karakter!',
+            'max' => 'Kolom :field maksimal :max karakter!',
+            'numeric' => 'Kolom :field harus berisikan angka!',
+        ];
+        $errors = Validation::message($request->all(), $rule, $messages);
+        $errors = Validation::first($errors);
+        // $errors = Validation::make($request->all(), [
+        //     'nis' => 'required|min:4|max:15',
+        //     'nama' => 'required|min:3|max:120',
+        //     'alamat' => 'required|min:10|max:120',
+        //     'telepon' => 'required|min:10|max:14',
+        //     'jk' => 'required',
+        //     'tempat_lahir' => 'required|max:25',
+        // ]);
         $valiadatechars = [
             'nis' => htmlspecialchars($request->nis),
             'nama' => htmlspecialchars($request->nama),
@@ -62,7 +78,7 @@ class Siswa extends Controller
             'tempat_lahir' => htmlspecialchars($request->tempat_lahir),
         ];
         if ($errors) {
-            Flasher::setFlash('Gagal Ditambahkan! ' . $data['check']->nis, 'danger');
+            Flasher::setFlash('Gagal Ditambahkan! ' . $errors, 'danger');
             header('location: ' . base_url . 'siswa/tambah');
             exit();
         }

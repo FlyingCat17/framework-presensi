@@ -1,11 +1,17 @@
 <?php
-
 namespace App\Controllers\Api;
 
 use Riyu\Http\Request;
 
 class Settings extends Controller
 {
+    /**
+     * Update profile
+     * 
+     * @param Request $request
+     * 
+     * @return void
+     */
     public function updateProfile(Request $request)
     {
         $this->ruleUpdate($request);
@@ -40,6 +46,13 @@ class Settings extends Controller
         return Response::json(200, 'Berhasil update profile', $this->mapUser($user));
     }
 
+    /**
+     * Change password
+     * 
+     * @param Request $request
+     * 
+     * @return void
+     */
     public function changePassword(Request $request)
     {
         $this->ruleChangePassword($request);
@@ -59,6 +72,13 @@ class Settings extends Controller
         return Response::json(200, 'Berhasil update password');
     }
 
+    /**
+     * Delete foto profile
+     * 
+     * @param Request $request
+     * 
+     * @return void
+     */
     public function deleteFoto(Request $request)
     {
         $this->ruleDeleteFoto($request);
@@ -72,6 +92,14 @@ class Settings extends Controller
         return Response::json(200, 'Berhasil menghapus foto', $this->mapUser($user));
     }
 
+    /**
+     * Handle upload foto
+     * 
+     * @param array $foto
+     * @param string $nis
+     * 
+     * @return string destination
+     */
     public function foto($foto = array(), string $nis)
     {
         // Get path info
@@ -89,24 +117,5 @@ class Settings extends Controller
         return base_url . 'images/profile/' . $formatFile;
     }
 
-    protected function compress($source, $destination, $quality)
-    {
-        $imgInfo = getimagesize($source);
-        $mime = $imgInfo['mime'];
-        switch ($mime) {
-            case 'image/jpeg':
-                $image = imagecreatefromjpeg($source);
-                break;
-            case 'image/png':
-                $image = imagecreatefrompng($source);
-                break;
-            case 'image/gif':
-                $image = imagecreatefromgif($source);
-                break;
-            default:
-                $image = imagecreatefromjpeg($source);
-        }
-        imagejpeg($image, $destination, $quality);
-        return $destination;
-    }
+    
 }

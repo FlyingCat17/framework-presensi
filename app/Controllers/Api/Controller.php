@@ -1,164 +1,68 @@
 <?php
-
 namespace App\Controllers\Api;
 
-use App\Models\Siswa;
+use App\Controllers\Api\Traits\Mapping;
+use App\Controllers\Api\Traits\Query;
+use App\Controllers\Api\Traits\Rule;
 
 class Controller
 {
-    use Rule;
+    use Rule, Query, Mapping;
 
     /**
-     * @param string $username
-     * @return object
+     * Compress image
+     * 
+     * @param string $source
+     * @param string $destination
+     * @param int $quality
+     * 
+     * @return string destination
      */
-    public function findSiswa($username)
+    protected function compress($source, $destination, $quality)
     {
-        try {
-            $user = Siswa::findOrFail($username, 'nis', function () {
-                return Response::json(404, 'Username salah');
-            });
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
+        $imgInfo = getimagesize($source);
+        $mime = $imgInfo['mime'];
+        switch ($mime) {
+            case 'image/jpeg':
+                $image = imagecreatefromjpeg($source);
+                break;
+            case 'image/png':
+                $image = imagecreatefrompng($source);
+                break;
+            case 'image/gif':
+                $image = imagecreatefromgif($source);
+                break;
+            default:
+                $image = imagecreatefromjpeg($source);
         }
-
-        return $user;
+        imagejpeg($image, $destination, $quality);
+        return $destination;
     }
 
-    /**
-     * @param object $username
-     * @return object
-     */
-    public function mapUser($user)
+    protected function daysSelector($days)
     {
-        return array(
-            'nis' => $user->nis,
-            'nama' => $user->nama_siswa,
-            'kelas' => $user->nama_kelas,
-            'id_kelas' => $user->id_kelas,
-            'tanggal_lahir' => $user->tanggal_lahir,
-            'foto' => $user->foto_profil,
-            'email' => $user->email,
-            'no_hp' => $user->notelp_siswa,
-            'alamat' => $user->alamat_siswa,
-            'isLogin' => $user->isLogin,
-            'deviceId' => $user->deviceId,
-            'nama_kelas' => $user->nama_kelas,
-        );
-    }
-
-    /**
-     * @return array $columns
-     */
-    public function select()
-    {
-        return [
-            "tb_kelas_ajaran.id_kelas_ajaran",
-            "tb_kelas_ajaran.id_kelas",
-            "tb_kelas.id_kelas",
-            "tb_kelas.nama_kelas",
-            "tb_siswa.nis",
-            "tb_siswa.nama_siswa",
-            "tb_siswa.email",
-            "tb_siswa.tanggal_lahir",
-            "tb_siswa.foto_profil",
-            "tb_siswa.deviceId",
-            "tb_siswa.isLogin",
-            "tb_siswa.notelp_siswa",
-            "tb_siswa.alamat_siswa",
-        ];
-    }
-
-    /**
-     * @param string $username
-     * @return object
-     */
-    public function query($username)
-    {
-        try {
-            return Siswa::join('tb_kelas_ajaran', 'tb_kelas_ajaran.id_kelas_ajaran', 'tb_siswa.id_kelas_ajaran')
-                ->join('tb_kelas', 'tb_kelas.id_kelas', 'tb_kelas_ajaran.id_kelas')
-                ->where('tb_siswa.nis', $username)
-                ->select($this->select())
-                ->first();
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
-    }
-
-    /**
-     * @param int $isLogin
-     * @param string $username
-     * @param string|null $deviceId
-     * @return object
-     */
-    public function updateLogin($isLogin, $username, ?string $deviceId)
-    {
-        try {
-            Siswa::where('nis', $username)->update([
-                'isLogin' => $isLogin,
-                'deviceId' => $deviceId
-            ])->save();
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
-    }
-
-    /**
-     * @param string $username
-     * @param array $update
-     * @return
-     */
-    public function queryUpdateProfile($username, $update)
-    {
-        try {
-            Siswa::where('nis', $username)->update($update)->save();
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
-    }
-
-    /**
-     * @param string $username
-     * @param string $password
-     * @return
-     */
-    public function updatePassword($username, $password)
-    {
-        try {
-            Siswa::where('nis', $username)->update([
-                'password' => password_hash($password, PASSWORD_BCRYPT)
-            ])->save();
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
-    }
-
-    /**
-     * @param string $username
-     * @return
-     */
-    public function deleteFotoProfile($username)
-    {
-        try {
-            Siswa::where('nis', $username)->update([
-                'foto_profil' => null
-            ])->save();
-        } catch (\Throwable $th) {
-            return Response::json(500, 'Terjadi kesalahan');
-        }
-    }
-
-    public function updateOtp($username, $otp)
-    {
-        try {
-            Siswa::where('nis', $username)->update([
-                'otp' => $otp,
-                'otp_expired' => date('Y-m-d H:i:s', strtotime('+5 minutes')),
-            ])->save();
-        } catch (\Throwable $th) {
-            echo $th;
-            return Response::json(500, 'Terjadi kesalahan');
+        switch (strtolower($days)) {
+            case 1:
+                return 'Senin';
+                break;
+            case 2:
+                return 'Selasa';
+                break;
+            case 3:
+                return "Rabu";
+                break;
+            case 4:
+                return 'Kamis';
+                break;
+            case 5:
+                return 'Jumat';
+                break;
+            case 6:
+                return 'Sabtu';
+                break;
+            default:
+                return 'Minggu';
+                break;
         }
     }
 }

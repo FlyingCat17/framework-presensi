@@ -30,9 +30,9 @@ class Manager implements ConnectionManager
         } catch (\Throwable $th) {
             $config = Config::get('app');
             if ($config['debug']) {
-                echo $th->getMessage();
+                echo $th;
             } else {
-                throw new AppException(Message::exception(1, $th->getMessage()));
+                throw new AppException($th);
             }
         }
     }
@@ -56,9 +56,9 @@ class Manager implements ConnectionManager
         } catch (\Throwable $th) {
             $config = Config::get('app');
             if ($config['debug']) {
-                echo $th->getMessage();
+                echo $th;
             } else {
-                throw new AppException(Message::exception(1, $th->getMessage()));
+                throw new AppException($th);
             }
         }
     }
@@ -82,9 +82,9 @@ class Manager implements ConnectionManager
         } catch (PDOException $th) {
             $config = Config::get('app');
             if ($config['debug']) {
-                echo $th->getMessage();
+                echo $th;
             } else {
-                throw new AppException(Message::exception(1, $th->getMessage()));
+                throw new AppException($th);
             }
         }
     }
@@ -108,9 +108,9 @@ class Manager implements ConnectionManager
         } catch (PDOException $th) {
             $config = Config::get('app');
             if ($config['debug']) {
-                echo $th->getMessage();
+                echo $th;
             } else {
-                throw new AppException(Message::exception(1, $th->getMessage()));
+                throw new AppException($th);
             }
         }
     }
@@ -134,9 +134,9 @@ class Manager implements ConnectionManager
         } catch (\Throwable $th) {
             $config = Config::get('app');
             if ($config['debug']) {
-                echo $th->getMessage();
+                echo $th;
             } else {
-                throw new AppException(Message::exception(1, $th->getMessage()));
+                throw new AppException($th);
             }
         }
     }
@@ -153,9 +153,9 @@ class Manager implements ConnectionManager
         } catch (\Throwable $th) {
             $config = Config::get('app');
             if ($config['debug']) {
-                echo $th->getMessage();
+                echo $th;
             } else {
-                throw new AppException(Message::exception(1, $th->getMessage()));
+                throw new AppException($th);
             }
         }
     }
@@ -179,9 +179,9 @@ class Manager implements ConnectionManager
         } catch (\Throwable $th) {
             $config = Config::get('app');
             if ($config['debug']) {
-                echo $th->getMessage();
+                echo $th;
             } else {
-                throw new AppException(Message::exception(1, $th->getMessage()));
+                throw new AppException($th);
             }
         }
     }
@@ -205,9 +205,9 @@ class Manager implements ConnectionManager
         } catch (\Throwable $th) {
             $config = Config::get('app');
             if ($config['debug']) {
-                echo $th->getMessage();
+                echo $th;
             } else {
-                throw new AppException(Message::exception(1, $th->getMessage()));
+                throw new AppException($th);
             }
         }
     }
@@ -242,9 +242,9 @@ class Manager implements ConnectionManager
         } catch (\Throwable $th) {
             $config = Config::get('app');
             if ($config['debug']) {
-                echo $th->getMessage();
+                echo $th;
             } else {
-                throw new AppException(Message::exception(1, $th->getMessage()));
+                throw new AppException($th);
             }
         }
     }

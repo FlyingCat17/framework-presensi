@@ -1,10 +1,7 @@
 <?php
-
 namespace App\Controllers\Api;
 
-use App\Models\Siswa;
 use Riyu\Http\Request;
-use Riyu\Validation\Validation;
 
 class ForgotPassword extends Controller
 {
