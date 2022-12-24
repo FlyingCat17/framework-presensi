@@ -1,8 +1,6 @@
 <?php
-
 namespace App\Controllers\Api;
 
-use App\Models\Siswa;
 use Riyu\Http\Request;
 
 class Mail extends Controller

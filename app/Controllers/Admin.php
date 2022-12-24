@@ -10,7 +10,7 @@ use App\Models\Siswa;
 use App\Models\Guru;
 use App\Models\Mapel;
 use App\Models\Tahun_Ajaran;
-use App\Models\kelas_Ajaran;
+use App\Models\Kelas_Ajaran;
 
 class Admin extends Controller
 {

@@ -2,8 +2,6 @@
 namespace App\Controllers\Api;
 
 use App\Models\Informasi as ModelsInformasi;
-use Riyu\Http\Request;
-use Riyu\Validation\Validation;
 
 class Informasi
 {

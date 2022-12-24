@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controllers\Api;
 
 use Riyu\Http\Request;
