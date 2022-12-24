@@ -179,8 +179,11 @@ Route::group('/presensi', function () {
     Route::get('/{idJadwal}/ubah/{idPresensi}', [PresensiController::class, 'ubah']);
     Route::post('/{idJadwal}/ubah/{idPresensi}', [PresensiController::class, 'update']);
     Route::post('/{idJadwal}/hapus/{idPresensi}', [PresensiController::class, 'delete']);
+
+    //Detail Presensi
     Route::get('/{idJadwal}/detail/{idPresensi}', [PresensiController::class, 'detail']);
-    Route::post('/{idJadwal}/detail/{idPresensi}', [PresensiController::class, 'tambah_presensi']);
+    Route::get('/{idJadwal}/detail/{idPresensi}/tambah/{nis}', [PresensiController::class, 'tambahSiswaPresensi']);
+    Route::post('/{idJadwal}/detail/{idPresensi}/tambah/{nis}', [PresensiController::class, 'tambah_presensi']);
     Route::get('/{idJadwal}/detail/{idPresensi}/siswa/{nis}', [PresensiController::class, 'detailSiswaPresensi']);
 
 });
