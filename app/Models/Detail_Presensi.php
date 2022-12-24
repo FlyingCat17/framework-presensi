@@ -17,7 +17,7 @@ class Detail_Presensi extends Model
         'nis',
         'timestamp',
         'kehadiran',
-        'koorfinat',
+        'koordinat',
         'bukti_izin',
     ];
 
