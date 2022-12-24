@@ -21,6 +21,7 @@
     ?>
 
     <!-- page js -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.0/jquery.min.js"></script>
     <script src="<?= base_url ?>resources/js/vendors.min.js"></script>
     <script src="<?= base_url ?>resources/js/app.min.js"></script>
     <script src="<?= base_url ?>resources/js/main.js"></script>

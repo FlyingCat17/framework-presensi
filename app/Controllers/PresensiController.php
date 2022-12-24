@@ -126,7 +126,7 @@ class PresensiController extends Controller
         }
 
         ModelsPresensi::insert([
-            'id_presensi' => '',
+            // 'id_presensi' => '',
             'id_jadwal' => $data_insert['id_jadwal'],
             'mulai_presensi' => $data_insert['mulai_presensi'] . ' ' . $data_insert['mulai_jam_presensi'],
             'akhir_presensi' => $data_insert['akhir_presensi'] . ' ' . $data_insert['akhir_jam_presensi']
@@ -229,11 +229,18 @@ class PresensiController extends Controller
             ->join('tb_guru', 'tb_guru.nuptk', 'tb_jadwal.nuptk')
             ->join('tb_mapel', 'tb_mapel.id_mapel', 'tb_jadwal.id_mapel')
             ->first();
+        if ($data['jadwal'] == false || null) {
+            echo 'Tidak Ada Jadwal';
+            exit();
+        }
         $data['presensi'] = ModelsPresensi::where('tb_presensi.id_presensi', $request->idPresensi)
             ->where('tb_presensi.id_jadwal', $data['jadwal']->id_jadwal)
             ->select('id_presensi', 'id_jadwal', 'DATE_FORMAT(tb_presensi.mulai_presensi, \'%H:%i\') AS jam_awal_presensi', 'DATE_FORMAT(tb_presensi.akhir_presensi, \'%H:%i\') AS jam_akhir_presensi', 'DATE_FORMAT(tb_presensi.mulai_presensi, \'%d-%M-%Y\', \'id_ID\') AS tgl_awal_presensi', 'DATE_FORMAT(tb_presensi.akhir_presensi, \'%d-%M-%Y\', \'id_ID\') AS tgl_akhir_presensi')
             ->first();
-
+        if ($data['presensi'] == false || null) {
+            echo 'Tidak Ada Presensi';
+            exit();
+        }
         $data['detail_presensi'] = ModelsDetail::leftjoin('tb_siswa', 'tb_siswa.nis', '=', 'tb_detail_presensi.nis')
             ->where('tb_detail_presensi.id_presensi', $data['presensi']->id_presensi)
             ->all();
@@ -241,7 +248,6 @@ class PresensiController extends Controller
             ->orderBy('tb_siswa.nama_siswa', 'asc')
             ->select('tb_siswa.nis', 'tb_siswa.nama_siswa')
             ->all();
-
 
 
         // header('Content-Type: application/json');
@@ -270,7 +276,7 @@ class PresensiController extends Controller
             // echo json_encode($data['kehadiran']);
         }
         // header('Content-Type: application/json');
-        // echo json_encode($data['kehadiran'], JSON_PRETTY_PRINT);
+        // echo json_encode($data['presensi'], JSON_PRETTY_PRINT);
         return view([
             'templates/header',
             'templates/sidebar',
@@ -278,34 +284,55 @@ class PresensiController extends Controller
             'templates/footer',
         ], $data);
     }
-    public function kelas(Request $request)
+    public function tambah_presensi(Request $request)
     {
-        $data['title'] = 'Presensi';
-        $data['tahun_ajaran'] = ModelsTahunAjaran::where('isActive', '1')->first();
-        $data['kelas'] = ModelsKelasAjaran::where('id_kelas_ajaran', $request->idKelasAjaran)
-            ->join('tb_kelas', 'tb_kelas.id_kelas', 'tb_kelas_ajaran.id_kelas')
-            ->where('id_tahun_ajaran', $data['tahun_ajaran']->id_tahun_ajaran)
-            ->first();
-        $data['jadwal'] = ModelsJadwal::select('tb_jadwal.id_jadwal', 'tb_kelas.nama_kelas', 'tb_mapel.nama_mapel', 'tb_guru.nama_guru', 'tb_jadwal.hari', 'tb_jadwal.jam_ke', 'DATE_FORMAT(tb_jadwal.jam_awal, \'%H:%i\') AS jam_awal', 'DATE_FORMAT(tb_jadwal.jam_akhir, \'%H:%i\') AS jam_akhir', 'tb_jadwal.nuptk', 'tb_jadwal.id_mapel', 'tb_jadwal.id_kelas_ajaran')
-            ->join('tb_guru', 'tb_guru.nuptk', 'tb_jadwal.nuptk')
-            ->join('tb_mapel', 'tb_mapel.id_mapel', 'tb_jadwal.id_mapel')
-            ->join('tb_kelas_ajaran', 'tb_kelas_ajaran.id_kelas_ajaran', 'tb_jadwal.id_kelas_ajaran')
-            ->join('tb_kelas', 'tb_kelas.id_kelas', 'tb_kelas_ajaran.id_kelas')
-            ->where('tb_kelas_ajaran.id_tahun_ajaran', $data['tahun_ajaran']->id_tahun_ajaran)
-            ->where('tb_kelas_ajaran.id_kelas_ajaran', $request->idKelasAjaran)
-            ->orderBy('tb_jadwal.hari', 'asc')
-            ->orderBy('tb_jadwal.jam_awal', 'asc')
-            ->all();
-        if ($data['kelas'] == false || null) {
-            header('Location: ' . base_url . 'presensi');
+        if (isset($request->kehadiran)) {
+            $kehadiran = $request->kehadiran;
+            switch ($kehadiran) {
+                case '1':
+                    // echo 'Hadir';
+                    date_default_timezone_set('Asia/Jakarta');
+                    date_default_timezone_get();
+                    $date2 = date('Y-m-d H:i:s', time());
+                    // echo $date2;
+                    ModelsDetail::insert([
+                        'id_presensi' => $request->idPresensi,
+                        'nis' => $request->nis,
+                        'timestamp' => $date2,
+                        'kehadiran' => $request->kehadiran
+                    ])->save();
+                    echo 'Berhasil Presensi Siswa';
+                    Flasher::setFlash('Berhasil Presensi Siswa', 'success');
+                    break;
+                case '2':
+                    echo 'Izin';
+                    break;
+                case '3':
+                    echo 'Sakit';
+                    break;
+                default:
+                    Flasher::setFlash('Harap Pilih Kehadiran! {Kehadiran:null}', 'danger');
+                    header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi);
+                    break;
+            }
         }
-        // header('Content-Type: application/json');
-        // echo json_encode($data['kelas'], JSON_PRETTY_PRINT);
-        return view([
-            'templates/header',
-            'templates/sidebar',
-            'presensi/pilih_jadwal',
-            'templates/footer',
-        ], $data);
+        // if ($request->kehadiran == 'null') {
+        //     // echo '<script>alert(\'Kehadiran Kosong!\')</script>';
+        //     Flasher::setFlash('Kehadiran yang dipilih Kosong!', 'danger');
+        //     header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi);
+        //     exit();
+        // }
+
+    }
+    public function detailSiswaPresensi(Request $request)
+    {
+        $p = [
+            'ID Jadwal' => $request->idJadwal,
+            'ID Presensi' => $request->idPresensi,
+            'NIS' => $request->nis
+        ];
+
+        header('Content-Type: application/json');
+        echo json_encode($p, JSON_PRETTY_PRINT);
     }
 }

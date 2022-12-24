@@ -34,6 +34,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row mt-3">
+                                <div class="col-lg-2 col-md-12 d-flex justify-content-start">
+                                    <button class="btn btn-danger w-80 mx-2"
+                                        onclick="location.href='<?= base_url; ?>presensi/<?= $data['jadwal']->id_jadwal ?>'"><i
+                                            class="anticon anticon-left mr-2"></i>Jadwal</button>
+                                </div>
+                                <div class="col-lg-10 col-md-12">
+
+                                </div>
+                            </div>
                             <div class="mt-3">
                                 <?php
                                 use Utils\Flasher;
@@ -72,7 +82,7 @@
                                             if ($kehadiran['kehadiran'] != null) {
                                                 $hadir = $kehadiran['kehadiran'][0]['kehadiran'];
                                                 // echo json_encode($hadir);
-                                                print_r($hadir);
+                                                // print_r($hadir);
                                             } else {
                                                 $hadir = 0;
                                             }
@@ -85,7 +95,7 @@
                                                 <?= $siswa['nama_siswa']; ?></td>
                                             <td><?=($hadir == "1" ? '<span class="badge badge-success">Hadir</span>' : ($hadir == "2" ? '<span class="badge badge-info">Izin</span>' : ($hadir == "3" ? '<span class="badge badge-warning">Sakit</span>' : '<span class="badge badge-danger">Tidak Hadir</span> '))) ?></td>
                                             <td><?php
-                                            if ($siswa['nis'] != NULL) {
+                                            if ($hadir != NULL) {
                                             ?>
                                                 <button
                                                     class="btn btn-icon btn-primary d-flex align-items-center justify-content-center">
@@ -97,8 +107,8 @@
                                                 <button
                                                     class="btn btn-icon btn-success d-flex align-items-center justify-content-center tampilModalTambahPresensi"
                                                     title="Isi Presensi Siswa" data-toggle="modal"
-                                                    data-target="#IsiPresensi" data-nis="<?= $detail['nis'] ?>"
-                                                    data-nama="<?= $detail['nama_siswa'] ?>">
+                                                    data-target="#IsiPresensi" data-nis="<?= $siswa['nis'] ?>"
+                                                    data-nama="<?= $siswa['nama_siswa'] ?>">
                                                     <i class="material-icons">edit_note</i>
                                                 </button>
                                                 <?php
@@ -126,47 +136,59 @@
 </div>
 
 <!-- Modal --->
-<!-- <div class="modal fade" id="IsiPresensi">
+<div class="modal fade" id="IsiPresensi">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="" method="post">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">Isi Presensi Siswa</h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <i class="anticon anticon-close"></i>
-                    </button>
+            <!-- <form action="" method="post"> -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Isi Presensi Siswa</h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-group mb-3">
+                    <h5 class="d-inline" id="nis-tambah-presensi" data-nis="">E41212174</h5>
+                    <h5 class="d-inline"> - </h5>
+                    <h5 class="d-inline" id="nama-tambah-presensi" data-nama>Fathan Maulana</h5>
                 </div>
-                <div class="modal-body">
-                    <div class="form-group mb-3">
-                        <h5 class="d-inline" id="nis-tambah-presensi" data-nis="">E41212174</h5>
-                        <h5 class="d-inline"> - </h5>
-                        <h5 class="d-inline" id="nama-tambah-presensi" data-nama>Fathan Maulana</h5>
-                    </div>
+                <div class="form-group">
+                    <label for="inputState">Status Kehadiran</label>
+                    <select class="form-control" id="TambahKehadiran" name="kehadiran">
+                        <option selected value="null">Pilih Status Kehadiran</option>
+                        <option value="1">Hadir</option>
+                        <option value="2">Izin</option>
+                        <option value="3">Sakit</option>
+                    </select>
+                </div>
+                <div class="d-none" id="izin">
                     <div class="form-group">
-                        <label for="inputState">Status Kehadiran</label>
-                        <select class="form-control" id="TambahKehadiran">
-                            <option selected value="null">Pilih Status Kehadiran</option>
-                            <option value="1">Hadir</option>
-                            <option value="2">Izin</option>
-                            <option value="3">Sakit</option>
-                        </select>
-                    </div>
-                    <div class="d-none" id="izin">
-                        <div class="form-group">
-                            <label for="customFile">Surat / Bukti Izin</label>
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="customFile">
-                                <label class="custom-file-label" for="customFile">Pilih File</label>
+                        <label for="customFile">Surat / Bukti Izin</label>
+                        <br>
+                        <input type="file" name="file" class="file" style="visibility: hidden; position: absolute;">
+                        <div class="input-group my-3">
+                            <input type="text" class="form-control" disabled placeholder="Upload File" id="file">
+                            <div class="input-group-append">
+                                <button type="button" class="browse btn btn-primary">Browse...</button>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <img src="https://via.placeholder.com/80" id="preview" class="img-thumbnail">
+                        </div>
+                        <!-- <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile">
+                            <label class="custom-file-label" for="customFile">Pilih File</label>
+                        </div> -->
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default text-danger" id="tutupModalTambahPresensi"
-                        data-dismiss="modal">Tutup</button>
-                    <button type="button" id="btn_save_tambah" class="btn btn-success font-weight-bold">Simpan</button>
-                </div>
-            </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default text-danger" id="tutupModalTambahPresensi"
+                    data-dismiss="modal">Tutup</button>
+                <button type="submit" id="btn_save_tambah" data-jadwal="<?= $data['jadwal']->id_jadwal ?>"
+                    data-idpresensi="<?= $data['presensi']->id_presensi ?>"
+                    class="btn btn-success font-weight-bold">Simpan</button>
+            </div>
+            <!-- </form> -->
         </div>
     </div>
-</div> -->
+</div>
+
+<script src="<?= base_url; ?>resources/views/presensi/insertDetail.js"></script>
