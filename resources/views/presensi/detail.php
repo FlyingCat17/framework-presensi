@@ -35,12 +35,12 @@
                                 </div>
                             </div>
                             <div class="row mt-3">
-                                <div class="col-lg-2 col-md-12 d-flex justify-content-start">
+                                <div class="col-lg-3 col-md-12 d-flex justify-content-start">
                                     <button class="btn btn-danger w-80 mx-2"
                                         onclick="location.href='<?= base_url; ?>presensi/<?= $data['jadwal']->id_jadwal ?>'"><i
-                                            class="anticon anticon-left mr-2"></i>Jadwal</button>
+                                            class="anticon anticon-left mr-2"></i>Daftar Jadwal</button>
                                 </div>
-                                <div class="col-lg-10 col-md-12">
+                                <div class="col-lg-9 col-md-12">
 
                                 </div>
                             </div>
@@ -106,7 +106,8 @@
                                                 ?>
                                                 <button
                                                     class="btn btn-icon btn-success d-flex align-items-center justify-content-center tampilModalTambahPresensi"
-                                                    title="Isi Presensi Siswa" data-toggle="modal"
+                                                    title="Isi Presensi Siswa"
+                                                    onclick="location.href='<?= base_url; ?>presensi/<?= $data['jadwal']->id_jadwal ?>/detail/<?= $data['presensi']->id_presensi ?>/tambah/<?= $siswa['nis'] ?>'"
                                                     data-target="#IsiPresensi" data-nis="<?= $siswa['nis'] ?>"
                                                     data-nama="<?= $siswa['nama_siswa'] ?>">
                                                     <i class="material-icons">edit_note</i>
@@ -136,10 +137,10 @@
 </div>
 
 <!-- Modal --->
-<div class="modal fade" id="IsiPresensi">
+<!--<div class="modal fade" id="IsiPresensi">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <!-- <form action="" method="post"> -->
+            <form action="" method="post">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalCenterTitle">Isi Presensi Siswa</h5>
             </div>
@@ -170,25 +171,25 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <img src="https://via.placeholder.com/80" id="preview" class="img-thumbnail">
+                            <img src="https://via.placeholder.com/80" width="100" id="preview" class="img-thumbnail">
                         </div>
-                        <!-- <div class="custom-file">
+                        <div class="custom-file">
                             <input type="file" class="custom-file-input" id="customFile">
                             <label class="custom-file-label" for="customFile">Pilih File</label>
-                        </div> -->
+                        </div> 
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default text-danger" id="tutupModalTambahPresensi"
                     data-dismiss="modal">Tutup</button>
-                <button type="submit" id="btn_save_tambah" data-jadwal="<?= $data['jadwal']->id_jadwal ?>"
-                    data-idpresensi="<?= $data['presensi']->id_presensi ?>"
+                <button type="submit" id="btn_save_tambah" data-jadwal="<?php // $data['jadwal']->id_jadwal ?>"
+                    data-idpresensi="<?php // $data['presensi']->id_presensi ?>"
                     class="btn btn-success font-weight-bold">Simpan</button>
             </div>
-            <!-- </form> -->
+            </form>
         </div>
     </div>
-</div>
+</div> --->
 
-<script src="<?= base_url; ?>resources/views/presensi/insertDetail.js"></script>
+<!-- <script src="<?= base_url; ?>resources/views/presensi/insertDetail.js"></script> -->

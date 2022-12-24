@@ -303,36 +303,93 @@ class PresensiController extends Controller
                     ])->save();
                     echo 'Berhasil Presensi Siswa';
                     Flasher::setFlash('Berhasil Presensi Siswa', 'success');
+                    header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi);
                     break;
                 case '2':
-                    echo 'Izin';
+                    //UPLOAD GAMBAR/FILE
+                    $namaFile = $request->file['name'];
+                    $sizeFile = $request->file['size'];
+                    $error = $request->file['error'];
+                    $tmpName = $request->file['tmp_name'];
+
+                    if ($request->file['error'] === 4) {
+                        Flasher::setFlash('Wajib mengupload bukti izin', 'danger');
+                        header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi . '/tambah/' . $request->nis);
+                        exit();
+                    }
+                    //get ekstension from file
+                    $ekstensi = ['jpg', 'jpeg', 'png', 'pdf'];
+                    $ekstensiFile = pathinfo($request->file['name'], PATHINFO_EXTENSION);
+                    if (!in_array($ekstensiFile, $ekstensi)) {
+                        Flasher::setFlash('File yang diperbolehkan upload: \'jpg\', \'png\', \'jpeg\'', 'danger');
+                        header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi . '/tambah/' . $request->nis);
+                        exit();
+                    }
+
+                    //get size of file
+                    if ($sizeFile > 5242880) {
+                        Flasher::setFlash('File terlalu besar! Maksimal 5 MB', 'danger');
+                        header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi . '/tambah/' . $request->nis);
+                        exit();
+                    }
+                    date_default_timezone_set('Asia/Jakarta');
+                    date_default_timezone_get();
+                    $date = date('Ymd_His', time());
+                    $formatFile = $request->nis . '_' . $kehadiran . '_' . $date . '_' . $request->idPresensi . '.' . $ekstensiFile;
+                    // echo $formatFile;
+                    // $moveFile = __DIR__ . $formatFile;
+                    $moveFile = __DIR__ . "/../../images/bukti_izin/" . $formatFile;
+                    // echo $moveFile;
+                    // $this->compress($tmpName, $moveFile, 75);
+                    if (move_uploaded_file($tmpName, $moveFile)) {
+                        Flasher::setFlash('Berhasil Presensi Siswa', 'info');
+                        header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi);
+                        exit();
+                    } 
+                    // echo 'Berhasil';
+
                     break;
                 case '3':
                     echo 'Sakit';
                     break;
                 default:
-                    Flasher::setFlash('Harap Pilih Kehadiran! {Kehadiran:null}', 'danger');
-                    header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi);
+                    Flasher::setFlash('Harap Pilih Kehadiran!', 'danger');
+                    header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi . '/tambah/' . $request->nis);
                     break;
             }
         }
-        // if ($request->kehadiran == 'null') {
-        //     // echo '<script>alert(\'Kehadiran Kosong!\')</script>';
-        //     Flasher::setFlash('Kehadiran yang dipilih Kosong!', 'danger');
-        //     header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi);
-        //     exit();
-        // }
-
     }
-    public function detailSiswaPresensi(Request $request)
-    {
-        $p = [
-            'ID Jadwal' => $request->idJadwal,
-            'ID Presensi' => $request->idPresensi,
-            'NIS' => $request->nis
-        ];
 
-        header('Content-Type: application/json');
-        echo json_encode($p, JSON_PRETTY_PRINT);
+
+    public function tambahSiswaPresensi(Request $request)
+    {
+        // header('Content-Type: application/json');
+        $data['title'] = "Tambah Presensi Siswa";
+        $data['jadwal'] = ModelsJadwal::where('id_jadwal', $request->idJadwal)->first();
+        $data['siswa'] = ModelsSiswa::where('tb_siswa.nis', $request->nis)
+            ->where('tb_siswa.id_kelas_ajaran', $data['jadwal']->id_kelas_ajaran)
+            ->join('tb_jadwal', 'tb_jadwal.id_kelas_ajaran', 'tb_siswa.id_kelas_ajaran')
+            ->first();
+        $data['presensi'] = ModelsPresensi::where('id_presensi', $request->idPresensi)->first();
+        $data['detailPresensi'] = ModelsDetail::where('tb_detail_presensi.id_presensi', $request->idPresensi)
+            ->where('tb_detail_presensi.nis', $request->nis)
+            ->first();
+        if ($data['siswa'] == false || null) {
+            header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi);
+            exit();
+        }
+        if ($data['detailPresensi'] != false) {
+            Flasher::setFlash('Sudah Melakukan Presensi!', 'info');
+            header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi);
+            exit();
+        }
+
+        // echo json_encode($data['siswa'], JSON_PRETTY_PRINT);
+        return view([
+            'templates/header',
+            'templates/sidebar',
+            'presensi/detail/tambah',
+            'templates/footer',
+        ], $data);
     }
 }

@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log('I LOVE YOU');
+    console.log('LOHJ??');
     const base_url = $('meta[name=base_url]').attr('content');
     $('#TambahKehadiran').change(function () {
         $(this).find("option:selected").each(function () {
@@ -8,14 +8,11 @@ $(document).ready(function () {
                 $('#izin').removeClass("d-none");
             } else {
                 $('#izin').addClass("d-none");
+                $('#file').val('');
+                $('.file').val('');
+                $('#file').html('');
             }
         });
-    });
-    $('#tutupModalTambahPresensi').on('click', function () {
-        $('#TambahKehadiran').val("null");
-        $('#izin').addClass("d-none");
-        $('#nis-tambah-presensi').html("");
-        $('#nama-tambah-presensi').html("");
     });
     $('.tampilModalTambahPresensi').on('click', function () {
         const nis = $(this).data('nis');
@@ -37,14 +34,14 @@ $(document).ready(function () {
         var fileName = e.target.files[0].name;
         $("#file").val(fileName);
 
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            // get loaded data and render thumbnail.
-            document.getElementById("preview").src = e.target.result;
-        };
+        // var reader = new FileReader();
+        // reader.onload = function (e) {
+        //     // get loaded data and render thumbnail.
+        //     document.getElementById("preview").src = e.target.result;
+        // };
         // read the image file as a data URL.
-        reader.readAsDataURL(this.files[0]);
-        console.log($(this).val());
+        // reader.readAsDataURL(this.files[0]);
+        // console.log($(this).val());
     });
     $('#btn_save_tambah').on('click', function () {
         var nis = $('#nis-tambah-presensi').data('nis');
@@ -79,7 +76,7 @@ $(document).ready(function () {
                 console.log('Sakit');
                 break;
             default:
-                alert('Harap Isi Kehadiran!');
+                // alert('Harap Isi Kehadiran!');
                 break;
         }
         // if ($('#TambahKehadiran').val() == 'null') {
