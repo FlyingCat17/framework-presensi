@@ -55,19 +55,19 @@
                         <li class="dropdown dropdown-animated scale-left">
                             <div class="pointer" data-toggle="dropdown">
                                 <div class="avatar avatar-image  m-h-10 m-r-15">
-                                    <img src="<?= base_url ?>resources/images/profile/fathan.jpg" alt="">
+                                    <img src="<?= base_url ?>images/profile/<?= $data['admin']->foto_profile ?>" alt="">
                                 </div>
                             </div>
                             <div class="p-b-15 p-t-20 dropdown-menu pop-profile">
                                 <div class="p-h-20 p-b-15 m-b-10 border-bottom">
                                     <div class="d-flex m-r-50">
                                         <div class="avatar avatar-lg avatar-image">
-                                            <img src="<?= base_url ?>resources/images/profile/fathan.jpg" alt="">
+                                            <img src="<?= base_url ?>images/profile/<?= $data['admin']->foto_profile ?>"
+                                                alt="">
                                         </div>
                                         <div class="m-l-10">
                                             <p class="m-b-0 text-dark font-weight-semibold">
-                                                <?=(!isset($data['admin']->nama_admin) ? '' :
-            $data['admin']->nama_admin) ?>
+                                                <?=(!isset($data['admin']->nama_admin) ? '' : $data['admin']->nama_admin) ?>
                                             </p>
                                             <p class="m-b-0 opacity-07">
                                                 <?=(!isset($_SESSION['type']) ? '' : strtoupper($_SESSION['type'])) ?>

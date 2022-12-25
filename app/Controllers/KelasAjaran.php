@@ -7,6 +7,7 @@ use App\Models\Kelas_Ajaran as ModelsKelasAjaran;
 use App\Models\Tahun_Ajaran as ModelsTahunAjaran;
 use App\Models\Kelas as ModelsKelas;
 use App\Models\Siswa as ModelsSiswa;
+use App\Models\User;
 use Riyu\Http\Request;
 use Utils\Flasher;
 
@@ -31,6 +32,7 @@ class KelasAjaran extends Controller
         // $data['kelas_ajaran'] = ModelsKelasAjaran::join('tb_kelas', 'tb_kelas_ajaran.id_kelas', 'tb_kelas.id_kelas')->where('id_tahun_ajaran', $tahun_ajaran->id_tahun_ajaran)->all();
         // $data['kelas_ajaran'] = ModelsKelasAjaran::where('id_tahun_ajaran', $data['tahun_ajar']->id_tahun_ajaran)->join('tb_kelas', 'tb_kelas.id_kelas', 'tb_kelas_ajaran.id_kelas')->orderby('tb_kelas.nama_kelas', 'asc')->all();
         $data['kelas_ajaran'] = ModelsKelasAjaran::where('tb_kelas_ajaran.id_tahun_ajaran', '=', $data['tahun_ajar']->id_tahun_ajaran)->where('tb_kelas_ajaran.status', '1')->join('tb_kelas', 'tb_kelas_ajaran.id_kelas', 'tb_kelas.id_kelas')->orderby('tb_kelas.nama_kelas', 'asc')->all();
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
 
         // header('Content-Type: application/json');
         // echo json_encode($data['kelas_ajaran'], JSON_PRETTY_PRINT);
@@ -40,7 +42,7 @@ class KelasAjaran extends Controller
     public function tambah()
     {
         $data['title'] = "Pembagian Kelas";
-
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         $data['tahun_ajar'] = ModelsTahunAjaran::where('isActive', '1')->first();
         $data['kelas'] = ModelsKelas::where('status', '1')->all();
         // $data['kelas_ajaran'] = ModelsKelasAjaran::where('id_tahun_ajaran', $data['tahun_ajar']->id_tahun_ajaran)->join('tb_kelas', 'tb_kelas.id_kelas', 'tb_kelas_ajaran.id_kelas')->all();
@@ -90,6 +92,8 @@ class KelasAjaran extends Controller
             header('Location: ' . base_url . 'kelas/bagi');
             exit();
         }
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
+
         // $checkstatus = ModelsKelasAjaran::where('status', '1')->first();
         // if (!$checkstatus) {
         //     header('Location: ' . base_url . 'kelas/bagi');
@@ -114,6 +118,7 @@ class KelasAjaran extends Controller
             header('Location: ' . base_url . 'kelas/bagi');
             exit();
         }
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         $data['title'] = 'Pembagian Kelas';
         $data['data_siswa'] = ModelsSiswa::where('status', 1)->all();
         $data['kelas'] = ModelsKelasAjaran::where('id_kelas_ajaran', $id)->join('tb_kelas', 'tb_kelas.id_kelas', 'tb_kelas_ajaran.id_kelas')->first();
@@ -130,6 +135,5 @@ class KelasAjaran extends Controller
         Flasher::setFlash('Berhasil Ditambahkan', 'success');
         header('location: ' . base_url . 'kelas/bagi/' . $id);
         exit();
-
     }
 }

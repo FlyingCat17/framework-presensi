@@ -168,7 +168,7 @@ Route::group('/presensi', function () {
     Route::get(
         '',
         function () {
-            Flasher::setFlash('Harap PIlih salah satu kelas!', 'info');
+            // Flasher::setFlash('Harap PIlih salah satu kelas!', 'info');
             header('location: ' . base_url . 'jadwal');
             exit();
         }
@@ -184,7 +184,7 @@ Route::group('/presensi', function () {
     Route::get('/{idJadwal}/detail/{idPresensi}', [PresensiController::class, 'detail']);
     Route::get('/{idJadwal}/detail/{idPresensi}/tambah/{nis}', [PresensiController::class, 'tambahSiswaPresensi']);
     Route::post('/{idJadwal}/detail/{idPresensi}/tambah/{nis}', [PresensiController::class, 'tambah_presensi']);
-    Route::get('/{idJadwal}/detail/{idPresensi}/siswa/{nis}', [PresensiController::class, 'detailSiswaPresensi']);
+    Route::get('/{idJadwal}/detail/{idPresensi}/d/{idDetail}', [PresensiController::class, 'detailSiswaPresensi']);
 
 });
 

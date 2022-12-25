@@ -52,7 +52,8 @@
                                             </div>
                                             <div class="d-flex justify-content-end">
                                                 <button type="button" class="btn btn-danger mr-2"
-                                                    id="tutupModalTambahPresensi" data-dismiss="modal">Tutup</button>
+                                                    id="tutupModalTambahPresensi"
+                                                    onclick="location.href='<?= base_url; ?>presensi/<?= $data['jadwal']->id_jadwal ?>/detail/<?= $data['presensi']->id_presensi ?>'">Tutup</button>
                                                 <button type="submit" id="btn_save_tambah"
                                                     data-jadwal="<?php // $data['jadwal']->id_jadwal ?>"
                                                     data-idpresensi="<?php // $data['presensi']->id_presensi ?>"
@@ -60,6 +61,7 @@
                                             </div>
                                         </form>
                                     </div>
+                                    <img src="../../../../images/bukti_izin/3357_2_20221225_153835_9.jpg" alt="">
                                 </div>
                             </div>
                         </div>

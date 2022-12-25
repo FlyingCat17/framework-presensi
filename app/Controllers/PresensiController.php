@@ -10,6 +10,7 @@ use App\Models\Siswa as ModelsSiswa;
 use App\Models\Presensi as ModelsPresensi;
 use App\Models\Detail_Presensi as ModelsDetail;
 use App\Models\Presensi;
+use App\Models\User;
 use Riyu\Http\Request;
 use Riyu\Validation\Validation;
 use Utils\Flasher;
@@ -29,6 +30,7 @@ class PresensiController extends Controller
     }
     public function index(Request $request)
     {
+
         $data['title'] = 'Presensi';
         $data['tahun_ajar'] = ModelsTahunAjaran::where('isActive', '1')->first();
         $data['jadwal'] = ModelsJadwal::where('tb_jadwal.id_jadwal', $request->idJadwal)
@@ -45,6 +47,7 @@ class PresensiController extends Controller
         $data['jumlah_siswa'] = ModelsSiswa::select("COUNT(tb_siswa.nis) AS jumlah_siswa")
             ->where('tb_siswa.id_kelas_ajaran', $data['jadwal']->id_kelas_ajaran)
             ->first();
+
         if ($data['jadwal'] == false || null) {
             header('Location: ' . base_url . 'jadwal');
             exit();
@@ -78,11 +81,13 @@ class PresensiController extends Controller
         $data['waktu'] = ModelsJadwal::select('DATE_FORMAT(tb_jadwal.jam_akhir, \'%H:%i\') AS jam_akhir', 'DATE_FORMAT(tb_jadwal.jam_awal, \'%H:%i\') AS jam_awal')
             ->where('tb_jadwal.id_jadwal', $request->idJadwal)
             ->first();
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         if ($data['jadwal'] == false || null) {
             Flasher::setFlash('Tidak Ada Data Presensi!', 'danger');
             header('Location: ' . base_url . 'jadwal');
             exit();
         }
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         return view([
             'templates/header',
             'templates/sidebar',
@@ -154,6 +159,8 @@ class PresensiController extends Controller
             ->where('tb_presensi.id_jadwal', $data['jadwal']->id_jadwal)
             ->select('id_presensi', 'id_jadwal', 'DATE_FORMAT(tb_presensi.mulai_presensi, \'%H:%i\') AS jam_awal_presensi', 'DATE_FORMAT(tb_presensi.akhir_presensi, \'%H:%i\') AS jam_akhir_presensi', 'DATE_FORMAT(tb_presensi.mulai_presensi, \'%Y-%m-%d\') AS tgl_awal_presensi', 'DATE_FORMAT(tb_presensi.akhir_presensi, \'%Y-%m-%d\') AS tgl_akhir_presensi')
             ->first();
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
+
         // header('Content-Type: application/json');
         // echo json_encode(['Presensi' => $data['presensi']], JSON_PRETTY_PRINT);
         if ($data['presensi'] == false || null) {
@@ -237,8 +244,11 @@ class PresensiController extends Controller
             ->where('tb_presensi.id_jadwal', $data['jadwal']->id_jadwal)
             ->select('id_presensi', 'id_jadwal', 'DATE_FORMAT(tb_presensi.mulai_presensi, \'%H:%i\') AS jam_awal_presensi', 'DATE_FORMAT(tb_presensi.akhir_presensi, \'%H:%i\') AS jam_akhir_presensi', 'DATE_FORMAT(tb_presensi.mulai_presensi, \'%d-%M-%Y\', \'id_ID\') AS tgl_awal_presensi', 'DATE_FORMAT(tb_presensi.akhir_presensi, \'%d-%M-%Y\', \'id_ID\') AS tgl_akhir_presensi')
             ->first();
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
+
         if ($data['presensi'] == false || null) {
-            echo 'Tidak Ada Presensi';
+            // echo 'Tidak Ada Presensi';/
+            header('Location: ' . base_url . 'presensi/' . $request->idJadwal);
             exit();
         }
         $data['detail_presensi'] = ModelsDetail::leftjoin('tb_siswa', 'tb_siswa.nis', '=', 'tb_detail_presensi.nis')
@@ -335,6 +345,7 @@ class PresensiController extends Controller
                     date_default_timezone_set('Asia/Jakarta');
                     date_default_timezone_get();
                     $date = date('Ymd_His', time());
+                    $date2 = date('Y-m-d H:i:s', time());
                     $formatFile = $request->nis . '_' . $kehadiran . '_' . $date . '_' . $request->idPresensi . '.' . $ekstensiFile;
                     // echo $formatFile;
                     // $moveFile = __DIR__ . $formatFile;
@@ -342,15 +353,70 @@ class PresensiController extends Controller
                     // echo $moveFile;
                     // $this->compress($tmpName, $moveFile, 75);
                     if (move_uploaded_file($tmpName, $moveFile)) {
+                        ModelsDetail::insert([
+                            'id_presensi' => $request->idPresensi,
+                            'nis' => $request->nis,
+                            'timestamp' => $date2,
+                            'kehadiran' => $request->kehadiran,
+                            'bukti_izin' => "images/bukti_izin/" . $formatFile
+                        ])->save();
                         Flasher::setFlash('Berhasil Presensi Siswa', 'info');
                         header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi);
                         exit();
-                    } 
+                    }
+
                     // echo 'Berhasil';
 
                     break;
                 case '3':
-                    echo 'Sakit';
+                    //UPLOAD GAMBAR/FILE
+                    $namaFile = $request->file['name'];
+                    $sizeFile = $request->file['size'];
+                    $error = $request->file['error'];
+                    $tmpName = $request->file['tmp_name'];
+
+                    if ($request->file['error'] === 4) {
+                        Flasher::setFlash('Wajib mengupload bukti izin', 'danger');
+                        header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi . '/tambah/' . $request->nis);
+                        exit();
+                    }
+                    //get ekstension from file
+                    $ekstensi = ['jpg', 'jpeg', 'png', 'pdf'];
+                    $ekstensiFile = pathinfo($request->file['name'], PATHINFO_EXTENSION);
+                    if (!in_array($ekstensiFile, $ekstensi)) {
+                        Flasher::setFlash('File yang diperbolehkan upload: \'jpg\', \'png\', \'jpeg\'', 'danger');
+                        header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi . '/tambah/' . $request->nis);
+                        exit();
+                    }
+
+                    //get size of file
+                    if ($sizeFile > 5242880) {
+                        Flasher::setFlash('File terlalu besar! Maksimal 5 MB', 'danger');
+                        header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi . '/tambah/' . $request->nis);
+                        exit();
+                    }
+                    date_default_timezone_set('Asia/Jakarta');
+                    date_default_timezone_get();
+                    $date = date('Ymd_His', time());
+                    $date2 = date('Y-m-d H:i:s', time());
+                    $formatFile = $request->nis . '_' . $kehadiran . '_' . $date . '_' . $request->idPresensi . '.' . $ekstensiFile;
+                    // echo $formatFile;
+                    // $moveFile = __DIR__ . $formatFile;
+                    $moveFile = __DIR__ . "/../../images/bukti_izin/" . $formatFile;
+                    // echo $moveFile;
+                    // $this->compress($tmpName, $moveFile, 75);
+                    if (move_uploaded_file($tmpName, $moveFile)) {
+                        ModelsDetail::insert([
+                            'id_presensi' => $request->idPresensi,
+                            'nis' => $request->nis,
+                            'timestamp' => $date2,
+                            'kehadiran' => $request->kehadiran,
+                            'bukti_izin' => "images/bukti_izin/" . $formatFile
+                        ])->save();
+                        Flasher::setFlash('Berhasil Presensi Siswa', 'info');
+                        header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi);
+                        exit();
+                    }
                     break;
                 default:
                     Flasher::setFlash('Harap Pilih Kehadiran!', 'danger');
@@ -383,12 +449,40 @@ class PresensiController extends Controller
             header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi);
             exit();
         }
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
 
         // echo json_encode($data['siswa'], JSON_PRETTY_PRINT);
         return view([
             'templates/header',
             'templates/sidebar',
             'presensi/detail/tambah',
+            'templates/footer',
+        ], $data);
+    }
+
+    public function detailSiswaPresensi(Request $request, $idDetail, $idPresensi, $idJadwal)
+    {
+        $data['title'] = 'Detail Presensi';
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
+        $data['detail'] = ModelsDetail::where('id_detail_presensi', $idDetail)
+            ->where('tb_detail_presensi.id_presensi', $idPresensi)
+            ->where('tb_presensi.id_jadwal', $idJadwal)
+            ->join('tb_presensi', 'tb_presensi.id_presensi', $idPresensi)
+            ->select('*, DATE_FORMAT(tb_detail_presensi.timestamp, \'%d %M %Y - %H:%i\', \'id_ID\') AS timestamp')
+            ->first();
+        $data['siswa'] = ModelsSiswa::where('nis', $data['detail']->nis)->first();
+
+        // header('Content-Type: application/json');    
+        if ($data['detail'] == false || null) {
+            header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi);
+            exit();
+        }
+        // echo json_encode(['Detail' => $data['detail']], JSON_PRETTY_PRINT);
+        // echo ($idPresensi);
+        return view([
+            'templates/header',
+            'templates/sidebar',
+            'presensi/detail/index',
             'templates/footer',
         ], $data);
     }

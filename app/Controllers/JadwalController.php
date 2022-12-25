@@ -8,6 +8,7 @@ use App\Models\Tahun_Ajaran;
 use App\Models\Kelas_Ajaran;
 use App\Models\Mapel;
 use App\Models\Guru;
+use App\Models\User;
 use Riyu\Http\Request;
 use Riyu\Validation\Validation;
 use Utils\Flasher;
@@ -45,6 +46,7 @@ class JadwalController extends Controller
         // $data['kelas_ajaran'] = ModelsKelasAjaran::join('tb_kelas', 'tb_kelas_ajaran.id_kelas', 'tb_kelas.id_kelas')->where('id_tahun_ajaran', $tahun_ajaran->id_tahun_ajaran)->all();
         // $data['kelas_ajaran'] = ModelsKelasAjaran::where('id_tahun_ajaran', $data['tahun_ajar']->id_tahun_ajaran)->join('tb_kelas', 'tb_kelas.id_kelas', 'tb_kelas_ajaran.id_kelas')->orderby('tb_kelas.nama_kelas', 'asc')->all();
         $data['kelas_ajaran'] = Kelas_Ajaran::where('tb_kelas_ajaran.id_tahun_ajaran', '=', $data['tahun_ajar']->id_tahun_ajaran)->where('tb_kelas_ajaran.status', '1')->join('tb_kelas', 'tb_kelas_ajaran.id_kelas', 'tb_kelas.id_kelas')->orderby('tb_kelas.nama_kelas', 'asc')->all();
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
 
         return view([
             'templates/header',
@@ -78,6 +80,8 @@ class JadwalController extends Controller
             header('Location: ' . base_url . 'jadwal');
             exit();
         }
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
+
         // header('Content-Type: application/json');
         // echo json_encode($data['kelas'], JSON_PRETTY_PRINT);
         return view([
@@ -98,6 +102,7 @@ class JadwalController extends Controller
             header('Location: ' . base_url . 'jadwal');
             exit();
         }
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         $data['kelas'] = Kelas_Ajaran::where('id_tahun_ajaran', $data['tahun_ajaran']->id_tahun_ajaran)
             ->join('tb_kelas', 'tb_kelas.id_kelas', 'tb_kelas_ajaran.id_kelas')
             ->orderBy('tb_kelas.nama_kelas', 'asc')
@@ -129,6 +134,7 @@ class JadwalController extends Controller
             header('location: ' . base_url . 'jadwal');
             exit();
         }
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         return view([
             'templates/header',
             'templates/sidebar',
@@ -213,7 +219,8 @@ class JadwalController extends Controller
             header('Location: ' . base_url . 'jadwal');
             exit();
         }
-        $data['mapel'] = Mapel::select()->all();
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
+        $data['mapel'] = Mapel::select()->where('status', '1')->all();
         $data['guru'] = Guru::select()->all();
         return view([
             'templates/header',

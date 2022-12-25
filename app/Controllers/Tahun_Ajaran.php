@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Config\Session;
 use Riyu\Http\Request;
 use App\Models\Tahun_Ajaran as ModelsTahunAjaran;
+use App\Models\User;
 use Utils\Flasher;
 use Riyu\Validation\Validation;
 
@@ -27,12 +28,14 @@ class Tahun_Ajaran extends Controller
         // echo 'kajsd';
         $data['title'] = "Tahun Ajaran";
         $data['tahun_ajaran'] = ModelsTahunAjaran::where('status', 1)->all();
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         return view(['templates/header', 'templates/sidebar', 'tahun_ajaran/index', 'templates/footer'], $data);
     }
 
     public function tambah()
     {
         $data['title'] = "Tahun Ajaran";
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         return view(['templates/header', 'templates/sidebar', 'tahun_ajaran/tambah', 'templates/footer'], $data);
     }
     public function insert(Request $request)
@@ -69,6 +72,7 @@ class Tahun_Ajaran extends Controller
             header("Location: " . base_url . "tahun_ajaran");
             exit();
         }
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         $data['title'] = "Tahun Ajaran";
         return view(['templates/header', 'templates/sidebar', 'tahun_ajaran/update', 'templates/footer'], $data);
     }
