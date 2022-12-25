@@ -34,6 +34,7 @@ class Kelas extends Controller
     public function tambah()
     {
         $data['title'] = "Kelas";
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         return view(['templates/header', 'templates/sidebar', 'kelas/tambah', 'templates/footer'], $data);
     }
 
@@ -74,7 +75,7 @@ class Kelas extends Controller
             header('Location: ' . base_url . 'kelas');
             exit();
         }
-
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         $data['title'] = 'Kelas';
         $data['kelas'] = ModelsKelas::where('id_kelas', $request->id)->first();
         return view(['templates/header', 'templates/sidebar', 'kelas/edit', 'templates/footer'], $data);

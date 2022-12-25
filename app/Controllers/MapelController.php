@@ -5,6 +5,7 @@ use App\Config\Session;
 use App\Controllers\Controller;
 use Riyu\Http\Request;
 use App\Models\Mapel as ModelsMapel;
+use App\Models\User;
 use Riyu\Validation\Validation;
 use Utils\Flasher;
 
@@ -25,12 +26,14 @@ class MapelController extends Controller
     {
         $data['title'] = "Mata Pelajaran";
         $data['mapel'] = ModelsMapel::where('status', '1')->all();
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         return view(['templates/header', 'templates/sidebar', 'pelajaran/index', 'templates/footer'], $data);
     }
 
     public function tambah()
     {
         $data['title'] = "Mata Pelajaran";
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         return view(['templates/header', 'templates/sidebar', 'pelajaran/tambah', 'templates/footer'], $data);
     }
 
@@ -64,6 +67,8 @@ class MapelController extends Controller
             header('location: ' . base_url . 'mapel');
             exit();
         }
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
+
         return view(['templates/header', 'templates/sidebar', 'pelajaran/edit', 'templates/footer'], $data);
     }
 

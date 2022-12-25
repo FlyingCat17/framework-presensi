@@ -70,7 +70,7 @@
                                         $no = 1;
                                         foreach ($data['siswa'] as $siswa): ?>
                                         <?php
-                                            $check = ModelsDetail::select('kehadiran')
+                                            $check = ModelsDetail::select('kehadiran', 'id_detail_presensi')
                                                 ->where('tb_detail_presensi.nis', $siswa['nis'])
                                                 ->where('tb_detail_presensi.id_presensi', $data['presensi']->id_presensi)
                                                 ->all();
@@ -81,6 +81,7 @@
                                             ];
                                             if ($kehadiran['kehadiran'] != null) {
                                                 $hadir = $kehadiran['kehadiran'][0]['kehadiran'];
+                                                $id_detail_presensi = $kehadiran['kehadiran'][0]['id_detail_presensi'];
                                                 // echo json_encode($hadir);
                                                 // print_r($hadir);
                                             } else {
@@ -98,7 +99,8 @@
                                             if ($hadir != NULL) {
                                             ?>
                                                 <button
-                                                    class="btn btn-icon btn-primary d-flex align-items-center justify-content-center">
+                                                    class="btn btn-icon btn-primary d-flex align-items-center justify-content-center"
+                                                    onclick="location.href='<?= base_url; ?>presensi/<?= $data['jadwal']->id_jadwal ?>/detail/<?= $data['presensi']->id_presensi ?>/d/<?= $id_detail_presensi ?>'">
                                                     <i class="material-icons">open_in_browser</i>
                                                 </button>
                                                 <?php
@@ -127,6 +129,7 @@
                                     </tbody>
                                 </table>
                                 <?=(empty($data['siswa']) ? '<p class="text-center">Tidak Ada Data</p>' : '') ?>
+                                <!-- <img src="<?php//base_url; ?>images/bukti_izin/3357_2_20221225_153835_9.jpg" alt=""> -->
                             </div>
                         </div>
                     </div>

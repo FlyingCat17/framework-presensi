@@ -61,7 +61,7 @@
                     <span class="title">Pembagian Kelas</span>
                 </a>
             </li>
-            <li class="nav-item dropdown <?=(strtolower($data['title']) === "jadwal" ? 'active' : (strtolower($data['title']) === "presensi" ? 'active' : (strtolower($data['title']) === "ubah jadwal" ? 'active' : ''))) ?>"
+            <li class="nav-item dropdown <?=(strtolower($data['title']) === "jadwal" ? 'active' : (strtolower($data['title']) === "presensi" ? 'active' : (strtolower($data['title']) === "detail presensi" ? 'active' : ''))) ?>"
                 id="liNav">
                 <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>jadwal">
                     <span class="icon-holder">

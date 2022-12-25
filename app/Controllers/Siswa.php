@@ -7,6 +7,7 @@ use Riyu\Http\Request;
 use Utils\Flasher;
 use Riyu\Validation\Validation;
 use App\Models\Siswa as ModelsSiswa;
+use App\Models\User;
 
 class Siswa extends Controller
 {
@@ -26,6 +27,7 @@ class Siswa extends Controller
     {
         $data['title'] = "Siswa";
         $data['data_siswa'] = ModelsSiswa::where('status', '1')->orderby('nama_siswa', 'asc')->all();
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         return view(['templates/header', 'templates/sidebar', 'siswa/index', 'templates/footer'], $data);
     }
 
@@ -33,6 +35,7 @@ class Siswa extends Controller
     {
         $data['title'] = "Siswa";
         $data['data_siswa'] = ModelsSiswa::where('status', '1')->all();
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         return view(['templates/header', 'templates/sidebar', 'siswa/tambah', 'templates/footer'], $data);
     }
 
@@ -111,6 +114,7 @@ class Siswa extends Controller
     {
         $data['title'] = 'Siswa';
         $data['siswa'] = ModelsSiswa::where('nis', $request->nis)->first();
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
         if ($data['siswa'] == null) {
             header('Location: ' . base_url . 'siswa');
             exit();
