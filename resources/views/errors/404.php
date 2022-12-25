@@ -66,7 +66,7 @@ http_response_code(404);
             display: inline-block;
             width: 230px;
             height: 350px;
-            background-image: url('<?= base_url; ?>/resources/img/error/notFound.png');
+            background-image: url('<?= base_url; ?>resources/img/error/notFound.png');
             background-size: cover;
             -webkit-transform: scale(1.4);
             -ms-transform: scale(1.4);

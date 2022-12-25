@@ -9,6 +9,21 @@ class Controller
 {
     use Rule, Query, Mapping;
 
+    protected function verifyPassword($password, $hash, $type = 'login')
+    {
+        if ($type == 'login') {
+            if (!password_verify($password, $hash)) {
+                return Response::json(403, 'Password salah');
+            }
+        }
+
+        if ($type == 'reset') {
+            if (password_verify($password, $hash)) {
+                return Response::json(400, 'Password baru tidak boleh sama dengan password lama');
+            }
+        }
+    }
+
     /**
      * Compress image
      * 

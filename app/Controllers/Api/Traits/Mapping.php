@@ -11,7 +11,7 @@ trait Mapping
      * 
      * @return object
      */
-    public function mapUser(object $user)
+    protected function mapUser(object $user)
     {
         return array(
             'nis' => $user->nis,
@@ -19,7 +19,7 @@ trait Mapping
             'kelas' => $user->nama_kelas,
             'id_kelas' => $user->id_kelas,
             'tanggal_lahir' => $user->tanggal_lahir,
-            'foto' => $user->foto_profil,
+            'foto' => base_url."images/profile/siswa/".$user->foto_profil,
             'email' => $user->email,
             'no_hp' => $user->notelp_siswa,
             'alamat' => $user->alamat_siswa,
@@ -35,7 +35,7 @@ trait Mapping
      * 
      * @return array $columns
      */
-    public function select()
+    protected function select()
     {
         return [
             "tb_kelas_ajaran.id_kelas_ajaran",
@@ -59,7 +59,7 @@ trait Mapping
      * 
      * @return array
      */
-    public function mapJadwalPresensi(array $jadwal)
+    protected function mapJadwalPresensi(array $jadwal)
     {
         $date = date('Y-m-d H:i:s');
         $data = [];
@@ -68,6 +68,7 @@ trait Mapping
             if ($value['mulai_presensi'] <= $date && $value['akhir_presensi'] >= $date) {
                 $data[] = array(
                     'namaMapel' => $value['nama_mapel'],
+                    'guru' => $value['nama_guru'],
                     'idPresensi' => $value['id_presensi'],
                     'mulaiPresensi' => $value['mulai_presensi'],
                     'akhirPresensi' => $value['akhir_presensi'],
@@ -78,9 +79,7 @@ trait Mapping
             }
         }
 
-        if ($data == null) {
-            return $data = [];
-        }
+        if ($data == null) return $data = [];
 
         return $data;
     }
@@ -93,6 +92,7 @@ trait Mapping
     protected function mapJadwalPelajaran(array $jadwals)
     {
         $data = [];
+
         foreach ($jadwals as $jadwal) {
             $hari = $jadwal['hari'];
             $pelajaran = $jadwal['nama_mapel'];
@@ -106,7 +106,9 @@ trait Mapping
                 'jam_selesai' => $jam_selesai
             ];
         }
+
         if ($data == null) return $data = [];
+
         return $data;
     }
 }

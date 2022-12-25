@@ -10,29 +10,31 @@ use App\Models\Siswa;
 trait Query
 {
     /**
+     * Find siswa by username
+     * 
      * @param string $username
      * 
      * @return object|void
      */
-    public function findSiswa($username)
+    protected function findSiswa($username)
     {
         try {
-            $user = Siswa::findOrFail($username, 'nis', function () {
+            return Siswa::findOrFail($username, 'nis', function () {
                 return Response::json(404, 'Username salah');
             });
         } catch (\Throwable $th) {
             return Response::json(500, 'Terjadi kesalahan');
         }
-
-        return $user;
     }
 
     /**
+     * Return result for siswa login
+     * 
      * @param string $username
      * 
-     * @return object
+     * @return object|void
      */
-    public function query($username)
+    protected function query($username)
     {
         try {
             return Siswa::join('tb_kelas_ajaran', 'tb_kelas_ajaran.id_kelas_ajaran', 'tb_siswa.id_kelas_ajaran')
@@ -46,13 +48,15 @@ trait Query
     }
 
     /**
+     * Update isLogin and deviceId
+     * 
      * @param int $isLogin
      * @param string $username
      * @param string|null $deviceId
      * 
      * @return void
      */
-    public function updateLogin($isLogin, $username, ?string $deviceId)
+    protected function updateLogin($isLogin, $username, ?string $deviceId)
     {
         try {
             Siswa::where('nis', $username)->update([
@@ -65,12 +69,14 @@ trait Query
     }
 
     /**
+     * Update profile
+     * 
      * @param string $username
      * @param array $update
      * 
      * @return void
      */
-    public function queryUpdateProfile($username, $update)
+    protected function queryUpdateProfile($username, $update)
     {
         try {
             Siswa::where('nis', $username)->update($update)->save();
@@ -80,12 +86,14 @@ trait Query
     }
 
     /**
+     * Update password and hash it
+     * 
      * @param string $username
      * @param string $password
      * 
      * @return void
      */
-    public function updatePassword($username, $password)
+    protected function updatePassword($username, $password)
     {
         try {
             Siswa::where('nis', $username)->update([
@@ -97,11 +105,13 @@ trait Query
     }
 
     /**
+     * Delete foto profile
+     * 
      * @param string $username
      * 
      * @return void
      */
-    public function deleteFotoProfile($username)
+    protected function deleteFotoProfile($username)
     {
         try {
             Siswa::where('nis', $username)->update([
@@ -113,12 +123,14 @@ trait Query
     }
 
     /**
+     * Update otp and otp expired
+     * 
      * @param string $username
      * @param string $otp
      * 
-     * @return array|void
+     * @return void
      */
-    public function updateOtp($username, $otp)
+    protected function updateOtp($username, $otp)
     {
         try {
             Siswa::where('nis', $username)->update([
@@ -131,11 +143,13 @@ trait Query
     }
 
     /**
-     * @param string $username
+     * Get log absensi
+     * 
+     * @param string $nis
      * 
      * @return array|void
      */
-    public function getLogAbsensi(string $nis)
+    protected function getLogAbsensi(string $nis)
     {
         try {
             return Detail_Presensi::join('tb_presensi', 'tb_presensi.id_presensi', 'tb_detail_presensi.id_presensi')
@@ -151,16 +165,19 @@ trait Query
     }
 
     /**
-     * @param string $username
+     * Get jadwal presensi
+     * 
+     * @param string $idKelas
      * 
      * @return array|void
      */
-    public function getjadwalPresensi($idKelas)
+    protected function getjadwalPresensi($idKelas)
     {
         try {
              return Presensi::join('tb_jadwal', 'tb_presensi.id_jadwal', 'tb_jadwal.id_jadwal')
                 ->join('tb_kelas_ajaran', 'tb_jadwal.id_kelas_ajaran', 'tb_kelas_ajaran.id_kelas_ajaran')
                 ->join('tb_mapel', 'tb_jadwal.id_mapel', 'tb_mapel.id_mapel')
+                ->join('tb_guru', 'tb_jadwal.nuptk', 'tb_guru.nuptk')
                 ->where('tb_kelas_ajaran.id_kelas_ajaran', $idKelas)
                 ->orderby('tb_presensi.mulai_presensi', 'asc')
                 ->all();
@@ -169,16 +186,67 @@ trait Query
         }
     }
     
+    /**
+     * Get jadwal pelajaran
+     * 
+     * @param string $idKelasAjaran
+     * 
+     * @return array|void
+     */
     protected function getJadwalPelajaran($idKelasAjaran)
     {
         try {
-            $jadwals = Jadwal::join('tb_mapel', 'tb_jadwal.id_mapel', 'tb_mapel.id_mapel')
+            return Jadwal::join('tb_mapel', 'tb_jadwal.id_mapel', 'tb_mapel.id_mapel')
                 ->where('tb_jadwal.id_kelas_ajaran', $idKelasAjaran)
                 ->orderby('tb_jadwal.hari', 'ASC')
                 ->all();
         } catch (\Throwable $th) {
             return Response::json(500, 'Terjadi kesalahan');
         }
-        return $jadwals;
+    }
+
+    /**
+     * Find presensi
+     * 
+     * @param string $idPresensi
+     * 
+     * @return void
+     */
+    protected function findPresensi($idPresensi)
+    {
+        Presensi::findorfail($idPresensi, 'id_presensi', function () {
+            return Response::json(404, 'Presensi tidak ditemukan');
+        });
+    }
+
+    /**
+     * Insert presensi
+     * 
+     * @param \Riyu\Http\Request $request
+     * 
+     * @return void
+     */
+    protected function insertPresensi($request)
+    {
+        try {
+            $presensi = new Detail_Presensi();
+            $presensi->id_presensi = $request->idPresensi;
+            $presensi->nis = $request->nis;
+            $presensi->kehadiran = $request->kehadiran;
+            $presensi->timestamp = $request->timestamp;
+            $presensi->koordinat = $request->koordinat;
+            $presensi->save();
+        } catch (\Throwable $th) {
+            return Response::json(500, 'Terjadi kesalahan');
+        }
+    }
+
+    protected function createPresensi(array $presensi)
+    {
+        try {
+            Detail_Presensi::insert($presensi)->save();
+        } catch (\Throwable $th) {
+            return Response::json(500, 'Terjadi kesalahan');
+        }
     }
 }

@@ -8,7 +8,24 @@ use Riyu\Validation\Validation;
 Trait Rule
 {
     /**
-     * Validate errors
+     * Verbs for all messages
+     * 
+     * @return array
+     */
+    protected function messages()
+    {
+        return [
+            'timestamp' => ':field harus berupa tanggal dan waktu (2022-12-28 15:59:45)',
+            'required' => ':field tidak boleh kosong',
+            'numeric' => ':field harus berupa angka',
+            'email' => ':field harus berupa email',
+            'date' => ':field harus berupa tanggal',
+            'min' => ':field minimal :min karakter',
+        ];
+    }
+
+    /**
+     * Validate errors and return response if errors
      * 
      * @param array $errors
      * 
@@ -26,11 +43,11 @@ Trait Rule
     /**
      * Validate login
      * 
-     * @param Request $request
+     * @param \Riyu\Http\Request $request
      * 
      * @return void
      */
-    public function ruleLogin(Request $request)
+    protected function ruleLogin(Request $request)
     {
         $rule = [
             'username' => 'required|numeric',
@@ -46,11 +63,11 @@ Trait Rule
     /**
      * Validate logout
      * 
-     * @param Request $request
+     * @param \Riyu\Http\Request $request
      * 
      * @return void
      */
-    public function ruleLogout(Request $request)
+    protected function ruleLogout(Request $request)
     {
         $rule = [
             'username' => 'required|numeric',
@@ -64,11 +81,11 @@ Trait Rule
     /**
      * Validate update profile
      * 
-     * @param Request $request
+     * @param \Riyu\Http\Request $request
      * 
      * @return void
      */
-    public function ruleUpdate(Request $request)
+    protected function ruleUpdate(Request $request)
     {
         $rule = [
             'tanggal_lahir' => 'required|date',
@@ -84,11 +101,11 @@ Trait Rule
     /**
      * Validate update password
      * 
-     * @param Request $request
+     * @param \Riyu\Http\Request $request
      * 
      * @return void
      */
-    public function ruleChangePassword(Request $request)
+    protected function ruleChangePassword(Request $request)
     {
         $rule = [
             'username' => 'required|numeric',
@@ -104,11 +121,11 @@ Trait Rule
     /**
      * Validate delete foto
      * 
-     * @param Request $request
+     * @param \Riyu\Http\Request $request
      * 
      * @return void
      */
-    public function ruleDeleteFoto(Request $request)
+    protected function ruleDeleteFoto(Request $request)
     {
         $rule = [
             'username' => 'required|numeric',
@@ -122,11 +139,11 @@ Trait Rule
     /**
      * Validate search account
      * 
-     * @param Request $request
+     * @param \Riyu\Http\Request $request
      * 
      * @return void
      */
-    public function ruleSearch(Request $request)
+    protected function ruleSearch(Request $request)
     {
         $rule = [
             'username' => 'required|numeric',
@@ -140,11 +157,11 @@ Trait Rule
     /**
      * Validate verify otp
      * 
-     * @param Request $request
+     * @param \Riyu\Http\Request $request
      * 
      * @return void
      */
-    public function ruleVerifyOtp(Request $request)
+    protected function ruleVerifyOtp(Request $request)
     {
         $rule = [
             'username' => 'required|numeric',
@@ -159,11 +176,11 @@ Trait Rule
     /**
      * Validate reset password
      * 
-     * @param Request $request
+     * @param \Riyu\Http\Request $request
      * 
      * @return void
      */
-    public function ruleResetPassword(Request $request)
+    protected function ruleResetPassword(Request $request)
     {
         $rule = [
             'username' => 'required|numeric',
@@ -178,11 +195,11 @@ Trait Rule
     /**
      * Validate send mail
      * 
-     * @param Request $request
+     * @param \Riyu\Http\Request $request
      * 
      * @return void
      */
-    public function ruleMail(Request $request)
+    protected function ruleMail(Request $request)
     {
         $rule = [
             'username' => 'required|numeric',
@@ -195,13 +212,13 @@ Trait Rule
     }
 
     /**
-     * Validate rule for absensi
+     * Validate log absensi
      * 
-     * @param Request $request
+     * @param \Riyu\Http\Request $request
      * 
      * @return void
      */
-    public function ruleLogAbsensi(Request $request)
+    protected function ruleLogAbsensi(Request $request)
     {
         $rule = [
             'id' => 'required|numeric',
@@ -213,13 +230,13 @@ Trait Rule
     }
 
     /**
-     * Validate rule for jadwal
+     * Validate get jadwal
      * 
-     * @param Request $request
+     * @param \Riyu\Http\Request $request
      * 
      * @return void
      */
-    public function ruleJadwal(Request $request)
+    protected function ruleJadwal(Request $request)
     {
         $rule = [
             'id' => 'required|numeric',
@@ -231,18 +248,24 @@ Trait Rule
     }
 
     /**
-     * Verbs for all messages
+     * Validate insert presensi
      * 
-     * @return array
+     * @param \Riyu\Http\Request $request
+     * 
+     * @return void
      */
-    public function messages()
+    protected function rulePresensi(Request $request)
     {
-        return [
-            'required' => ':field tidak boleh kosong',
-            'numeric' => ':field harus berupa angka',
-            'email' => ':field harus berupa email',
-            'date' => ':field harus berupa tanggal',
-            'min' => ':field minimal :min karakter'
+        $rule = [
+            'idPresensi' => 'required|numeric',
+            'nis' => 'required|numeric',
+            'kehadiran' => 'required|numeric',
+            'timestamp' => 'required|timestamp',
+            'koordinat' => 'required'
         ];
+
+        $errors = Validation::message($request->all(), $rule, $this->messages());
+
+        $this->validate($errors);
     }
 }

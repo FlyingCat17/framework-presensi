@@ -8,7 +8,7 @@ class Settings extends Controller
     /**
      * Update profile
      * 
-     * @param Request $request
+     * @param \Riyu\Http\Request $request
      * 
      * @return void
      */
@@ -49,7 +49,7 @@ class Settings extends Controller
     /**
      * Change password
      * 
-     * @param Request $request
+     * @param \Riyu\Http\Request $request
      * 
      * @return void
      */
@@ -63,9 +63,7 @@ class Settings extends Controller
 
         $user = $this->findsiswa($request->username);
 
-        if (!password_verify($request->password, $user->password)) {
-            return Response::json(400, 'Password salah');
-        }
+        $this->verifyPassword($request->password, $user->password);
 
         $this->updatePassword($request->username, $request->new_password);
 
@@ -75,7 +73,7 @@ class Settings extends Controller
     /**
      * Delete foto profile
      * 
-     * @param Request $request
+     * @param \Riyu\Http\Request $request
      * 
      * @return void
      */
@@ -102,19 +100,23 @@ class Settings extends Controller
      */
     public function foto($foto = array(), string $nis)
     {
-        // Get path info
-        $ekstensi = pathinfo($foto['name'], PATHINFO_EXTENSION);
-
-        // Set format name foto
-        $formatFile = $nis . "-profile." . $ekstensi;
-
-        // set for save
-        $moveFile = __DIR__ . "/../../../images/profile/" . $formatFile;
-
-        // compress image
-        $this->compress($foto['tmp_name'], $moveFile, 75);
-
-        return base_url . 'images/profile/' . $formatFile;
+        try {
+            // Get path info
+            $ekstensi = pathinfo($foto['name'], PATHINFO_EXTENSION);
+    
+            // Set format name foto
+            $formatFile = $nis . "-profile." . $ekstensi;
+    
+            // set for save
+            $moveFile = __DIR__ . "/../../../images/profile/siswa/" . $formatFile;
+    
+            // compress image
+            $this->compress($foto['tmp_name'], $moveFile, 75);
+    
+            return $formatFile;
+        } catch (\Throwable $th) {
+            return Response::json(500, 'Gagal mengupload foto');
+        }
     }
 
     
