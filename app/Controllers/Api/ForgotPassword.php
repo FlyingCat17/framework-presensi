@@ -44,9 +44,7 @@ class ForgotPassword extends Controller
         
         $user = $this->findSiswa($request->username);
 
-        if (password_verify($request->password, $user->password)) {
-            return Response::json(400, 'Password baru tidak boleh sama dengan password lama');
-        }
+        $this->verifyPassword($request->password, $user->password, 'reset');
 
         $this->updatePassword($request->username, $request->password);
 

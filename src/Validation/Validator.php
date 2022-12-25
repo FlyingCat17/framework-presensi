@@ -94,6 +94,7 @@ trait Validator
      */
     public static function unique($value, $field, object $model)
     {
+        $model = 'App\\Models\\' . $model;
         $model = new $model;
         $result = $model->where($field, $value)->first();
         if ($result) {
@@ -158,6 +159,22 @@ trait Validator
     {
         if (!preg_match('/^\d{4}\/\d{4}$/', $value)) {
             return $field . ' must be a valid year';
+        }
+    }
+
+    /**
+     * Validate timestamp
+     * 
+     * format YYYY-MM-DD HH:MM:SS
+     *
+     * @param string $value
+     * @param string $field
+     * @return string
+     */
+    public static function timestamp($value, $field, $options = null)
+    {
+        if (!preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $value)) {
+            return $field . ' must be a valid timestamp';
         }
     }
 }

@@ -113,8 +113,7 @@
                                     <div class="card-body">
                                       <div class="row">
                                         <div class="col-md-4">
-                                          <img class="img-fluid" src="<?php //base_url 
-                                                                      ?>/assets/img/others/img-2.jpg" alt="">
+                                          <img class="img-fluid" src="<?= base_url ?>resources/img/others/img-2.jpg" alt="">
                                         </div>
                                         <div class="col-md-8">
                                           <h4 class="m-b-10"><?php //$informasi['judul'] 

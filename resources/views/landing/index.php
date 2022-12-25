@@ -358,7 +358,7 @@
                                 <div class="client-user mt-5 d-flex">
                                     <div class="client-img pe-3">
                                         <a href="https://www.instagram.com/flyingcat.me/?hl=id" target="_blank">
-                                            <img src="<?=base_url;?>/esources/views/landing/images/users/fathan3.png" style="object-fit: cover;"
+                                            <img src="<?=base_url;?>resources/views/landing/images/users/fathan3.png" style="object-fit: cover;"
                                                 class="img-fluid rounded-circle" alt="">
                                         </a>
                                     </div>

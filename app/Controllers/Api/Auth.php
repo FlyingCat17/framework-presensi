@@ -11,9 +11,7 @@ class Auth extends Controller
 
         $user = $this->findSiswa($request->username);
 
-        if (!password_verify($request->password, $user->password)) {
-            return Response::json(403, 'Password salah');
-        }
+        $this->verifyPassword($request->password, $user->password);
 
         if ($user->isLogin == 0) {
             $this->updateLogin(1, $request->username, $request->deviceId);
@@ -27,9 +25,9 @@ class Auth extends Controller
                 $user = $this->query($request->username);
                 return Response::json(200, 'Berhasil login', $this->mapUser($user));
             }
-
-            return Response::json(403, 'Akun sedang digunakan');
         }
+        
+        return Response::json(403, 'Akun sedang digunakan');
     }
 
     public function newLogin(Request $request)
@@ -38,9 +36,7 @@ class Auth extends Controller
 
         $user = $this->findSiswa($request->username);
 
-        if (!password_verify($request->password, $user->password)) {
-            return Response::json(403, 'Password salah');
-        }
+        $this->verifyPassword($request->password, $user->password);
 
         $this->updateLogin(1, $request->username, $request->deviceId);
         $user = $this->query($request->username);
