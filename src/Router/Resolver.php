@@ -1,5 +1,4 @@
 <?php
-
 namespace Riyu\Router;
 
 use Closure;
@@ -8,7 +7,6 @@ use ReflectionFunction;
 use ReflectionMethod;
 use Riyu\App\Config;
 use Riyu\Helpers\Errors\AppException;
-use Riyu\Helpers\Errors\Message;
 use Riyu\Http\Request;
 
 class Resolver
@@ -38,12 +36,7 @@ class Resolver
             $class = new $class;
             return $class->$method();
         } catch (\Throwable $th) {
-            $config = Config::get('app');
-            if ($config['debug']) {
-                echo $th;
-            } else {
-                throw new AppException(Message::exception(500, json_encode($class)));
-            }
+            throw new AppException("Callback error: " . $th->getMessage());
         }
     }
 
@@ -75,12 +68,7 @@ class Resolver
             }
             return $class->$method(...$params);
         } catch (\Throwable $th) {
-            $config = Config::get('app');
-            if ($config['debug']) {
-                echo $th;
-            } else {
-                throw new AppException(Message::exception(500, json_encode($class)));
-            }
+            throw new AppException("Callback error: " . $th->getMessage());
         }
     }
 
@@ -95,7 +83,7 @@ class Resolver
             if ($config['debug']) {
                 echo $th;
             } else {
-                throw new AppException(Message::exception(500, json_encode($class)));
+                throw new AppException("Callback error: " . $th->getMessage());
             }
         }
     }
@@ -115,7 +103,7 @@ class Resolver
             if ($config['debug']) {
                 echo $th;
             } else {
-                throw new AppException(Message::exception(500, json_encode($class)));
+                throw new AppException("Callback error: " . $th->getMessage());
             }
         }
     }
@@ -160,7 +148,7 @@ class Resolver
             if ($config['debug']) {
                 echo $th;
             } else {
-                throw new AppException(Message::exception(500, json_encode($callback)));
+                throw new AppException("Callback error: " . $th->getMessage());
             }
         }
     }
@@ -179,7 +167,7 @@ class Resolver
             if ($config['debug']) {
                 echo $th;
             } else {
-                throw new AppException(Message::exception(500, json_encode($closure)));
+                throw new AppException("Callback error: " . $th->getMessage());
             }
         }
     }

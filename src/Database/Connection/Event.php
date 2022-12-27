@@ -4,7 +4,6 @@ namespace Riyu\Database\Connection;
 use PDO;
 use PDOException;
 use Riyu\Helpers\Errors\AppException;
-use Riyu\Helpers\Errors\Message;
 use Riyu\Helpers\Storage\GlobalStorage;
 
 class Event
@@ -74,7 +73,7 @@ class Event
             $this->connection = new PDO($this->dsn, $this->config[2], $this->config[3]);
             return $this->connection;
         } catch (PDOException $e) {
-            new AppException(Message::exception(1, $e->getMessage()), 1);
+            new AppException("Connection failed: " . $e->getMessage());
         }
     }
 
@@ -83,8 +82,12 @@ class Event
         $dsn = $this->config[0] . ':host=' . $this->config[1] . ';charset=' . $this->config[5] . ';port=' . $this->config[6];
         $this->setDsn();
         $connection = $this->dsn;
-        $connection = new PDO($dsn, $this->config[2], $this->config[3]);
-        $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $connection;
+        try {
+            $connection = new PDO($dsn, $this->config[2], $this->config[3]);
+            $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $connection;
+        } catch (\Throwable $th) {
+            throw new AppException("Connection failed: " . $th->getMessage());
+        }
     }
 }

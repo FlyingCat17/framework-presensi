@@ -13,13 +13,19 @@ trait Mapping
      */
     protected function mapUser(object $user)
     {
+        $foto = null;
+
+        if ($user->foto_profil != null) {
+            $foto = base_url."images/profile/siswa/".$user->foto_profil;
+        }
+
         return array(
             'nis' => $user->nis,
             'nama' => $user->nama_siswa,
             'kelas' => $user->nama_kelas,
             'id_kelas' => $user->id_kelas,
             'tanggal_lahir' => $user->tanggal_lahir,
-            'foto' => base_url."images/profile/siswa/".$user->foto_profil,
+            'foto' => $foto,
             'email' => $user->email,
             'no_hp' => $user->notelp_siswa,
             'alamat' => $user->alamat_siswa,
