@@ -2,10 +2,6 @@
 
 namespace Riyu\Database\Connection;
 
-use PDO;
-use PDOException;
-use Riyu\Helpers\Errors\AppException;
-use Riyu\Helpers\Errors\Message;
 use Riyu\Helpers\Storage\GlobalStorage;
 
 class Connection

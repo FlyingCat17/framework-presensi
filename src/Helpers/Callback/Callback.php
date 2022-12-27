@@ -4,7 +4,6 @@ namespace Riyu\Helpers\Callback;
 
 use ReflectionMethod;
 use Riyu\Helpers\Errors\AppException;
-use Riyu\Helpers\Errors\Message;
 use Riyu\Router\Resolver;
 
 class Callback
@@ -38,7 +37,7 @@ class Callback
                 self::object($callback, $data);
             }
         } catch (\Throwable $th) {
-            throw new AppException(Message::exception(500, $callback));
+            throw new AppException("Callback error: " . $th->getMessage());
         }
     }
 
@@ -51,7 +50,7 @@ class Callback
                 self::callable($callback, $data);
             }
         } catch (\Throwable $th) {
-            throw new AppException(Message::exception(500, $callback));
+            throw new AppException("Callback error: " . $th->getMessage());
         }
     }
 
@@ -62,13 +61,13 @@ class Callback
                 try {
                     return $callback($data);
                 } catch (\Throwable $th) {
-                    throw new AppException(Message::exception(500, $callback));
+                    throw new AppException("Callback error: " . $th->getMessage());
                 }
             } else {
                 try {
                     return $callback();
                 } catch (\Throwable $th) {
-                    throw new AppException(Message::exception(500, $callback));
+                    throw new AppException("Callback error: " . $th->getMessage());
                 }
             }
         } else {
@@ -85,7 +84,7 @@ class Callback
                     return $callback();
                 }
             } catch (\Throwable $th) {
-                throw new AppException(Message::exception(500, $callback));
+                throw new AppException("Callback error: " . $th->getMessage());
             }
         }
     }

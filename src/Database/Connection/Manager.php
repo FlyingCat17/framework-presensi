@@ -5,9 +5,7 @@ namespace Riyu\Database\Connection;
 use Riyu\Database\Utils\ConnectionManager;
 use PDO;
 use PDOException;
-use Riyu\App\Config;
 use Riyu\Helpers\Errors\AppException;
-use Riyu\Helpers\Errors\Message;
 
 class Manager implements ConnectionManager
 {
@@ -28,12 +26,7 @@ class Manager implements ConnectionManager
         try {
             $this->connection = $connection;
         } catch (\Throwable $th) {
-            $config = Config::get('app');
-            if ($config['debug']) {
-                echo $th;
-            } else {
-                throw new AppException($th);
-            }
+            throw new AppException($th->getMessage());
         }
     }
 
@@ -54,12 +47,7 @@ class Manager implements ConnectionManager
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (\Throwable $th) {
-            $config = Config::get('app');
-            if ($config['debug']) {
-                echo $th;
-            } else {
-                throw new AppException($th);
-            }
+            throw new AppException($th->getMessage());
         }
     }
 
@@ -80,12 +68,7 @@ class Manager implements ConnectionManager
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $th) {
-            $config = Config::get('app');
-            if ($config['debug']) {
-                echo $th;
-            } else {
-                throw new AppException($th);
-            }
+            throw new AppException($th->getMessage());
         }
     }
 
@@ -106,12 +89,7 @@ class Manager implements ConnectionManager
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_OBJ);
         } catch (PDOException $th) {
-            $config = Config::get('app');
-            if ($config['debug']) {
-                echo $th;
-            } else {
-                throw new AppException($th);
-            }
+            throw new AppException($th->getMessage());
         }
     }
 
@@ -132,12 +110,7 @@ class Manager implements ConnectionManager
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (\Throwable $th) {
-            $config = Config::get('app');
-            if ($config['debug']) {
-                echo $th;
-            } else {
-                throw new AppException($th);
-            }
+            throw new AppException($th->getMessage());
         }
     }
 
@@ -151,12 +124,7 @@ class Manager implements ConnectionManager
             $stmt->execute();
             return $stmt->rowCount();
         } catch (\Throwable $th) {
-            $config = Config::get('app');
-            if ($config['debug']) {
-                echo $th;
-            } else {
-                throw new AppException($th);
-            }
+            throw new AppException($th->getMessage());
         }
     }
 
@@ -177,12 +145,7 @@ class Manager implements ConnectionManager
             $stmt->execute();
             return $stmt->rowCount();
         } catch (\Throwable $th) {
-            $config = Config::get('app');
-            if ($config['debug']) {
-                echo $th;
-            } else {
-                throw new AppException($th);
-            }
+            throw new AppException($th->getMessage());
         }
     }
 
@@ -203,12 +166,7 @@ class Manager implements ConnectionManager
             $stmt->execute();
             return $stmt->rowCount();
         } catch (\Throwable $th) {
-            $config = Config::get('app');
-            if ($config['debug']) {
-                echo $th;
-            } else {
-                throw new AppException($th);
-            }
+            throw new AppException($th->getMessage());
         }
     }
 
@@ -240,12 +198,7 @@ class Manager implements ConnectionManager
                 }
             }
         } catch (\Throwable $th) {
-            $config = Config::get('app');
-            if ($config['debug']) {
-                echo $th;
-            } else {
-                throw new AppException($th);
-            }
+            throw new AppException($th->getMessage());
         }
     }
 }

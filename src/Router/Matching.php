@@ -4,13 +4,12 @@ namespace Riyu\Router;
 
 use Riyu\Helpers\Callback\Callback;
 use Riyu\Helpers\Errors\AppException;
-use Riyu\Helpers\Errors\Message;
 use Riyu\Helpers\Errors\ViewError;
 use Riyu\Http\Request;
 use Riyu\Router\Utils\Foundation;
 use Riyu\Router\Utils\Storage;
 
-class Matches extends Storage
+class Matching extends Storage
 {
     /**
      * @var Request
@@ -33,19 +32,11 @@ class Matches extends Storage
         }
         foreach ($routes[$method] as $route) {
             if (preg_match($uri, $route)) {
-                try {
-                    return $this->callback($route, $method);
-                } catch (\Throwable $th) {
-                    throw new AppException(Message::exception(501, [$route, $method]));
-                }
+                return $this->callback($route, $method);
             }
             $rout = $this->pregReplaceRoute($route);
             if (preg_match($rout, $url)) {
-                try {
-                    return $this->callback($route, $method);
-                } catch (\Throwable $th) {
-                    throw new AppException(Message::exception(501, [$route, $method]));
-                }
+                return $this->callback($route, $method);
             }
         }
         $this->matchGroup($url, $method);
@@ -63,11 +54,7 @@ class Matches extends Storage
         }
         foreach ($routes[$method] as $route) {
             if (preg_match($uri, $route)) {
-                try {
-                    return $this->callback($route, $method);
-                } catch (\Throwable $th) {
-                    throw new AppException(Message::exception(501, [$route, $method]));
-                }
+                return $this->callback($route, $method);
             }
             $rout = $this->pregReplaceRoute($route);
             if (preg_match($rout, $url)) {
@@ -84,12 +71,7 @@ class Matches extends Storage
         $params = Foundation::getParams($route);
         $callback = $methods[$method];
         $callback = $callback[array_search($route, $routes[$method])];
-        try {
-            Storage::clearAll();
-            return Callback::call($callback, $params);
-        } catch (\Throwable $th) {
-            throw new AppException(Message::exception(501, [$callback, $params]));
-        }
+        return Callback::call($callback, $params);
     }
 
     public function pregReplace($uri)

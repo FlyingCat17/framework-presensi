@@ -177,7 +177,7 @@ class Builder extends Grammar
         try {
             return $exec->queryGet($query, $this->bindings);
         } catch (\Throwable $th) {
-            new AppException("Error Processing Request");
+            throw new AppException($th->getMessage());
         }
     }
 
@@ -195,7 +195,7 @@ class Builder extends Grammar
         try {
             return $exec->queryAll($query, $this->bindings);
         } catch (\Throwable $th) {
-            new AppException("Error Processing Request");
+            throw new AppException($th->getMessage());
         }
     }
 
@@ -214,7 +214,7 @@ class Builder extends Grammar
         try {
             return $exec->queryFirst($query, $this->bindings);
         } catch (\Throwable $th) {
-            new AppException("Error Processing Request");
+            throw new AppException($th->getMessage());
         }
     }
 
@@ -232,7 +232,7 @@ class Builder extends Grammar
         try {
             return $exec->queryCount($query, $this->bindings);
         } catch (\Throwable $th) {
-            new AppException("Error Processing Request");
+            throw new AppException($th->getMessage());
         }
     }
 
@@ -250,7 +250,7 @@ class Builder extends Grammar
         try {
             return $exec->exec($query, $this->bindings);
         } catch (\Throwable $th) {
-            new AppException("Error Processing Request");
+            throw new AppException($th->getMessage());
         }
     }
 
@@ -269,7 +269,7 @@ class Builder extends Grammar
         try {
             return $exec->exec($query, $this->bindings);
         } catch (\Throwable $th) {
-            new AppException("Error Processing Request");
+            throw new AppException($th->getMessage());
         }
     }
 
@@ -289,7 +289,7 @@ class Builder extends Grammar
         try {
             return $exec->queryAll($query, $this->bindings);
         } catch (\Throwable $th) {
-            new AppException("Error Processing Request");
+            throw new AppException($th->getMessage());
         }
     }
 
@@ -357,7 +357,7 @@ class Builder extends Grammar
         try {
             return $exec->exec($query);
         } catch (\Throwable $th) {
-            new AppException("Error Processing Request");
+            throw new AppException($th->getMessage());
         }
     }
 }

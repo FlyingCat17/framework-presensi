@@ -2,6 +2,8 @@
 
 namespace Riyu\Validation;
 
+use Riyu\Helpers\Errors\AppException;
+
 class Validation
 {
     use Validator;
@@ -32,7 +34,7 @@ class Validation
                         $errors[$field][] = $error;
                     }
                 } else {
-                    $errors[$field][] = "Rule $ruleName not found";
+                    throw new AppException("Rule $ruleName not found");
                 }
             }
         }
@@ -71,7 +73,7 @@ class Validation
                         }
                     }
                 } else {
-                    $errors[$field][] = "Rule $ruleName not found";
+                    throw new AppException("Rule $ruleName not found");
                 }
             }
         }
