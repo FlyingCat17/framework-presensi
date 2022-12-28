@@ -40,6 +40,11 @@
                             <div class="mb-4"></div>
                             <div class="d-flex justify-content-between align-items-end">
                                 <div>
+                                    <a href="<?= base_url; ?>jadwal/kelas/<?= $data['jadwal']->id_kelas_ajaran ?>"
+                                        class="btn btn-danger mb-3"><i class="anticon anticon-left"
+                                            style="margin-left: -5px;"></i> Daftar
+                                        Jadwal</a>
+                                    <br>
                                     <button type="button" class="btn btn-success mb-3 tambah_presensi"
                                         onclick="location.href='<?= base_url; ?>presensi/<?= $data['jadwal']->id_jadwal ?>/tambah'"
                                         data-id="<?= $data['jadwal']->id_jadwal ?>"><i class="anticon anticon-plus"

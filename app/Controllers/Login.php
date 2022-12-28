@@ -13,7 +13,7 @@ use Utils\Flasher;
 
 class Login
 {
-    
+
 
     public function index()
     {
@@ -37,6 +37,7 @@ class Login
         $username = $request->username;
         $password = $request->password;
         if (empty($username) || empty($password)) {
+            Flasher::setFlash('Harap isi Username atau Password', 'danger');
             header('Location: ' . base_url . 'auth/login');
             exit();
         }
