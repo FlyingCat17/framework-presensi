@@ -18,6 +18,17 @@
     } else {
         echo '';
     }
+
+    if ($data['title'] == 'Siswa') {
+        echo '<!-- page css -->
+        <link href="' . base_url . 'resources/vendors/datatables/dataTables.bootstrap.min.css" rel="stylesheet">
+        
+        <!-- page js -->
+        <script src="' . base_url . 'resources/vendors/datatables/jquery.dataTables.min.js"></script>
+        <script src="' . base_url . 'resources/vendors/datatables/dataTables.bootstrap.min.js"></script>';
+    } else {
+        echo '';
+    }
     ?>
 
     <!-- page js -->
