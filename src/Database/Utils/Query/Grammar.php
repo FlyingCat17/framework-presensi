@@ -1,7 +1,6 @@
 <?php
-namespace Riyu\Database\Utils\Query;
 
-use Riyu\Database\Connection\Event;
+namespace Riyu\Database\Utils\Query;
 
 class Grammar
 {
@@ -139,10 +138,16 @@ class Grammar
      */
     protected $connection;
 
+    /**
+     * @var \Riyu\Database\Connection\Manager
+     */
+    protected $manager;
+
     public function __construct()
     {
-        $connection = new Event;
+        $connection = new \Riyu\Database\Connection\Event;
         $this->connection = $connection->connect();
+        $this->manager = new \Riyu\Database\Connection\Manager($this->connection);
     }
 
     /**
@@ -312,26 +317,26 @@ class Grammar
             } else {
                 return 'WHERE ' . $where[0]['column'] . ' ' . $where[0]['operator'] . ' ' . $where[0]['value'] . ' ';
             }
-        } else {
-            $query = '';
-            foreach ($where as $key => $value) {
-                if ($key == 0) {
-                    if (!is_array($value)) {
-                        $query .= $value . ' ';
-                    } else {
-                        $query .= '' . $value['column'] . ' ' . $value['operator'] . ' ' . $value['value'] . ' ';
-                    }
+        }
+        
+        $query = '';
+        foreach ($where as $key => $value) {
+            if ($key == 0) {
+                if (!is_array($value)) {
+                    $query .= $value . ' ';
                 } else {
-                    if (!is_array($value)) {
-                        $query .= $value . ' ';
-                    } else {
-                        $query .= $value['boolean'] . ' ' . $value['column'] . ' ' . $value['operator'] . ' ' . $value['value'] . ' ';
-                    }
+                    $query .= '' . $value['column'] . ' ' . $value['operator'] . ' ' . $value['value'] . ' ';
+                }
+            } else {
+                if (!is_array($value)) {
+                    $query .= $value . ' ';
+                } else {
+                    $query .= $value['boolean'] . ' ' . $value['column'] . ' ' . $value['operator'] . ' ' . $value['value'] . ' ';
                 }
             }
-            if ($query != '') {
-                return ' WHERE ' . $query;
-            }
+        }
+        if ($query != '') {
+            return ' WHERE ' . $query;
         }
     }
 
@@ -492,8 +497,9 @@ class Grammar
         }
 
         if (count($this->timestamp) > 0) {
-            $query .= "NOW(), ";
-            $query .= "NOW(), ";
+            $date = date('Y-m-d H:i:s');
+            $query .= $date . ", ";
+            $query .= $date . ", ";
         }
 
         $query = substr($query, 0, -2);
@@ -520,7 +526,10 @@ class Grammar
         }
 
         if (count($this->timestamp) > 0) {
-            $query .= "`" . $this->timestamp['updated_at'] . "` = NOW(), ";
+            if (isset($this->timestamp['updated_at'])) {
+                $date = date('Y-m-d H:i:s');
+                $query .= "`" . $this->timestamp['updated_at'] . "` = " . $date . ", ";
+            }
         }
 
         $query = substr($query, 0, -2);

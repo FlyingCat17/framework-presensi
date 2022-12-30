@@ -13,6 +13,7 @@ use App\Controllers\Admin;
 use App\Controllers\Siswa;
 use App\Controllers\MapelController;
 use App\Controllers\JadwalController;
+use App\Controllers\Testing;
 use App\Models\Presensi;
 use Riyu\Http\Request;
 use Riyu\Router\Route;
@@ -22,6 +23,17 @@ use Utils\Flasher;
 
 Route::get('/', function () {
     return view('landing/index');
+});
+
+Route::get('/test', function () {
+    return view('test');
+});
+
+Route::group('/generate', function() {
+    Route::post('/presensi', [Testing::class, 'generatePresensi']);
+    Route::post('/detail-presensi', [Testing::class, 'generateDetailPresensi']);
+    Route::post('/siswa', [Testing::class, 'generateSiswa']);
+    Route::post('/informasi', [Testing::class, 'generateInformasi']);
 });
 
 Route::get('/auth/logout', [Login::class, 'logout']);
@@ -69,6 +81,7 @@ Route::group('/siswa', function () {
             exit();
         }
     );
+    Route::get('/page/{page}', [Siswa::class, 'pagination']);
     Route::get('/tambah', [Siswa::class, 'tambah']);
     Route::post('/tambah', [Siswa::class, 'insert']);
     Route::get(

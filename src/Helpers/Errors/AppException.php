@@ -4,14 +4,19 @@ namespace Riyu\Helpers\Errors;
 
 use Exception;
 use Riyu\App\Config;
+use Riyu\Helpers\Errors\Backtrace\Handler\Backtrace;
 use Throwable;
 
 class AppException extends Exception
 {
     public function __construct($message, $code = 0, Throwable $previous = null)
     {
-        http_response_code(500);
         parent::__construct($message, $code, $previous);
+        http_response_code(500);
+        try {
+            new \Riyu\Helpers\Errors\Backtrace\Handler\Logging();
+        } catch (\Throwable $th) {
+        }
         $config = Config::get('app');
         if ($config['debug']) {
             return new Backtrace;
