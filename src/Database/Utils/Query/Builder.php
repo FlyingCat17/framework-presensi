@@ -2,8 +2,6 @@
 namespace Riyu\Database\Utils\Query;
 
 use Closure;
-use Riyu\Database\Connection\Event;
-use Riyu\Database\Connection\Manager;
 use Riyu\Helpers\Errors\AppException;
 use Riyu\Helpers\Storage\GlobalStorage;
 
@@ -166,16 +164,10 @@ class Builder extends Grammar
     public function get()
     {
         $query = $this->buildQuery();
-
         $this->setStorage($query);
 
-        $connection = new Event();
-        $connection = $connection->connect();
-
-        $exec = new Manager($connection);
-
         try {
-            return $exec->queryGet($query, $this->bindings);
+            return $this->manager->queryGet($query, $this->bindings);
         } catch (\Throwable $th) {
             throw new AppException($th->getMessage());
         }
@@ -184,16 +176,10 @@ class Builder extends Grammar
     public function all()
     {
         $query = $this->buildQuery();
-        // print_r($query);
         $this->setStorage($query);
 
-        $connection = new Event();
-        $connection = $connection->connect();
-
-        $exec = new Manager($connection);
-
         try {
-            return $exec->queryAll($query, $this->bindings);
+            return $this->manager->queryAll($query, $this->bindings);
         } catch (\Throwable $th) {
             throw new AppException($th->getMessage());
         }
@@ -206,13 +192,8 @@ class Builder extends Grammar
 
         $this->setStorage($query);
 
-        $connection = new Event();
-        $connection = $connection->connect();
-
-        $exec = new Manager($connection);
-
         try {
-            return $exec->queryFirst($query, $this->bindings);
+            return $this->manager->queryFirst($query, $this->bindings);
         } catch (\Throwable $th) {
             throw new AppException($th->getMessage());
         }
@@ -221,16 +202,10 @@ class Builder extends Grammar
     public function count()
     {
         $query = $this->buildQuery();
-
         $this->setStorage($query);
 
-        $connection = new Event();
-        $connection = $connection->connect();
-
-        $exec = new Manager($connection);
-
         try {
-            return $exec->queryCount($query, $this->bindings);
+            return $this->manager->queryCount($query, $this->bindings);
         } catch (\Throwable $th) {
             throw new AppException($th->getMessage());
         }
@@ -239,16 +214,10 @@ class Builder extends Grammar
     public function save()
     {
         $query = $this->buildQuery();
-
         $this->setStorage($query);
 
-        $connection = new Event();
-        $connection = $connection->connect();
-
-        $exec = new Manager($connection);
-
         try {
-            return $exec->exec($query, $this->bindings);
+            return $this->manager->exec($query, $this->bindings);
         } catch (\Throwable $th) {
             throw new AppException($th->getMessage());
         }
@@ -258,16 +227,10 @@ class Builder extends Grammar
     {
         $this->insert($attributes);
         $query = $this->buildQuery();
-
         $this->setStorage($query);
 
-        $connection = new Event();
-        $connection = $connection->connect();
-
-        $exec = new Manager($connection);
-
         try {
-            return $exec->exec($query, $this->bindings);
+            return $this->manager->exec($query, $this->bindings);
         } catch (\Throwable $th) {
             throw new AppException($th->getMessage());
         }
@@ -278,16 +241,10 @@ class Builder extends Grammar
         $this->limit($limit);
         $this->offset(($page - 1) * $limit);
         $query = $this->buildQuery();
-
         $this->setStorage($query);
 
-        $connection = new Event();
-        $connection = $connection->connect();
-
-        $exec = new Manager($connection);
-
         try {
-            return $exec->queryAll($query, $this->bindings);
+            return $this->manager->queryAll($query, $this->bindings);
         } catch (\Throwable $th) {
             throw new AppException($th->getMessage());
         }
@@ -316,9 +273,9 @@ class Builder extends Grammar
             $this->where($id);
             return $this->first();
         }
+
         $this->where($column, $id);
         return $this->first();
-
     }
 
     public function findorfail($id, $column = 'id', Closure $callback = null)
@@ -349,13 +306,9 @@ class Builder extends Grammar
     {
         $query = "TRUNCATE TABLE {$this->table}";
         GlobalStorage::set('last_query', $query);
-        $connection = new Event();
-        $connection = $connection->connect();
-
-        $exec = new Manager($connection);
 
         try {
-            return $exec->exec($query);
+            return $this->manager->exec($query);
         } catch (\Throwable $th) {
             throw new AppException($th->getMessage());
         }

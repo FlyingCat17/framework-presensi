@@ -25,10 +25,31 @@ class Siswa extends Controller
 
     public function index()
     {
-        $data['title'] = "Siswa";
-        $data['data_siswa'] = ModelsSiswa::where('status', '1')->orderby('nama_siswa', 'asc')->all();
-        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
-        return view(['templates/header', 'templates/sidebar', 'siswa/index', 'templates/footer'], $data);
+        try {
+            $data['title'] = "Siswa";
+            $data['jumlah_data'] = ModelsSiswa::where('status', '1')->count();
+            $data['data_siswa'] = ModelsSiswa::where('status', '1')->orderby('nama_siswa', 'asc')->all();
+            $data['admin'] = User::where('id_admin', Session::get('user'))->first();
+            return view(['templates/header', 'templates/sidebar', 'siswa/index', 'templates/footer'], $data);
+        } catch (\Throwable $th) {
+            throw new \riyu\Helpers\Errors\AppException($th->getMessage(), $th->getCode(), $th->getPrevious());
+        }
+    }
+
+    public function pagination(Request $request)
+    {
+        try {
+            $data['title'] = "Siswa";
+            $data['jumlah_data'] = ModelsSiswa::where('status', '1')->count();
+            $data['data_siswa'] = ModelsSiswa::where('status', '1')->orderby('nama_siswa', 'asc')->paginate($request->page);
+            $data['admin'] = User::where('id_admin', Session::get('user'))->first();
+            $data['halaman_aktif'] = $request->page;
+            $data['jumlah_halaman'] = ceil($data['jumlah_data'] / 10);
+            $data['halaman_akhir'] = $data['jumlah_halaman'];
+            return view(['templates/header', 'templates/sidebar', 'siswa/index', 'templates/footer'], $data);
+        } catch (\Throwable $th) {
+            throw new \riyu\Helpers\Errors\AppException($th->getMessage(), $th->getCode(), $th->getPrevious());
+        }
     }
 
     public function tambah()

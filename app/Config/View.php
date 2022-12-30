@@ -33,6 +33,7 @@ class View
                     // $engine->setPath(__DIR__ . '/../../resources/views/');
                     // return $engine->render($v, $data, $mergeData);
                 } else {
+                    throw new \Riyu\Helpers\Errors\AppException("View $v not found");
                     return ViewError::code(404);
                 }
             }
@@ -46,6 +47,7 @@ class View
 
             require_once __DIR__.'/../../resources/views/'.$view.'.php';
         } else {
+            throw new \Riyu\Helpers\Errors\AppException("View $view not found");
             return ViewError::code(404);
         }
     }
