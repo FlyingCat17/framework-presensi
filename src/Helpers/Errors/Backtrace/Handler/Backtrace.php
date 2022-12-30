@@ -1,5 +1,5 @@
 <?php
-namespace Riyu\Helpers\Errors;
+namespace Riyu\Helpers\Errors\Backtrace\Handler;
 
 class Backtrace {
     protected $trace;
@@ -11,7 +11,7 @@ class Backtrace {
 
     public function render()
     {
-        require_once __DIR__ .'/view.php';
+        require_once __DIR__ .'/../resources/view.php';
         exit;
     }
 
@@ -26,5 +26,14 @@ class Backtrace {
         $trace = $this->trace;
         $trace = array_slice($trace, 1);
         return $trace;
+    }
+
+    public function assets($assetsName)
+    {
+        $dir = __DIR__ . '/../resources/';
+        $file = $dir . $assetsName;
+        if (file_exists($file)) {
+            require_once $file;
+        }
     }
 }

@@ -8,6 +8,13 @@ if (!function_exists('view')) {
         try {
             return new App\Config\View($view, $data, $mergeData);
         } catch (\Throwable $th) {
+            if (is_null($view)) {
+                throw new AppException("View not found");
+            }
+            if (is_array($view)) {
+                $view = implode(' ', $view);
+                throw new AppException("View $view not found");
+            }
             throw new AppException("View $view not found");
         }
     }

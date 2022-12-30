@@ -14,7 +14,7 @@ return [
         'host' => 'localhost',
         'port' => 3306,
         'dbname' => 'db_new_presensi',
-        'username' => 'root',
+        'username' => 'lutfisobri',
         'password' => '',
         'charset' => 'utf8',
     ],
@@ -24,4 +24,6 @@ return [
     "view" => [
         "path" => __DIR__ . "/../resources/views/",
     ],
+
+    "path" => __DIR__ . "/"
 ];

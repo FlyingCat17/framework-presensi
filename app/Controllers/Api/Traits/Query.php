@@ -180,6 +180,7 @@ trait Query
                 ->join('tb_guru', 'tb_jadwal.nuptk', 'tb_guru.nuptk')
                 ->where('tb_kelas_ajaran.id_kelas_ajaran', $idKelas)
                 ->orderby('tb_presensi.mulai_presensi', 'asc')
+                ->limit(20)
                 ->all();
         } catch (\Throwable $th) {
             return Response::json(500, 'Terjadi kesalahan');
