@@ -1,7 +1,7 @@
 <script type="text/javascript" src="<?= base_url; ?>resources/views/jadwal/index.js"></script>
 <div class="page-container">
   <div class="main-content">
-    <div class="container-fluid">
+    <div class="container">
       <div class="mb-2 ml-3">
         <h1 class="font-weight-bold">Jadwal Kelas</h1>
         <h3>
@@ -14,119 +14,384 @@
             <div class="card-body">
               <button type="button"
                 onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $data['kelas']->id_kelas_ajaran ?>/tambah'"
-                class="btn btn-success mb-3" id="tambah_jadwal"><span><i class="anticon anticon-plus"
+                class="btn btn-success" id="tambah_jadwal"><span><i class="anticon anticon-plus"
                     style="margin-left: -5px;"></i></span>
                 Tambah</button>
+              <button type="button" onclick="location.href='<?= base_url; ?>jadwal/'" class="btn btn-danger"
+                id="tambah_jadwal"><span><i class="anticon anticon-left" style="margin-left: -5px;"></i></i></span>
+                Pilih Kelas</button>
               <?php
               use Utils\Flasher;
 
               Flasher::flash();
               ?>
-              <div class="mt-4">
-                <div class="table-responsive">
-                  <table class="table" style="overflow: auto;">
-                    <thead>
-                      <tr>
-                        <th scope="col" style="width: 5px;">No</th>
-                        <th scope="col">Kelas</th>
-                        <th scope="col" style="">Mata Pelajaran</th>
-                        <th scope="col" style="width: 250px;">Guru</th>
-                        <th scope="col" style="">Hari</th>
-                        <th scope="col" style="width: 30px;">Jam</th>
-                        <th scope="col" style="width: 130px;">Pukul</th>
-                        <th scope="col" style=""></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <?php
-
-                      $no = 1;
-                      $kelas = $data['kelas']->id_kelas_ajaran;
-                      if (!empty($data['jadwal'])) {
-                        foreach ($data['jadwal'] as $jadwal): ?>
-                      <tr>
-                        <td scope="row">
-                          <?= $no ?>
-                        </td>
-                        <td>
-                          <?= $jadwal['nama_kelas'] ?>
-                        </td>
-                        <td>
-                          <?= $jadwal['nama_mapel'] ?>
-                        </td>
-                        <td>
-                          <?= $jadwal['nama_guru'] ?>
-                        </td>
-                        <td>
-                          <?php
-                          switch ($jadwal['hari']) {
-                            case 1:
-                              echo 'Senin';
-                              break;
-                            case 2:
-                              echo 'Selasa';
-                              break;
-                            case 3:
-                              echo 'Rabu';
-                              break;
-                            case 4:
-                              echo 'Kamis';
-                              break;
-                            case 5:
-                              echo 'Jumat';
-                              break;
-                            case 6:
-                              echo 'Sabtu';
-                              break;
-                          }
-                          ?>
-                        </td>
-                        <td>
-                          <?= $jadwal['jam_ke'] ?>
-                        </td>
-                        <td>
-                          <?= $jadwal['jam_awal'] ?> - <?= $jadwal['jam_akhir'] ?>
-                        </td>
-                        <td>
-                          <button type="button" class="btn btn-success align-items-center m-1"
-                            onclick="location.href='<?= base_url; ?>presensi/<?= $jadwal['id_jadwal'] ?>'"
-                            data-toggle="tooltip" data-placement="top" title="Presensi"
-                            data-id="<?= $jadwal['id_jadwal'] ?>" style="width: 20px;"><i class="far fa-folder-open"
-                              style="font-size: 12px; margin-left: -5px;"></i></button>
-                          <!-- <button class="btn btn-warning"><i class="far fa-edit"></i></button> -->
-                          <button type="button"
-                            onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $kelas ?>/ubah/<?= $jadwal['id_jadwal'] ?>'"
-                            class="btn btn-warning edit_jadwal m-1" data-toggle="tooltip" data-placement="top"
-                            title="Ubah Jadwal" style="width: 30px;" data-id="<?= $jadwal['id_jadwal'] ?>"><i
-                              class="far fa-edit" style="margin-left: -5px;"></i></button>
-                          <button class="btn btn-danger m-1 tampilModalHapus" data-toggle="modal"
-                            data-target="#hapus_jadwal" data-id="<?= $jadwal['id_jadwal'] ?>"
-                            data-kelas="<?= $jadwal['nama_kelas'] ?>"
-                            data-idkelasajaran="<?= $jadwal['id_kelas_ajaran'] ?>"
-                            data-guru="<?= $jadwal['nama_guru'] ?>"
-                            data-jam="<?= $jadwal['jam_awal'] . ' - ' . $jadwal['jam_akhir'] ?>"
-                            data-hari="<?=($jadwal['hari'] == 1 ? 'Senin' : ($jadwal['hari'] == 2 ? 'Selasa' : ($jadwal['hari'] == 3 ? 'Rabu' : ($jadwal['hari'] == 4 ? 'Kamis' : ($jadwal['hari'] == 5 ? 'Jumat' : ($jadwal['hari'] == 6 ? 'Sabtu' : '')))))) ?>"
-                            data-mapel="<?= $jadwal['nama_mapel'] ?>" style="width: 30px;"><i class="far fa-trash-alt"
-                              style="margin-left: -5px;"></i></button>
-                        </td>
-                      </tr>
-                      <?php
-                          $no++;
-                        endforeach;
-                      } else {
-                        echo '';
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion" id="accordion-default">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">
+              <a data-toggle="collapse" class="collapsed" href="#senin">
+                <span class="font-weight-bold">Senin</span>
+              </a>
+            </h5>
+          </div>
+          <div id="senin" class="collapse" data-parent="#accordion-default">
+            <div class="card-body">
+              <div class="table-responsive mb-5">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col" style="width: 50px;">No</th>
+                      <th scope="col" style="width: 230px;">Mata Pelajaran</th>
+                      <th scope="col" style="width: 300px;">Guru</th>
+                      <th scope="col">Pukul</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                    $no = 1;
+                    if (!empty($data['jadwalSenin'])) {
+                      foreach ($data['jadwalSenin'] as $jadwal) {
+                        ?>
+                        <tr>
+                          <td><?= $no; ?></td>
+                          <td>
+                            <?= $jadwal['nama_mapel']; ?>
+                          </td>
+                          <td><?= $jadwal['nama_guru']; ?></td>
+                          <td>
+                            <?= $jadwal['jam_awal'] ?> - <?= $jadwal['jam_akhir'] ?>
+                          </td>
+                          <td>
+                            <div class="dropdown">
+                              <button class="btn btn-default dropdown-toggle bg-primary text-white" data-toggle="dropdown">
+                                <span>Opsi</span>
+                              </button>
+                              <div class="dropdown-menu">
+                                <button class="dropdown-item"
+                                  onclick="location.href='<?= base_url; ?>presensi/<?= $jadwal['id_jadwal'] ?>'">Buka
+                                  Presensi</button>
+                                <button type="button" class="dropdown-item"
+                                  onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $kelas ?>/ubah/<?= $jadwal['id_jadwal'] ?>'">Ubah
+                                  Jadwal</button>
+                                <a class="dropdown-item tampilModalHapus text-danger" href="#hapus_jadwal"
+                                  data-toggle="modal" data-target="#hapus_jadwal" data-id="<?= $jadwal['id_jadwal'] ?>"
+                                  data-kelas="<?= $jadwal['nama_kelas'] ?>"
+                                  data-idkelasajaran="<?= $jadwal['id_kelas_ajaran'] ?>"
+                                  data-guru="<?= $jadwal['nama_guru'] ?>"
+                                  data-jam="<?= $jadwal['jam_awal'] . ' - ' . $jadwal['jam_akhir'] ?>"
+                                  data-hari="<?=($jadwal['hari'] == 1 ? 'Senin' : ($jadwal['hari'] == 2 ? 'Selasa' : ($jadwal['hari'] == 3 ? 'Rabu' : ($jadwal['hari'] == 4 ? 'Kamis' : ($jadwal['hari'] == 5 ? 'Jumat' : ($jadwal['hari'] == 6 ? 'Sabtu' : '')))))) ?>"
+                                  data-mapel="<?= $jadwal['nama_mapel'] ?>">Hapus Jadwal</a>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        <?php
+                        $no++;
                       }
-                      ?>
-                    </tbody>
-                  </table>
-                  <?php
-                  if (empty($data['jadwal'])) {
-                  ?>
-                  <p class="text-center">Tidak Ada Data</p>
-                  <?php
-                  }
-                  ?>
-                </div>
+                    } else {
+                      echo '';
+                    }
+                    ?>
+                  </tbody>
+                </table>
+                <?=(empty($data['jadwalSenin']) ? '<p class="text-center">Tidak Ada Jadwal</p>' : '') ?>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">
+              <a class="collapsed" data-toggle="collapse" href="#selasa">
+                <span class="font-weight-bold">Selasa</span>
+              </a>
+            </h5>
+          </div>
+          <div id="selasa" class="collapse" data-parent="#accordion-default">
+            <div class="card-body">
+              <div class="table-responsive mb-5">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col" style="width: 50px;">No</th>
+                      <th scope="col" style="width: 230px;">Mata Pelajaran</th>
+                      <th scope="col" style="width: 300px;">Guru</th>
+                      <th scope="col">Pukul</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                    $no = 1;
+                    if (!empty($data['jadwalSelasa'])) {
+                      foreach ($data['jadwalSelasa'] as $jadwal) {
+                        ?>
+                        <tr>
+                          <td><?= $no; ?></td>
+                          <td>
+                            <?= $jadwal['nama_mapel']; ?>
+                          </td>
+                          <td><?= $jadwal['nama_guru']; ?></td>
+                          <td>
+                            <?= $jadwal['jam_awal'] ?> - <?= $jadwal['jam_akhir'] ?>
+                          </td>
+                          <td>
+                            <div class="dropdown">
+                              <button class="btn btn-default dropdown-toggle bg-primary text-white" data-toggle="dropdown">
+                                <span>Opsi</span>
+                              </button>
+                              <div class="dropdown-menu">
+                                <button class="dropdown-item"
+                                  onclick="location.href='<?= base_url; ?>presensi/<?= $jadwal['id_jadwal'] ?>'">Buka
+                                  Presensi</button>
+                                <button type="button" class="dropdown-item"
+                                  onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $kelas ?>/ubah/<?= $jadwal['id_jadwal'] ?>'">Ubah
+                                  Jadwal</button>
+                                <a class="dropdown-item tampilModalHapus text-danger" href="#hapus_jadwal"
+                                  data-toggle="modal" data-target="#hapus_jadwal" data-id="<?= $jadwal['id_jadwal'] ?>"
+                                  data-kelas="<?= $jadwal['nama_kelas'] ?>"
+                                  data-idkelasajaran="<?= $jadwal['id_kelas_ajaran'] ?>"
+                                  data-guru="<?= $jadwal['nama_guru'] ?>"
+                                  data-jam="<?= $jadwal['jam_awal'] . ' - ' . $jadwal['jam_akhir'] ?>"
+                                  data-hari="<?=($jadwal['hari'] == 1 ? 'Senin' : ($jadwal['hari'] == 2 ? 'Selasa' : ($jadwal['hari'] == 3 ? 'Rabu' : ($jadwal['hari'] == 4 ? 'Kamis' : ($jadwal['hari'] == 5 ? 'Jumat' : ($jadwal['hari'] == 6 ? 'Sabtu' : '')))))) ?>"
+                                  data-mapel="<?= $jadwal['nama_mapel'] ?>">Hapus Jadwal</a>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        <?php
+                        $no++;
+                      }
+                    } else {
+                      echo '';
+                    }
+                    ?>
+                  </tbody>
+                </table>
+                <?=(empty($data['jadwalSelasa']) ? '<p class="text-center">Tidak Ada Jadwal</p>' : '') ?>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">
+              <a class="collapsed" data-toggle="collapse" href="#rabu">
+                <span class="font-weight-bold">Rabu</span>
+              </a>
+            </h5>
+          </div>
+          <div id="rabu" class="collapse" data-parent="#accordion-default">
+            <div class="card-body">
+              <div class="table-responsive mb-5">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col" style="width: 50px;">No</th>
+                      <th scope="col" style="width: 230px;">Mata Pelajaran</th>
+                      <th scope="col" style="width: 300px;">Guru</th>
+                      <th scope="col">Pukul</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                    $no = 1;
+                    if (!empty($data['jadwalRabu'])) {
+                      foreach ($data['jadwalRabu'] as $jadwal) {
+                        ?>
+                        <tr>
+                          <td><?= $no; ?></td>
+                          <td>
+                            <?= $jadwal['nama_mapel']; ?>
+                          </td>
+                          <td><?= $jadwal['nama_guru']; ?></td>
+                          <td>
+                            <?= $jadwal['jam_awal'] ?> - <?= $jadwal['jam_akhir'] ?>
+                          </td>
+                          <td>
+                            <div class="dropdown">
+                              <button class="btn btn-default dropdown-toggle bg-primary text-white" data-toggle="dropdown">
+                                <span>Opsi</span>
+                              </button>
+                              <div class="dropdown-menu">
+                                <button class="dropdown-item"
+                                  onclick="location.href='<?= base_url; ?>presensi/<?= $jadwal['id_jadwal'] ?>'">Buka
+                                  Presensi</button>
+                                <button type="button" class="dropdown-item"
+                                  onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $kelas ?>/ubah/<?= $jadwal['id_jadwal'] ?>'">Ubah
+                                  Jadwal</button>
+                                <a class="dropdown-item tampilModalHapus text-danger" href="#hapus_jadwal"
+                                  data-toggle="modal" data-target="#hapus_jadwal" data-id="<?= $jadwal['id_jadwal'] ?>"
+                                  data-kelas="<?= $jadwal['nama_kelas'] ?>"
+                                  data-idkelasajaran="<?= $jadwal['id_kelas_ajaran'] ?>"
+                                  data-guru="<?= $jadwal['nama_guru'] ?>"
+                                  data-jam="<?= $jadwal['jam_awal'] . ' - ' . $jadwal['jam_akhir'] ?>"
+                                  data-hari="<?=($jadwal['hari'] == 1 ? 'Senin' : ($jadwal['hari'] == 2 ? 'Selasa' : ($jadwal['hari'] == 3 ? 'Rabu' : ($jadwal['hari'] == 4 ? 'Kamis' : ($jadwal['hari'] == 5 ? 'Jumat' : ($jadwal['hari'] == 6 ? 'Sabtu' : '')))))) ?>"
+                                  data-mapel="<?= $jadwal['nama_mapel'] ?>">Hapus Jadwal</a>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        <?php
+                        $no++;
+                      }
+                    } else {
+                      echo '';
+                    }
+                    ?>
+                  </tbody>
+                </table>
+                <?=(empty($data['jadwalRabu']) ? '<p class="text-center">Tidak Ada Jadwal</p>' : '') ?>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">
+              <a class="collapsed" data-toggle="collapse" href="#kamis">
+                <span class="font-weight-bold">Kamis</span>
+              </a>
+            </h5>
+          </div>
+          <div id="kamis" class="collapse" data-parent="#accordion-default">
+            <div class="card-body">
+              <div class="table-responsive mb-5">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col" style="width: 50px;">No</th>
+                      <th scope="col" style="width: 230px;">Mata Pelajaran</th>
+                      <th scope="col" style="width: 300px;">Guru</th>
+                      <th scope="col">Pukul</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                    $no = 1;
+                    if (!empty($data['jadwalKamis'])) {
+                      foreach ($data['jadwalKamis'] as $jadwal) {
+                        ?>
+                        <tr>
+                          <td><?= $no; ?></td>
+                          <td>
+                            <?= $jadwal['nama_mapel']; ?>
+                          </td>
+                          <td><?= $jadwal['nama_guru']; ?></td>
+                          <td>
+                            <?= $jadwal['jam_awal'] ?> - <?= $jadwal['jam_akhir'] ?>
+                          </td>
+                          <td>
+                            <div class="dropdown">
+                              <button class="btn btn-default dropdown-toggle bg-primary text-white" data-toggle="dropdown">
+                                <span>Opsi</span>
+                              </button>
+                              <div class="dropdown-menu">
+                                <button class="dropdown-item"
+                                  onclick="location.href='<?= base_url; ?>presensi/<?= $jadwal['id_jadwal'] ?>'">Buka
+                                  Presensi</button>
+                                <button type="button" class="dropdown-item"
+                                  onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $kelas ?>/ubah/<?= $jadwal['id_jadwal'] ?>'">Ubah
+                                  Jadwal</button>
+                                <a class="dropdown-item tampilModalHapus text-danger" href="#hapus_jadwal"
+                                  data-toggle="modal" data-target="#hapus_jadwal" data-id="<?= $jadwal['id_jadwal'] ?>"
+                                  data-kelas="<?= $jadwal['nama_kelas'] ?>"
+                                  data-idkelasajaran="<?= $jadwal['id_kelas_ajaran'] ?>"
+                                  data-guru="<?= $jadwal['nama_guru'] ?>"
+                                  data-jam="<?= $jadwal['jam_awal'] . ' - ' . $jadwal['jam_akhir'] ?>"
+                                  data-hari="<?=($jadwal['hari'] == 1 ? 'Senin' : ($jadwal['hari'] == 2 ? 'Selasa' : ($jadwal['hari'] == 3 ? 'Rabu' : ($jadwal['hari'] == 4 ? 'Kamis' : ($jadwal['hari'] == 5 ? 'Jumat' : ($jadwal['hari'] == 6 ? 'Sabtu' : '')))))) ?>"
+                                  data-mapel="<?= $jadwal['nama_mapel'] ?>">Hapus Jadwal</a>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        <?php
+                        $no++;
+                      }
+                    } else {
+                      echo '';
+                    }
+                    ?>
+                  </tbody>
+                </table>
+                <?=(empty($data['jadwalKamis']) ? '<p class="text-center">Tidak Ada Jadwal</p>' : '') ?>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">
+              <a class="collapsed" data-toggle="collapse" href="#jumat">
+                <span class="font-weight-bold">Jumat</span>
+              </a>
+            </h5>
+          </div>
+          <div id="jumat" class="collapse" data-parent="#accordion-default">
+            <div class="card-body">
+              <div class="table-responsive mb-5">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col" style="width: 50px;">No</th>
+                      <th scope="col" style="width: 230px;">Mata Pelajaran</th>
+                      <th scope="col" style="width: 300px;">Guru</th>
+                      <th scope="col">Pukul</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                    $no = 1;
+                    if (!empty($data['jadwalJumat'])) {
+                      foreach ($data['jadwalJumat'] as $jadwal) {
+                        ?>
+                        <tr>
+                          <td><?= $no; ?></td>
+                          <td>
+                            <?= $jadwal['nama_mapel']; ?>
+                          </td>
+                          <td><?= $jadwal['nama_guru']; ?></td>
+                          <td>
+                            <?= $jadwal['jam_awal'] ?> - <?= $jadwal['jam_akhir'] ?>
+                          </td>
+                          <td>
+                            <div class="dropdown">
+                              <button class="btn btn-default dropdown-toggle bg-primary text-white" data-toggle="dropdown">
+                                <span>Opsi</span>
+                              </button>
+                              <div class="dropdown-menu">
+                                <button class="dropdown-item"
+                                  onclick="location.href='<?= base_url; ?>presensi/<?= $jadwal['id_jadwal'] ?>'">Buka
+                                  Presensi</button>
+                                <button type="button" class="dropdown-item"
+                                  onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $kelas ?>/ubah/<?= $jadwal['id_jadwal'] ?>'">Ubah
+                                  Jadwal</button>
+                                <a class="dropdown-item tampilModalHapus text-danger" href="#hapus_jadwal"
+                                  data-toggle="modal" data-target="#hapus_jadwal" data-id="<?= $jadwal['id_jadwal'] ?>"
+                                  data-kelas="<?= $jadwal['nama_kelas'] ?>"
+                                  data-idkelasajaran="<?= $jadwal['id_kelas_ajaran'] ?>"
+                                  data-guru="<?= $jadwal['nama_guru'] ?>"
+                                  data-jam="<?= $jadwal['jam_awal'] . ' - ' . $jadwal['jam_akhir'] ?>"
+                                  data-hari="<?=($jadwal['hari'] == 1 ? 'Senin' : ($jadwal['hari'] == 2 ? 'Selasa' : ($jadwal['hari'] == 3 ? 'Rabu' : ($jadwal['hari'] == 4 ? 'Kamis' : ($jadwal['hari'] == 5 ? 'Jumat' : ($jadwal['hari'] == 6 ? 'Sabtu' : '')))))) ?>"
+                                  data-mapel="<?= $jadwal['nama_mapel'] ?>">Hapus Jadwal</a>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        <?php
+                        $no++;
+                      }
+                    } else {
+                      echo '';
+                    }
+                    ?>
+                  </tbody>
+                </table>
+                <?=(empty($data['jadwalJumat']) ? '<p class="text-center">Tidak Ada Jadwal</p>' : '') ?>
               </div>
             </div>
           </div>

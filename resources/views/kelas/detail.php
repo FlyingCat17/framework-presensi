@@ -9,6 +9,7 @@
             				<div>
             					<h1 class="mb-4 font-weight-bold">
             						<?php
+            						use Utils\Flasher;
 									if (!empty($data['kelas']['nama_kelas'])) {
 										echo $data['kelas']['nama_kelas'];
 									} else {
