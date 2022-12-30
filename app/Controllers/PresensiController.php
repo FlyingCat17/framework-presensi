@@ -311,7 +311,7 @@ class PresensiController extends Controller
                         'timestamp' => $date2,
                         'kehadiran' => $request->kehadiran
                     ])->save();
-                    echo 'Berhasil Presensi Siswa';
+                    // echo 'Berhasil Presensi Siswa';
                     Flasher::setFlash('Berhasil Presensi Siswa', 'success');
                     header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi);
                     break;
@@ -484,6 +484,30 @@ class PresensiController extends Controller
             'templates/sidebar',
             'presensi/detail/index',
             'templates/footer',
+        ], $data);
+    }
+    public function rekapPresensi(Request $request)
+    {
+        $data['title'] = "Rekap Presensi";
+        $data['tahun_ajaran'] = ModelsTahunAjaran::where('isActive', '1')->first();
+        $data['jadwal'] = ModelsJadwal::where('tb_jadwal.id_jadwal', $request->idJadwal)
+            ->select('*', 'DATE_FORMAT(tb_jadwal.jam_akhir, \'%H:%i\') AS jam_akhir_convert', 'DATE_FORMAT(tb_jadwal.jam_awal, \'%H:%i\') AS jam_awal_convert')
+            ->where('tb_kelas_ajaran.id_tahun_ajaran', $data['tahun_ajaran']->id_tahun_ajaran)
+            ->join('tb_kelas_ajaran', 'tb_kelas_ajaran.id_kelas_ajaran', 'tb_jadwal.id_kelas_ajaran')
+            ->join('tb_kelas', 'tb_kelas.id_kelas', 'tb_kelas_ajaran.id_kelas')
+            ->join('tb_guru', 'tb_guru.nuptk', 'tb_jadwal.nuptk')
+            ->join('tb_mapel', 'tb_mapel.id_mapel', 'tb_jadwal.id_mapel')
+            ->first();
+        $data['siswa'] = ModelsSiswa::where('id_kelas_ajaran', $data['jadwal']->id_kelas_ajaran)
+            ->orderBy('tb_siswa.nama_siswa', 'asc')
+            ->select('tb_siswa.nis', 'tb_siswa.nama_siswa')
+            ->all();
+        $data['presensi'] = ModelsPresensi::where('tb_presensi.id_jadwal', $data['jadwal']->id_jadwal)
+            ->select('tb_presensi.id_presensi')
+            ->orderBy('tb_presensi.mulai_presensi', 'ASC')
+            ->all();
+        return view([
+            'presensi/rekap/index'
         ], $data);
     }
 }

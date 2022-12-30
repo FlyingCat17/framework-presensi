@@ -36,7 +36,7 @@
 							Flasher::flash(); ?>
 							<div class="">
 								<div class="table-responsive">
-									<table class="table">
+									<table id="data-table" class="table">
 										<thead>
 											<tr>
 												<th scope="col" style="width: 20px;">No</th>
@@ -160,19 +160,23 @@
 				<!-- Hapus Siswa Modal -->
 			</div>
 		</div>
-
-		<script>
-			$('.datepicker-input').datepicker({
-				format: 'yyyy-mm-dd'
-			});
+	</div>
+</div>
 
 
-			$(document).ready(function() {
-				$('.tampilModalHapus').on('click', function() {
-					$('.modal-content form').attr('action', '<?= base_url; ?>siswa/hapus/' + $(this).data('nis'));
-					$('#post_nis_siswa').val($(this).data('nis'));
-					$('#nis_siswa_hapus').html($(this).data('nis'));
-					$('#nama_siswa_hapus').html($(this).data('nama'));
-				});
-			});
-		</script>
+<script type="text/javascript">
+	$('.datepicker-input').datepicker({
+		format: 'yyyy-mm-dd'
+	});
+
+	$(document).ready(function () {
+		$('.tampilModalHapus').on('click', function () {
+			$('.modal-content form').attr('action', '<?= base_url; ?>siswa/hapus/' + $(this).data('nis'));
+			$('#post_nis_siswa').val($(this).data('nis'));
+			$('#nis_siswa_hapus').html($(this).data('nis'));
+			$('#nama_siswa_hapus').html($(this).data('nama'));
+		});
+	});
+
+	$('#data-table').DataTable();
+</script>

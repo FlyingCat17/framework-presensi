@@ -38,7 +38,7 @@
                                 <div class="col-lg-3 col-md-12 d-flex justify-content-start">
                                     <button class="btn btn-danger w-80 mx-2"
                                         onclick="location.href='<?= base_url; ?>presensi/<?= $data['jadwal']->id_jadwal ?>'"><i
-                                            class="anticon anticon-left mr-2"></i>Daftar Jadwal</button>
+                                            class="anticon anticon-left mr-2"></i>Daftar Presensi</button>
                                 </div>
                                 <div class="col-lg-9 col-md-12">
 

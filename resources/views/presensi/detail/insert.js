@@ -43,49 +43,49 @@ $(document).ready(function () {
         // reader.readAsDataURL(this.files[0]);
         // console.log($(this).val());
     });
-    $('#btn_save_tambah').on('click', function () {
-        var nis = $('#nis-tambah-presensi').data('nis');
-        var id_jadwal = $(this).data('jadwal');
-        var id_presensi = $(this).data('idpresensi');
-        var kehadiran = $('#TambahKehadiran').val();
-        var url = base_url + 'presensi/' + id_jadwal + '/detail/' + id_presensi;
+    // $('#btn_save_tambah').on('click', function () {
+    //     var nis = $('#nis-tambah-presensi').data('nis');
+    //     var id_jadwal = $(this).data('jadwal');
+    //     var id_presensi = $(this).data('idpresensi');
+    //     var kehadiran = $('#TambahKehadiran').val();
+    //     var url = base_url + 'presensi/' + id_jadwal + '/detail/' + id_presensi;
 
-        switch (kehadiran) {
-            case '1':
-                $.ajax({
-                    url: base_url + 'presensi/' + id_jadwal + '/detail/' + id_presensi,
-                    method: 'POST',
-                    data: {
-                        nis: nis,
-                        kehadiran: kehadiran,
-                    },
-                    cache: false,
-                    success: function (result) {
-                        alert(result);
-                        location.href = url;
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(xhr);
-                    }
-                });
-                break;
-            case '2':
-                console.log('Izin');
-                break;
-            case '3':
-                console.log('Sakit');
-                break;
-            default:
-                // alert('Harap Isi Kehadiran!');
-                break;
-        }
-        // if ($('#TambahKehadiran').val() == 'null') {
-        //     alert('Harap Isi Kehadiran!' + id_presensi);
-        // } else {
+    //     switch (kehadiran) {
+    //         case '1':
+    //             $.ajax({
+    //                 url: base_url + 'presensi/' + id_jadwal + '/detail/' + id_presensi,
+    //                 method: 'POST',
+    //                 data: {
+    //                     nis: nis,
+    //                     kehadiran: kehadiran,
+    //                 },
+    //                 cache: false,
+    //                 success: function (result) {
+    //                     alert(result);
+    //                     location.href = url;
+    //                 },
+    //                 error: function (xhr, status, error) {
+    //                     console.error(xhr);
+    //                 }
+    //             });
+    //             break;
+    //         case '2':
+    //             console.log('Izin');
+    //             break;
+    //         case '3':
+    //             console.log('Sakit');
+    //             break;
+    //         default:
+    //             // alert('Harap Isi Kehadiran!');
+    //             break;
+    //     }
+    // if ($('#TambahKehadiran').val() == 'null') {
+    //     alert('Harap Isi Kehadiran!' + id_presensi);
+    // } else {
 
-        // }
-        // console.log(nis);
-        // console.log($(this).data('jadwal'));
-        // console.log($(this).data('idpresensi'));
-    });
+    // }
+    // console.log(nis);
+    // console.log($(this).data('jadwal'));
+    // console.log($(this).data('idpresensi'));
+    // });
 });
