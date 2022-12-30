@@ -37,12 +37,12 @@
                                         <option value="null" selected>Pilih Mata Pelajaran</option>
                                         <?php foreach ($data['mapel'] as $mapel):
                                         ?>
-                                        <option value="<?= $mapel['id_mapel'] ?>">
-                                            <?= $mapel['nama_mapel'] ?>
-                                        </option>
-                                        <?php
-                                        endforeach;
-                                        ?>
+                                            <option value="<?= $mapel['id_mapel'] ?>">
+                                                <?= $mapel['nama_mapel'] ?>
+                                            </option>
+                                            <?php
+                                    endforeach;
+                                    ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -51,12 +51,12 @@
                                         <option value="null" selected>Pilih Guru</option>
                                         <?php foreach ($data['guru'] as $guru):
                                         ?>
-                                        <option value="<?= $guru['nuptk'] ?>">
-                                            <?= $guru['nama_guru'] ?>
-                                        </option>
-                                        <?php
-                                        endforeach;
-                                        ?>
+                                            <option value="<?= $guru['nuptk'] ?>">
+                                                <?= $guru['nama_guru'] ?>
+                                            </option>
+                                            <?php
+                                    endforeach;
+                                    ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -68,7 +68,6 @@
                                         <option value="3">Rabu</option>
                                         <option value="4">Kamis</option>
                                         <option value="5">Jumat</option>
-                                        <option value="6">Sabtu</option>
                                     </select>
                                 </div>
                                 <div class="form-group">

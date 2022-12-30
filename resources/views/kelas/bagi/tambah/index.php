@@ -10,6 +10,8 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
+                            <button class="btn btn-danger"
+                                onclick="location.href='<?= base_url; ?>kelas/bagi/<?= $data['kelas']->id_kelas_ajaran ?>'">Kembali</button>
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
@@ -27,28 +29,28 @@
                                         $no = 1;
                                         if (!empty($data['data_siswa'])) {
                                             foreach ($data['data_siswa'] as $siswa): ?>
-                                        <tr>
-                                            <th scope="row">
-                                                <?= $no ?>
-                                            </th>
-                                            <td>
-                                                <?= $siswa['nis']; ?>
-                                            </td>
-                                            <td>
-                                                <?= $siswa['nama_siswa']; ?>
-                                            </td>
-                                            <td>
-                                                <?= $siswa['jenis_kelamin']; ?>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-icon btn-success btn_pilih" data-toggle="modal"
-                                                    data-target="#modalPilih" data-nis="<?= $siswa['nis'] ?>"
-                                                    data-nama="<?= $siswa['nama_siswa'] ?>">
-                                                    <i class="far fa-check-square"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <?php $no++;
+                                                <tr>
+                                                    <th scope="row">
+                                                        <?= $no ?>
+                                                    </th>
+                                                    <td>
+                                                        <?= $siswa['nis']; ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= $siswa['nama_siswa']; ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= $siswa['jenis_kelamin']; ?>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-icon btn-success btn_pilih" data-toggle="modal"
+                                                            data-target="#modalPilih" data-nis="<?= $siswa['nis'] ?>"
+                                                            data-nama="<?= $siswa['nama_siswa'] ?>">
+                                                            <i class="far fa-check-square"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <?php $no++;
                                             endforeach;
                                         } else {
                                             echo '';

@@ -72,6 +72,15 @@ Route::get('/profile', [HomeController::class, 'profile']);
 //siswa
 Route::group('/siswa', function () {
     Route::get('', [Siswa::class, 'index']);
+    Route::get('/cari/{keyword}', [Siswa::class, 'cari']);
+    Route::get(
+        '/cari',
+        function () {
+            Flasher::setFlash('Masukkan keyword pencarian', 'danger');
+            header('Location: ' . base_url . 'siswa');
+            exit();
+        }
+    );
     Route::get('/page/{page}', [Siswa::class, 'pagination']);
     Route::get('/tambah', [Siswa::class, 'tambah']);
     Route::post('/tambah', [Siswa::class, 'insert']);

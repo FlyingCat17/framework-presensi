@@ -9,7 +9,8 @@
                     <span class="title">Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item dropdown <?= strtolower($data['title']) === "siswa" ? 'active' : '' ?>" id="liNav">
+            <li class="nav-item dropdown <?=(strtolower($data['title']) === "siswa" ? 'active' : (strtolower($data['title']) === "hasil pencarian siswa" ? 'active' : '')) ?>"
+                id="liNav">
                 <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>siswa">
                     <span class="icon-holder">
                         <i class="material-icons" style="font-size: 18px;">person</i>
