@@ -49,8 +49,10 @@
                                         onclick="location.href='<?= base_url; ?>presensi/<?= $data['jadwal']->id_jadwal ?>/tambah'"
                                         data-id="<?= $data['jadwal']->id_jadwal ?>"><i class="anticon anticon-plus"
                                             style="margin-left: -5px;"></i> Presensi</button>
-                                    <a href="#" class="btn btn-danger mb-3"><i class="anticon anticon-file-pdf"
-                                            style="margin-left: -5px;"></i> Rekap Presensi</a>
+                                    <a href="<?= base_url; ?>presensi/<?= $data['jadwal']->id_jadwal ?>/rekap"
+                                        class="btn btn-danger mb-3"><i class="anticon anticon-file-pdf"
+                                            style="margin-left: -5px;"></i> Rekap
+                                        Presensi</a>
                                 </div>
                                 <p>Jumlah Siswa : <span>
                                         <?= $data['jumlah_siswa']->jumlah_siswa ?>
@@ -71,33 +73,33 @@
                                         $no = 1;
                                         if (!empty($data['presensi'])) {
                                             foreach ($data['presensi'] as $presensi): ?>
-                                        <tr>
-                                            <th scope="row">
-                                                <?= $no ?>
-                                            </th>
-                                            <td>
-                                                <?= $presensi['mulai_presensi_convert'] ?>
-                                            </td>
-                                            <td>
-                                                <?= $presensi['akhir_presensi_convert'] ?>
-                                            </td>
-                                            <td class="text-right">
-                                                <a href="<?= base_url; ?>presensi/<?= $data['jadwal']->id_jadwal ?>/detail/<?= $presensi['id_presensi'] ?>"
-                                                    class="btn btn-success" data-toggle="tooltip" data-placement="top"
-                                                    title="Buka Detail"><i class="fas fa-clipboard"></i></a>
-                                                <!-- /{idJadwal}/ubah/{idPresensi} -->
-                                                <a href="<?= base_url; ?>presensi/<?= $data['jadwal']->id_jadwal; ?>/ubah/<?= $presensi['id_presensi'] ?>"
-                                                    class="btn btn-warning ubah_presensi"
-                                                    data-id="<?= $presensi['id_presensi'] ?>" data-toggle="tooltip"
-                                                    data-placement="top" title="Ubah Presensi"><i
-                                                        class="far fa-edit"></i></a>
-                                                <button type="button" class="btn btn-danger hapusPresensi"
-                                                    data-toggle="modal" data-target="#modalHapus" title="Hapus Presensi"
-                                                    data-id="<?= $presensi['id_presensi'] ?>"><i
-                                                        class="far fa-trash-alt"></i></button>
-                                            </td>
-                                        </tr>
-                                        <?php $no++;
+                                                <tr>
+                                                    <th scope="row">
+                                                        <?= $no ?>
+                                                    </th>
+                                                    <td>
+                                                        <?= $presensi['mulai_presensi_convert'] ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= $presensi['akhir_presensi_convert'] ?>
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <a href="<?= base_url; ?>presensi/<?= $data['jadwal']->id_jadwal ?>/detail/<?= $presensi['id_presensi'] ?>"
+                                                            class="btn btn-success" data-toggle="tooltip" data-placement="top"
+                                                            title="Buka Detail"><i class="fas fa-clipboard"></i></a>
+                                                        <!-- /{idJadwal}/ubah/{idPresensi} -->
+                                                        <a href="<?= base_url; ?>presensi/<?= $data['jadwal']->id_jadwal; ?>/ubah/<?= $presensi['id_presensi'] ?>"
+                                                            class="btn btn-warning ubah_presensi"
+                                                            data-id="<?= $presensi['id_presensi'] ?>" data-toggle="tooltip"
+                                                            data-placement="top" title="Ubah Presensi"><i
+                                                                class="far fa-edit"></i></a>
+                                                        <button type="button" class="btn btn-danger hapusPresensi"
+                                                            data-toggle="modal" data-target="#modalHapus" title="Hapus Presensi"
+                                                            data-id="<?= $presensi['id_presensi'] ?>"><i
+                                                                class="far fa-trash-alt"></i></button>
+                                                    </td>
+                                                </tr>
+                                                <?php $no++;
                                             endforeach;
                                         } else {
                                             echo '';

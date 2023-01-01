@@ -24,15 +24,59 @@ class Guru extends Controller
             exit();
         }
     }
-    public function index()
+    public function index(Request $request)
     {
-        $data['title'] = "Guru";
-        $data['guru'] = ModelsGuru::where('isActive', '1')->all();
-        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
-
-        return $this->view('guru/index', $data);
+        // $data['title'] = "Guru";
+        // $data['guru'] = ModelsGuru::where('isActive', '1')->all();
+        // $data['admin'] = User::where('id_admin', Session::get('user'))->first();
+        try {
+            $data['title'] = "Guru";
+            $data['jumlah_data'] = ModelsGuru::where('isActive', '1')->count();
+            $data['guru'] = ModelsGuru::where('isActive', '1')->orderby('nama_guru', 'asc')->paginate($request->page);
+            $data['admin'] = User::where('id_admin', Session::get('user'))->first();
+            $data['halaman_aktif'] = $request->page;
+            $data['jumlah_halaman'] = ceil($data['jumlah_data'] / 10);
+            $data['halaman_akhir'] = $data['jumlah_halaman'];
+            return view(['templates/header', 'templates/sidebar', 'guru/index', 'templates/footer'], $data);
+        } catch (\Throwable $th) {
+            throw new \riyu\Helpers\Errors\AppException($th->getMessage(), $th->getCode(), $th->getPrevious());
+        }
+        // return $this->view('guru/index', $data);
     }
 
+    public function aksiCari(Request $request)
+    {
+        // echo $request->keyword;
+        if ($request->keyword == "") {
+            Flasher::setFlash('Masukkan keyword pencarian', 'danger');
+            header('Location: ' . base_url . 'guru');
+            exit();
+        }
+        header('Location: ' . base_url . 'guru/cari/' . trim($request->keyword) . '/p/1');
+        exit();
+    }
+    public function cari(Request $request)
+    {
+        try {
+            $data['title'] = "Hasil Pencarian Guru";
+            $data['keyword'] = $request->keyword;
+            $data['jumlah_data'] = ModelsGuru::where('isActive', '1')
+                ->where('tb_guru.nama_guru', 'LIKE', '%' . $request->keyword . '%')
+                ->where('tb_guru.nuptk', 'LIKE', '%' . $request->keyword . '%')
+                ->count();
+            $data['guru'] = ModelsGuru::where('isActive', '1')
+                ->where('nama_guru', 'LIKE', '%' . $request->keyword . '%')
+                ->orWhere('nuptk', 'LIKE', '%' . $request->keyword . '%')
+                ->orderby('nama_guru', 'asc')->paginate($request->page);
+            $data['admin'] = User::where('id_admin', Session::get('user'))->first();
+            $data['halaman_aktif'] = $request->page;
+            $data['jumlah_halaman'] = ceil($data['jumlah_data'] / 10);
+            $data['halaman_akhir'] = $data['jumlah_halaman'];
+            return view(['templates/header', 'templates/sidebar', 'guru/cari', 'templates/footer'], $data);
+        } catch (\Throwable $th) {
+            throw new \riyu\Helpers\Errors\AppException($th->getMessage(), $th->getCode(), $th->getPrevious());
+        }
+    }
     public function tambah()
     {
         $data['title'] = "Guru";

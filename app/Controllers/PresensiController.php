@@ -364,9 +364,6 @@ class PresensiController extends Controller
                         header('Location: ' . base_url . 'presensi/' . $request->idJadwal . '/detail/' . $request->idPresensi);
                         exit();
                     }
-
-                    // echo 'Berhasil';
-
                     break;
                 case '3':
                     //UPLOAD GAMBAR/FILE
