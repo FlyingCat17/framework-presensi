@@ -29,7 +29,7 @@ Route::get('/test', function () {
     return view('test');
 });
 
-Route::group('/generate', function() {
+Route::group('/generate', function () {
     Route::post('/presensi', [Testing::class, 'generatePresensi']);
     Route::post('/detail-presensi', [Testing::class, 'generateDetailPresensi']);
     Route::post('/siswa', [Testing::class, 'generateSiswa']);
@@ -47,9 +47,6 @@ Route::get('/dashboard', [Admin::class, 'index']);
 Route::get('/dashboard/guru', [Guru::class, 'index']);
 // tahun ajaran
 Route::get('/tahun_ajaran', [Tahun_Ajaran::class, 'index']);
-// // Route::get('/tahun_ajaran', function () {
-// //     echo 'okew';
-// // });
 Route::post('/tahun_ajaran', [Tahun_Ajaran::class, 'delete']);
 Route::get('/tahun_ajaran/tambah', [Tahun_Ajaran::class, 'tambah']);
 Route::post('/tahun_ajaran/tambah', [Tahun_Ajaran::class, 'insert']);
@@ -72,7 +69,8 @@ Route::get('/profile', [HomeController::class, 'profile']);
 //siswa
 Route::group('/siswa', function () {
     Route::get('', [Siswa::class, 'index']);
-    Route::get('/cari/{keyword}', [Siswa::class, 'cari']);
+    Route::get('/cari/{keyword}/page/{page}', [Siswa::class, 'cari']);
+    Route::post('/cari', [Siswa::class, 'aksiCari']);
     Route::get(
         '/cari',
         function () {
@@ -138,8 +136,16 @@ Route::group('/kelas', function () {
     );
     Route::get('/bagi/{id}', [KelasAjaran::class, 'detail']);
     Route::get(
-        '/bagi/{id}/tambah',
+        '/bagi/{id}/tambah/page/{page}',
         [KelasAjaran::class, 'tambah_siswa']
+    );
+    Route::post(
+        '/bagi/{id}/tambah/cari',
+        [KelasAjaran::class, 'aksiCariSiswa']
+    );
+    Route::get(
+        '/bagi/{id}/tambah/cari/{keyword}/page/{page}',
+        [KelasAjaran::class, 'cariTambahSiswa']
     );
     Route::post(
         '/bagi/{id}/tambah',
@@ -148,7 +154,16 @@ Route::group('/kelas', function () {
 });
 
 Route::group('/guru', function () {
-    Route::get('', [Guru::class, 'index']);
+    Route::get(
+        '',
+        function () {
+            header('Location: ' . base_url . 'guru/p/1');
+            exit();
+        }
+    );
+    Route::get('/p/{page}', [Guru::class, 'index']);
+    Route::post('/cari', [Guru::class, 'aksiCari']);
+    Route::get('/cari/{keyword}/p/{page}', [Guru::class, 'cari']);
     Route::get('/tambah', [Guru::class, 'tambah']);
     Route::post('/tambah', [Guru::class, 'insert']);
     Route::get(
@@ -209,10 +224,6 @@ Route::group('/presensi', function () {
     Route::get('/{idJadwal}/detail/{idPresensi}/d/{idDetail}', [PresensiController::class, 'detailSiswaPresensi']);
     Route::get('/{idJadwal}/rekap', [PresensiController::class, 'rekapPresensi']);
 });
-
-
-
-
 Route::group('/mapel', function () {
     Route::get('/', [MapelController::class, 'index']);
     Route::get('/tambah', [MapelController::class, 'tambah']);
@@ -227,4 +238,25 @@ Route::group('/mapel', function () {
     Route::get('/ubah/{id}', [MapelController::class, 'ubah']);
     Route::post('/ubah/{id}', [MapelController::class, 'update']);
     Route::post('/hapus/{id}', [MapelController::class, 'delete']);
+});
+
+Route::group('/profil', function () {
+    Route::get(
+        '/',
+        function () {
+            echo 'Profil';
+        }
+    );
+    Route::get(
+        '/admin',
+        [Admin::class, 'profil']
+    );
+    Route::get(
+        '/admin/ubah',
+        [Admin::class, 'ubahProfil']
+    );
+    Route::post(
+        '/admin/ubah',
+        [Admin::class, 'updateProfile']
+    );
 });

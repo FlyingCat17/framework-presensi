@@ -24,7 +24,7 @@
 
                         <div class="col-lg-1 col-md-12 my-2">
                             <button type="button"
-                                onclick="location.href='<?= base_url; ?>kelas/bagi/<?= $data['id_kelas'] ?>/tambah'"
+                                onclick="location.href='<?= base_url; ?>kelas/bagi/<?= $data['id_kelas'] ?>/tambah/page/1'"
                                 class="btn btn-success tampilModalTambah" style="width: 100%;">
                                 <i class=" anticon anticon-plus" style="width: 100%;"></i>
                             </button>
@@ -48,28 +48,28 @@
                                         $no = 1;
                                         if (!empty($data['siswa'])) {
                                             foreach ($data['siswa'] as $siswa): ?>
-                                        <tr>
-                                            <th scope="row">
-                                                <input type="checkbox" value="<?= $siswa['nis']; ?>" />
-                                                <?= $no ?>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <input type="checkbox" value="<?= $siswa['nis']; ?>" />
+                                                        <?= $no ?>
 
-                                            </th>
-                                            <td>
-                                                <?= $siswa['nis']; ?>
-                                            </td>
-                                            <td>
-                                                <?= $siswa['nama_siswa']; ?>
-                                            </td>
-                                            <td>
-                                                <button type="button" data-id="<?= $kelas['id_kelas'] ?>"
-                                                    data-nama="<?= $kelas['nama_kelas'] ?>"
-                                                    class="btn btn-icon btn-danger tampilModalHapus" data-toggle="modal"
-                                                    data-target="#hapusModal">
-                                                    <i class="anticon anticon-delete"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <?php $no++;
+                                                    </th>
+                                                    <td>
+                                                        <?= $siswa['nis']; ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= $siswa['nama_siswa']; ?>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" data-id="<?= $kelas['id_kelas'] ?>"
+                                                            data-nama="<?= $kelas['nama_kelas'] ?>"
+                                                            class="btn btn-icon btn-danger tampilModalHapus" data-toggle="modal"
+                                                            data-target="#hapusModal">
+                                                            <i class="anticon anticon-delete"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <?php $no++;
                                             endforeach;
                                         } else {
                                             echo '';

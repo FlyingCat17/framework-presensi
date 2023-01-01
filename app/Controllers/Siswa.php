@@ -26,11 +26,13 @@ class Siswa extends Controller
     public function index()
     {
         try {
-            $data['title'] = "Siswa";
-            $data['jumlah_data'] = ModelsSiswa::where('status', '1')->count();
-            $data['data_siswa'] = ModelsSiswa::where('status', '1')->orderby('nama_siswa', 'asc')->all();
-            $data['admin'] = User::where('id_admin', Session::get('user'))->first();
-            return view(['templates/header', 'templates/sidebar', 'siswa/index', 'templates/footer'], $data);
+            header('Location: ' . base_url . 'siswa/page/1');
+            exit();
+            // $data['title'] = "Siswa";
+            // $data['jumlah_data'] = ModelsSiswa::where('status', '1')->count();
+            // $data['data_siswa'] = ModelsSiswa::where('status', '1')->orderby('nama_siswa', 'asc')->all();
+            // $data['admin'] = User::where('id_admin', Session::get('user'))->first();
+            // return view(['templates/header', 'templates/sidebar', 'siswa/index', 'templates/footer'], $data);
         } catch (\Throwable $th) {
             throw new \riyu\Helpers\Errors\AppException($th->getMessage(), $th->getCode(), $th->getPrevious());
         }
@@ -200,6 +202,49 @@ class Siswa extends Controller
         ])->where('nis', $request->nis)->save();
         Flasher::setFlash('Berhasil Dihapus', 'success');
         header('Location: ' . base_url . 'siswa');
+        exit();
+    }
+
+    public function cari(Request $request)
+    {
+        $data['title'] = 'Hasil Pencarian Siswa';
+        try {
+
+            $data['keyword'] = $request->keyword;
+            $data['jumlah_data'] = ModelsSiswa::where('status', '1')
+                ->where('nama_siswa', 'LIKE', '%' . $request->keyword . '%')
+                ->orWhere('nis', 'LIKE', '%' . $request->keyword . '%')
+                ->count();
+            $data['data_siswa'] = ModelsSiswa::where('status', '1')
+                ->where('nama_siswa', 'LIKE', '%' . $request->keyword . '%')
+                ->orWhere('nis', 'LIKE', '%' . $request->keyword . '%')
+                ->orderby('nama_siswa', 'asc')->paginate($request->page);
+            $data['admin'] = User::where('id_admin', Session::get('user'))->first();
+            $data['halaman_aktif'] = $request->page;
+            $data['jumlah_halaman'] = ceil($data['jumlah_data'] / 10);
+            $data['halaman_akhir'] = $data['jumlah_halaman'];
+            return view(['templates/header', 'templates/sidebar', 'siswa/cari/index', 'templates/footer'], $data);
+        } catch (\Throwable $th) {
+            throw new \riyu\Helpers\Errors\AppException($th->getMessage(), $th->getCode(), $th->getPrevious());
+        }
+
+        // $data['data_siswa'] = ModelsSiswa::where('status', '1')
+        //     ->where('nama_siswa', 'LIKE', '%' . $request->keyword . '%')
+        //     ->orWhere('nis', 'LIKE', '%' . $request->keyword . '%')
+        //     ->orderby('nama_siswa', 'asc')->all();
+        // $data['admin'] = User::where('id_admin', Session::get('user'))->first();
+        // return view(['templates/header', 'templates/sidebar', 'siswa/index', 'templates/footer'], $data);
+    }
+
+    public function aksiCari(Request $request)
+    {
+        if ($request->keyword == null) {
+            Flasher::setFlash('Masukkan Keyword pencarian', 'danger');
+            header('Location: ' . base_url . 'siswa/page/1');
+            exit();
+        }
+        // echo $request->keyword;
+        header('Location: ' . base_url . 'siswa/cari/' . trim($request->keyword) . '/page/1');
         exit();
     }
 }

@@ -3,7 +3,7 @@
     <div class="main-content">
         <div class="container">
             <div>
-                <h1 class="mb-4 font-weight-bold">Daftar Siswa
+                <h1 class="mb-4 font-weight-bold">Hasil Pencarian Siswa : <?= $data['keyword'] ?>
                 </h1>
             </div>
             <div class="row">
@@ -21,14 +21,9 @@
                                     </button>
                                 </div>
                             </form>
-                            <?php
-                            use Utils\Flasher;
-
-                            Flasher::flash();
-                            ?>
-                            <button class="btn btn-danger mt-2"
-                                onclick="location.href='<?= base_url; ?>kelas/bagi/<?= $data['kelas']->id_kelas_ajaran ?>'">
-                                <i class="fas fa-reply mr-2"></i>Kembali</button>
+                            <button class="btn btn-danger"
+                                onclick="location.href='<?= base_url; ?>kelas/bagi/<?= $data['kelas']->id_kelas_ajaran ?>/tambah/page/1'">
+                                <i class="fas fa-reply mr-2"></i>Daftar Siswa</button>
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
@@ -96,7 +91,7 @@
                                                 $link_active = ($data['halaman_aktif'] == $i) ? 'active' : '';
                                                 ?>
                                                 <li class="paginate_button page-item <?= $link_active; ?>">
-                                                    <a href="<?= base_url; ?>kelas/bagi/<?= $data['kelas']->id_kelas_ajaran ?>/tambah/page/<?= $i; ?>"
+                                                    <a href="<?= base_url; ?>kelas/bagi/<?= $data['kelas']->id_kelas_ajaran ?>/tambah/cari/<?= $data['keyword'] ?>/page/<?= $i; ?>"
                                                         aria-controls="data-table" data-dt-idx="1" tabindex="0"
                                                         class="page-link">
                                                         <?= $i; ?>

@@ -3,7 +3,7 @@
 	<div class="main-content">
 		<div class="container">
 			<div>
-				<h1 class="mb-4 font-weight-bold">Daftar Siswa</h1>
+				<h1 class="mb-4 font-weight-bold">Hasil Pencarian Siswa : <?= $data['keyword'] ?></h1>
 			</div>
 			<div class="row">
 				<div class="col-md-12">
@@ -19,12 +19,19 @@
 									</button>
 								</div>
 							</form>
+							<div class="d-flex justify-content-start">
+								<!-- <button type="button" class="btn btn-primary mb-2"
+									onclick="location.href = '<?php // base_url; ?>siswa/tambah';">
+									<i class="anticon anticon-plus" style="width: 100%;"></i>
+									Tambah
+								</button> -->
+								<button type="button" class="btn btn-danger mb-2"
+									onclick="location.href = '<?= base_url; ?>siswa/page/1';">
+									<i class="fas fa-reply mr-1"></i>
+									Kembali
+								</button>
+							</div>
 
-							<button type="button" class="btn btn-primary mb-2"
-								onclick="location.href = '<?= base_url; ?>siswa/tambah';">
-								<i class="anticon anticon-plus" style="width: 100%;"></i>
-								Tambah
-							</button>
 
 							<?php
 
@@ -106,7 +113,7 @@
 												$link_active = ($data['halaman_aktif'] == $i) ? 'active' : '';
 												?>
 												<li class="paginate_button page-item <?= $link_active; ?>">
-													<a href="<?= base_url; ?>siswa/page/<?= $i; ?>"
+													<a href="<?= base_url; ?>siswa/cari/<?= $data['keyword'] ?>/page/<?= $i; ?>"
 														aria-controls="data-table" data-dt-idx="1" tabindex="0"
 														class="page-link">
 														<?= $i; ?>
