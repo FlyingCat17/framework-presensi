@@ -259,4 +259,20 @@ Route::group('/profil', function () {
         '/admin/ubah',
         [Admin::class, 'updateProfile']
     );
+    Route::get(
+        '/admin/ubah/username',
+        [Admin::class, 'ubahUsername']
+    );
+    Route::post(
+        '/admin/ubah/username',
+        [Admin::class, 'updateUsername']
+    );
+    Route::get(
+        '/admin/ubah/password',
+        [Admin::class, 'ubahPassword']
+    );
+    Route::post(
+        '/admin/ubah/password',
+        [Admin::class, 'updatePassword']
+    );
 });
