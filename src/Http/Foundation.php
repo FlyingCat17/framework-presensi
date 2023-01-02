@@ -7,6 +7,8 @@ abstract class Foundation
 
     public static $storage = [];
 
+    protected $request;
+
     public function __construct()
     {
         $this->booting();
@@ -57,6 +59,8 @@ abstract class Foundation
         foreach ($_SESSION as $key => $value) {
             $this->$key = $value;
         }
+        // if (isset($_SESSION) && !empty($_SESSION)) {
+        // }
     }
 
     public function getFile()

@@ -8,6 +8,7 @@ use Utils\Flasher;
 use Riyu\Validation\Validation;
 use App\Models\Siswa as ModelsSiswa;
 use App\Models\User;
+use Exception;
 
 class Siswa extends Controller
 {
@@ -32,7 +33,7 @@ class Siswa extends Controller
             $data['admin'] = User::where('id_admin', Session::get('user'))->first();
             return view(['templates/header', 'templates/sidebar', 'siswa/index', 'templates/footer'], $data);
         } catch (\Throwable $th) {
-            throw new \riyu\Helpers\Errors\AppException($th->getMessage(), $th->getCode(), $th->getPrevious());
+            throw new Exception($th->getMessage(), $th->getCode(), $th->getPrevious());
         }
     }
 
@@ -48,7 +49,7 @@ class Siswa extends Controller
             $data['halaman_akhir'] = $data['jumlah_halaman'];
             return view(['templates/header', 'templates/sidebar', 'siswa/index', 'templates/footer'], $data);
         } catch (\Throwable $th) {
-            throw new \riyu\Helpers\Errors\AppException($th->getMessage(), $th->getCode(), $th->getPrevious());
+            throw new Exception($th->getMessage(), $th->getCode(), $th->getPrevious());
         }
     }
 

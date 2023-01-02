@@ -16,10 +16,23 @@ class Mail extends Controller
 
         $otp = rand(1000, 9999);
 
+        $dataToken = [
+            'otp' => $otp,
+            'username' => $username,
+        ];
+        $token = base64_encode(json_encode($dataToken));
+        try {
+            $token = str_replace('=', '', $token);
+        } catch (\Exception $e) {
+            $token = $token;
+        }
+        $url = base_url.'verify-token='.$token;
+
         $data = [
             'nama' => $user->nama_siswa,
             'email' => $email,
             'otp' => $otp,
+            'url' => $url,
         ];
 
         $this->updateOtp($username, $otp);
@@ -37,6 +50,11 @@ class Mail extends Controller
     {
         try {
             $curl = curl_init();
+            $url = null;
+
+            if (isset($data['url']) && $data['url'] != '' && $data['url'] != null) {
+                $url = $data['url'];
+            }
 
             curl_setopt_array($curl, array(
                 CURLOPT_URL => 'https://kateruriyu.my.id/send-mail.php',
@@ -47,7 +65,7 @@ class Mail extends Controller
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => array('email' => $data['email'], 'nama' => $data['nama'], 'otp' => $data['otp']),
+                CURLOPT_POSTFIELDS => array('email' => $data['email'], 'nama' => $data['nama'], 'otp' => $data['otp'], 'url' => $url),
             ));
 
             $exec = curl_exec($curl);

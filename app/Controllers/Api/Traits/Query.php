@@ -79,7 +79,28 @@ trait Query
     protected function queryUpdateProfile($username, $update)
     {
         try {
-            Siswa::where('nis', $username)->update($update)->save();
+            $this->uniqueEmail($update['email'], $username);
+
+                Siswa::where('nis', $username)->update($update)->save();
+
+        } catch (\Throwable $th) {
+            return Response::json(500, 'Terjadi kesalahan');
+        }
+    }
+
+    protected function uniqueEmail($email, $username)
+    {
+        try {
+            $isData = Siswa::where('email', $email)->first();
+            
+            if ($isData == null) {
+                return;
+            }
+
+            if ($isData->nis != $username) {
+                print_r($isData);
+                return Response::json(409, 'Email sudah digunakan');
+            }
         } catch (\Throwable $th) {
             return Response::json(500, 'Terjadi kesalahan');
         }
@@ -130,9 +151,15 @@ trait Query
      * 
      * @return void
      */
-    protected function updateOtp($username, $otp)
+    protected function updateOtp($username, $otp = null)
     {
         try {
+            if ($otp == null) {
+                Siswa::where('nis', $username)->update([
+                    'otp' => null,
+                    'otp_expired' => null,
+                ])->save();
+            }
             Siswa::where('nis', $username)->update([
                 'otp' => $otp,
                 'otp_expired' => date('Y-m-d H:i:s', strtotime('+5 minutes')),
@@ -157,7 +184,7 @@ trait Query
                 ->orderby('tb_presensi.mulai_presensi', 'desc')
                 ->where('tb_presensi.mulai_presensi', '<=', date('Y-m-d H:i:s'))
                 // ->where('tb_presensi.akhir_presensi', '>=', date('Y-m-d H:i:s'))
-                ->limit(10)
+                // ->limit(10)
                 ->get();
         } catch (\Throwable $th) {
             return Response::json(500, 'Terjadi kesalahan');
@@ -178,8 +205,10 @@ trait Query
                 ->join('tb_kelas_ajaran', 'tb_jadwal.id_kelas_ajaran', 'tb_kelas_ajaran.id_kelas_ajaran')
                 ->join('tb_mapel', 'tb_jadwal.id_mapel', 'tb_mapel.id_mapel')
                 ->join('tb_guru', 'tb_jadwal.nuptk', 'tb_guru.nuptk')
+                ->where('tb_presensi.mulai_presensi', '<=', date('Y-m-d H:i:s'))
+                ->where('tb_presensi.akhir_presensi', '>=', date('Y-m-d H:i:s'))
                 ->where('tb_kelas_ajaran.id_kelas_ajaran', $idKelas)
-                ->orderby('tb_presensi.mulai_presensi', 'asc')
+                ->orderby('tb_presensi.akhir_presensi', 'asc')
                 ->limit(20)
                 ->all();
         } catch (\Throwable $th) {
@@ -201,6 +230,25 @@ trait Query
                 ->where('tb_jadwal.id_kelas_ajaran', $idKelasAjaran)
                 ->orderby('tb_jadwal.hari', 'ASC')
                 ->all();
+        } catch (\Throwable $th) {
+            return Response::json(500, 'Terjadi kesalahan');
+        }
+    }
+
+    /**
+     * Get jadwal ujian
+     * 
+     * @param string $idKelasAjaran
+     * 
+     * @return array|void
+     */
+    protected function getJadwalUjian($idKelasAjaran)
+    {
+        try {
+            // return Ujian::join('tb_mapel', 'tb_ujian.id_mapel', 'tb_mapel.id_mapel')
+            //     ->where('tb_ujian.id_kelas_ajaran', $idKelasAjaran)
+            //     ->orderby('tb_ujian.tanggal_ujian', 'ASC')
+            //     ->all();
         } catch (\Throwable $th) {
             return Response::json(500, 'Terjadi kesalahan');
         }
@@ -230,13 +278,21 @@ trait Query
     protected function insertPresensi($request)
     {
         try {
-            $presensi = new Detail_Presensi();
-            $presensi->id_presensi = $request->idPresensi;
-            $presensi->nis = $request->nis;
-            $presensi->kehadiran = $request->kehadiran;
-            $presensi->timestamp = $request->timestamp;
-            $presensi->koordinat = $request->koordinat;
-            $presensi->save();
+            $isData = Detail_Presensi::where('id_presensi', $request->idPresensi)
+            ->findorfail($request->nis, 'nis', function () use ($request) {
+                $presensi = new Detail_Presensi();
+                $presensi->id_presensi = $request->idPresensi;
+                $presensi->nis = $request->nis;
+                $presensi->kehadiran = $request->kehadiran;
+                $presensi->timestamp = $request->timestamp;
+                $presensi->koordinat = $request->koordinat;
+                $presensi->save();
+            });
+
+            if ($isData) {
+                return Response::json(409, 'Anda sudah melakukan presensi pada jadwal ini');
+            }
+
         } catch (\Throwable $th) {
             return Response::json(500, 'Terjadi kesalahan');
         }
@@ -245,7 +301,15 @@ trait Query
     protected function createPresensi(array $presensi)
     {
         try {
-            Detail_Presensi::insert($presensi)->save();
+            $isData = Detail_Presensi::where('id_presensi', $presensi['id_presensi'])
+            ->findorfail($presensi['nis'], 'nis', function () use ($presensi) {
+                Detail_Presensi::insert($presensi)->save();
+            });
+
+            if ($isData) {
+                return Response::json(409, 'Anda sudah melakukan presensi pada jadwal ini');
+            }
+
         } catch (\Throwable $th) {
             return Response::json(500, 'Terjadi kesalahan');
         }

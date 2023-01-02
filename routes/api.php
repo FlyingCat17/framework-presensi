@@ -17,10 +17,11 @@ Route::group('/api/v3/user', function () {
     Route::post('/update-profile', [Settings::class, 'updateProfile']);
     Route::post('/change-password', [Settings::class, 'changePassword']);
     Route::post('/delete-foto', [Settings::class, 'deleteFoto']);
-    
+
     Route::get('/search/{username}', [ForgotPassword::class, 'search']);
     Route::post('/verify-otp', [ForgotPassword::class, 'verifyOtp']);
     Route::post('/reset-password', [ForgotPassword::class, 'resetPassword']);
+    Route::get('/verify-token={token}', [ForgotPassword::class, 'verifyToken']);
 });
 
 Route::group('/api/v3/jadwal', function () {
@@ -36,3 +37,4 @@ Route::group('/api/v3/absensi', function () {
 
 Route::post('/api/v3/mail/send', [Mail::class, 'index']);
 Route::get('/api/v3/informasi', [Informasi::class, 'index']);
+Route::get('/verify-token={token}', [ForgotPassword::class, 'toUrl']);

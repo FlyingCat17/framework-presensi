@@ -20,6 +20,18 @@ class Settings extends Controller
         $email = $request->email;
         $tanggalLahir = $request->tanggal_lahir;
 
+        $date = date('Y-m-d');
+        $diff = date_diff(date_create($tanggalLahir), date_create($date));
+        $umur = $diff->format('%y');
+
+        if ($umur < 15) {
+            return Response::json(400, 'Umur minimal 13 tahun');
+        }
+
+        if ($umur > 18) {
+            return Response::json(400, 'Umur maksimal 18 tahun');
+        }
+
         if (isset($request->foto) && !empty($request->foto) || $request->foto != null) {
             $foto = $request->foto;
         } else {

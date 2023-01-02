@@ -47,4 +47,10 @@ class Response
     {
         return json_encode($data, JSON_PRETTY_PRINT);
     }
+
+    public static function url(string $url)
+    {
+        header('Location: ' . $url);
+        exit;
+    }
 }

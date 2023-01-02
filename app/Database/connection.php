@@ -11,7 +11,7 @@ $connection->config([
     'host' => Config::get('database')['host'],
     'username' => Config::get('database')['username'],
     'password' => Config::get('database')['password'],
-    'dbname' => Config::get('database')['dbname'],
+    'database' => Config::get('database')['database'],
     'charset' => Config::get('database')['charset'],
     'port' => Config::get('database')['port'],
 ]);
