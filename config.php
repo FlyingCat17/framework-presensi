@@ -3,7 +3,7 @@
 return [
     'app' => [
         'debug' => true,
-        'safety' => false,
+        'safety' => true,
         'name' => 'Riyu',
         'url' => 'http://localhost/framework-presensi/',
         'timezone' => 'Asia/Jakarta',
@@ -15,7 +15,7 @@ return [
         'host' => 'localhost',
         'port' => 3306,
         'database' => 'db_new_presensi',
-        'username' => 'lutfisobri',
+        'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
 
