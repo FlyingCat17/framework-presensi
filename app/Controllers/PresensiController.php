@@ -301,8 +301,6 @@ class PresensiController extends Controller
             switch ($kehadiran) {
                 case '1':
                     // echo 'Hadir';
-                    date_default_timezone_set('Asia/Jakarta');
-                    date_default_timezone_get();
                     $date2 = date('Y-m-d H:i:s', time());
                     // echo $date2;
                     ModelsDetail::insert([

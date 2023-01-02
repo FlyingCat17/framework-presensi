@@ -35,7 +35,7 @@ class Login
     public function auth(Request $request)
     {
         $username = $request->username;
-        $password = $request->password;
+        $password = trim($request->password);
         if (empty($username) || empty($password)) {
             Flasher::setFlash('Harap isi Username atau Password', 'danger');
             header('Location: ' . base_url . 'auth/login');
@@ -85,9 +85,16 @@ class Login
             return ViewError::code(500);
         }
         if ($user) {
-            if ($password == $user->password) {
+            if (password_verify($password, $user->password)) {
                 $_SESSION['user'] = $user->id_admin;
-                $_SESSION['type'] = $user->jabatan;
+                switch ($user->isRoot) {
+                    case '1':
+                        $_SESSION['type'] = strtoupper('admin root');
+                        break;
+                    default:
+                        $_SESSION['type'] = strtoupper('admin');
+                        break;
+                }
                 // Session::set('user', $user->id_admin);
                 // Session::set('type', $user->jabatan);
                 return redirect(base_url . 'dashboard');
@@ -102,7 +109,7 @@ class Login
             //     return redirect('');
             // }
         } else if ($guru) {
-            if ($password == $guru->password) {
+            if (password_verify($password, $guru->password)) {
                 echo 'LOGIN GURU';
             } else {
                 Flasher::setFlash('Username atau password salah', 'danger');
