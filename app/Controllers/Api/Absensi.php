@@ -67,10 +67,12 @@ class Absensi extends Controller
      * 
      * @param array $foto
      * @param string $nis
+     * @param int|string $id
+     * @param int $type
      * 
      * @return string destination
      */
-    private function foto($foto = array(), string $nis, $id, int $type = 2)
+    private function foto($foto, $nis, $id, $type = 2)
     {
         try {
             // Get path info
