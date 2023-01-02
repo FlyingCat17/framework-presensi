@@ -10,47 +10,39 @@ class Callback
 {
     public static function call($callback, $data = null)
     {
-        try {
-            if (is_array($callback)) {
-                $class = new $callback[0];
-                $method = $callback[1];
-                if (isset($method) && $method != null) {
-                    $tmp = new ReflectionMethod($class, $method);
-                    $params = $tmp->getParameters();
-                    if (count($params) > 0) {
-                        if ($data != null) {
-                            return Resolver::resolveData($class, $method, $data);
-                        } else {
-                            return Resolver::resolveWithParams($class, $method, $params);
-                        }
+        if (is_array($callback)) {
+            $class = new $callback[0];
+            $method = $callback[1];
+            if (isset($method) && $method != null) {
+                $tmp = new ReflectionMethod($class, $method);
+                $params = $tmp->getParameters();
+                if (count($params) > 0) {
+                    if ($data != null) {
+                        return Resolver::resolveData($class, $method, $data);
                     } else {
-                        if ($data != null) {
-                            return Resolver::resolveData($class, $method, $data);
-                        } else {
-                            return Resolver::resolveMethod($class, $method);
-                        }
+                        return Resolver::resolveWithParams($class, $method, $params);
                     }
                 } else {
-                    self::callable($callback, $data);
+                    if ($data != null) {
+                        return Resolver::resolveData($class, $method, $data);
+                    } else {
+                        return Resolver::resolveMethod($class, $method);
+                    }
                 }
             } else {
-                self::object($callback, $data);
+                self::callable($callback, $data);
             }
-        } catch (\Throwable $th) {
-            throw new AppException("Callback error: " . $th->getMessage());
+        } else {
+            self::object($callback, $data);
         }
     }
 
     private static function object($callback, $data = null)
     {
-        try {
-            if (is_object($callback)) {
-                return Resolver::resolve($callback, $data);
-            } else {
-                self::callable($callback, $data);
-            }
-        } catch (\Throwable $th) {
-            throw new AppException("Callback error: " . $th->getMessage());
+        if (is_object($callback)) {
+            return Resolver::resolve($callback, $data);
+        } else {
+            self::callable($callback, $data);
         }
     }
 
@@ -58,33 +50,21 @@ class Callback
     {
         if (is_callable($callback)) {
             if ($data != null) {
-                try {
-                    return $callback($data);
-                } catch (\Throwable $th) {
-                    throw new AppException("Callback error: " . $th->getMessage());
-                }
+                return $callback($data);
             } else {
-                try {
-                    return $callback();
-                } catch (\Throwable $th) {
-                    throw new AppException("Callback error: " . $th->getMessage());
-                }
+                return $callback();
             }
         } else {
-            try {
-                if (is_array($callback)) {
-                    $class = new $callback[0];
-                    $method = $callback[1];
-                    if ($method == null) {
-                        return $class->index();
-                    } else {
-                        return $class->$method();
-                    }
+            if (is_array($callback)) {
+                $class = new $callback[0];
+                $method = $callback[1];
+                if ($method == null) {
+                    return $class->index();
                 } else {
-                    return $callback();
+                    return $class->$method();
                 }
-            } catch (\Throwable $th) {
-                throw new AppException("Callback error: " . $th->getMessage());
+            } else {
+                return $callback();
             }
         }
     }

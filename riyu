@@ -2,6 +2,9 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+use Riyu\App\Config;
 use Riyu\Commands\cmd;
+
+Config::load('config.php');
 
 new cmd($argv);

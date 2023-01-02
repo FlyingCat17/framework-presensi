@@ -27,9 +27,7 @@ class Absensi extends Controller
 
         if ($kehadiran == 1) {
             $this->insertPresensi($request);
-        } else if ($kehadiran == 2) {
-            $this->kehadiran($request);
-        } else if ($kehadiran == 3) {
+        } else if ($kehadiran == 2 || $kehadiran == 3) {
             $this->kehadiran($request);
         } else {
             return Response::json(400, 'Kehadiran tidak valid');

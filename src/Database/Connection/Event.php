@@ -3,6 +3,7 @@ namespace Riyu\Database\Connection;
 
 use PDO;
 use PDOException;
+use Riyu\App\Config;
 use Riyu\Helpers\Errors\AppException;
 use Riyu\Helpers\Storage\GlobalStorage;
 
@@ -30,13 +31,32 @@ class Event
     private $dsn;
 
     /**
+     * Default options for database
+     * 
+     * @var array
+     */
+    private $options = [
+        PDO::ATTR_CASE => PDO::CASE_NATURAL,
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_ORACLE_NULLS => PDO::NULL_NATURAL,
+        PDO::ATTR_STRINGIFY_FETCHES => false,
+        PDO::ATTR_EMULATE_PREPARES => false,
+    ];
+
+    /**
      * Constructor for Event
      * 
      * @return void
      */
     public function __construct()
     {
-        $this->config = GlobalStorage::get('db_config');
+        if (Config::has('database')) {
+            $this->config = Config::get('database');
+        } else if (GlobalStorage::has('database')) {
+            $this->config = GlobalStorage::get('db');
+        } else {
+            throw new AppException("Database config not found");
+        }
     }
 
     /**
@@ -59,7 +79,39 @@ class Event
      */
     public function setDsn()
     {
-        $this->dsn = $this->config[0] . ':host=' . $this->config[1] . ';dbname=' . $this->config[4] . ';charset=' . $this->config[5] . ';port=' . $this->config[6];
+        $dsn = '';
+
+        if (isset($this->config['driver'])) {
+            $dsn .= $this->config['driver'] . ':';
+        } else {
+            throw new AppException("Driver not found");
+        }
+
+        if (isset($this->config['host'])) {
+            $dsn .= 'host=' . $this->config['host'] . ';';
+        } else {
+            throw new AppException("Host not found");
+        }
+
+        if (isset($this->config['port'])) {
+            $dsn .= 'port=' . $this->config['port'] . ';';
+        } else {
+            throw new AppException("Port not found");
+        }
+
+        if (isset($this->config['database'])) {
+            $dsn .= 'dbname=' . $this->config['database'] . ';';
+        } else {
+            throw new AppException("Dbname not found");
+        }
+
+        if (isset($this->config['charset'])) {
+            $dsn .= 'charset=' . $this->config['charset'] . ';';
+        } else {
+            throw new AppException("Charset not found");
+        }
+
+        $this->dsn = $dsn;
     }
 
     /**
@@ -69,25 +121,83 @@ class Event
      */
     public function setConnection()
     {
+        if (isset($this->config['username'])) {
+            $username = $this->config['username'];
+        } else {
+            throw new AppException("Username not found");
+        }
+
+        if (isset($this->config['password'])) {
+            $password = $this->config['password'];
+        } else {
+            throw new AppException("Password not found");
+        }
+
+        if (isset($this->config['options'])) {
+            $options = $this->config['options'];
+        } else {
+            $options = $this->options;
+        }
+
         try {
-            $this->connection = new PDO($this->dsn, $this->config[2], $this->config[3]);
+            $this->connection = new PDO($this->dsn, $username, $password, $options);
             return $this->connection;
-        } catch (PDOException $e) {
-            new AppException("Connection failed: " . $e->getMessage());
+        } catch (AppException $e) {
+            new AppException("Connection to database failed");
         }
     }
 
     public function raw()
     {
-        $dsn = $this->config[0] . ':host=' . $this->config[1] . ';charset=' . $this->config[5] . ';port=' . $this->config[6];
-        $this->setDsn();
-        $connection = $this->dsn;
+        $dsn = '';
+
+        if (isset($this->config['driver'])) {
+            $dsn = $this->config['driver'] . ':';
+        } else {
+            throw new AppException("Driver not found");
+        }
+
+        if (isset($this->config['host'])) {
+            $dsn .= 'host=' . $this->config['host'] . ';';
+        } else {
+            throw new AppException("Host not found");
+        }
+
+        if (isset($this->config['port'])) {
+            $dsn .= 'port=' . $this->config['port'] . ';';
+        } else {
+            throw new AppException("Port not found");
+        }
+
+        if (isset($this->config['charset'])) {
+            $dsn .= 'charset=' . $this->config['charset'] . ';';
+        } else {
+            throw new AppException("Charset not found");
+        }
+
+        if (isset($this->config['username'])) {
+            $username = $this->config['username'];
+        } else {
+            throw new AppException("Username not found");
+        }
+
+        if (isset($this->config['password'])) {
+            $password = $this->config['password'];
+        } else {
+            throw new AppException("Password not found");
+        }
+
+        if (isset($this->config['options'])) {
+            $options = $this->config['options'];
+        } else {
+            $options = $this->options;
+        }
+
         try {
-            $connection = new PDO($dsn, $this->config[2], $this->config[3]);
-            $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $connection = new PDO($dsn, $username, $password, $options);
             return $connection;
-        } catch (\Throwable $th) {
-            throw new AppException("Connection failed: " . $th->getMessage());
+        } catch (AppException $e) {
+            new AppException("Connection to database failed");
         }
     }
 }

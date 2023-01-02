@@ -25,7 +25,7 @@ class Testing
                 'tanggal_lahir' => date('Y-m-d', strtotime('-' . rand(10, 20) . ' years')),
                 'alamat_siswa' => 'Alamat Sekarang adalah' . $i,
                 'notelp_siswa' => '08' . rand(1000000000, 9999999999),
-                'email' => 'email' . $nis . '@gmail.com',
+                // 'email' => 'email' . $nis . '@gmail.com',
                 'password' => password_hash($nis, PASSWORD_BCRYPT),
                 'status' => 1,
             ];

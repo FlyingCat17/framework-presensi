@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers\Api;
 
+use Riyu\Helpers\Errors\ViewError;
 use Riyu\Http\Request;
 
 class ForgotPassword extends Controller
@@ -33,6 +34,8 @@ class ForgotPassword extends Controller
             return Response::json(410, 'Kode OTP sudah kadaluarsa');
         }
 
+        $this->updateOtp($username);
+
         $user = $this->query($username);
 
         return Response::json(200, 'Kode OTP benar', $this->mapUser($user));
@@ -49,5 +52,35 @@ class ForgotPassword extends Controller
         $this->updatePassword($request->username, $request->password);
 
         return Response::json(200, 'Password berhasil diubah');
+    }
+
+    public function verifyToken(Request $request)
+    {
+        $raw = $request->token . "==";
+        $token = base64_decode($raw);
+        $token = json_decode($token);
+
+        if (isset($token->otp) && $token->otp != '' && $token->otp != null) {
+            $otp = $token->otp;
+        } else {
+            return Response::json(404, 'Token tidak ditemukan');
+        }
+
+        if (isset($token->username) && $token->username != '' && $token->username != null) {
+            $username = $token->username;
+        } else {
+            return Response::json(404, 'Token tidak ditemukan');
+        }
+
+        return $this->verifyOtp(Request::create([
+            'username' => $username,
+            'otp' => $otp,
+        ]));
+    }
+
+    public function toUrl(Request $request)
+    {
+        header('Location: riyu://myapp.com/otp?token=' . $request->token);
+        exit;
     }
 }

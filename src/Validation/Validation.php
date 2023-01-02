@@ -125,7 +125,10 @@ class Validation
     public static function replace($message, $field, $rule, $value)
     {
         $message = str_replace(':field', $field, $message);
-        $message = str_replace(":$rule", $value, $message);
+        try {
+            $message = str_replace(":$rule", $value, $message);
+        } catch (\Throwable $th) {
+        }
         return $message;
     }
 }

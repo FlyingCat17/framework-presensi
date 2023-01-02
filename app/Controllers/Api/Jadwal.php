@@ -17,6 +17,9 @@ class Jadwal extends Controller
     public function ujian(Request $request)
     {
         $this->ruleJadwal($request);
+        $data = [];
+        // $data = $this->mapJadwalUjian($this->getJadwalUjian($request->id));
+        return Response::json(200, 'Berhasil mengambil jadwal ujian', $data);
     }
 
     public function presensi(Request $request)

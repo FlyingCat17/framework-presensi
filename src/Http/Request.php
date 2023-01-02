@@ -223,6 +223,35 @@ class Request extends Foundation
 
     public function __get($name)
     {
-        return $this->$name;
+        if ($this->has($name)) {
+            return $this->get($name);
+        }
+        
+        return null;
+    }
+
+    public static function create($request = null)
+    {
+        $instance = new static;
+        if (is_null($request)) {
+            $instance;
+        }
+
+        if (is_callable($request)) {
+            $request();
+        }
+
+        if (is_string($request)) {
+            $instance->set($request);
+        }
+
+        $request = is_array($request) ? $request : func_get_args();
+        $instance->set($request);
+        return $instance;
+    }
+
+    public function getAttributes()
+    {
+        return get_object_vars($this);
     }
 }
