@@ -117,4 +117,32 @@ trait Mapping
 
         return $data;
     }
+
+    /**
+     * @param array $jadwal
+     * 
+     * @return array
+     */
+    protected function mapJadwalUjian(array $jadwal)
+    {
+        $data = [];
+
+        foreach ($jadwal as $key => $value) {
+            $data[] = array(
+                // $hari 
+                'namaMapel' => $value['nama_mapel'],
+                'guru' => $value['nama_guru'],
+                'idUjian' => $value['id_ujian'],
+                'mulaiUjian' => $value['mulai_ujian'],
+                'akhirUjian' => $value['akhir_ujian'],
+                'hari' => $value['hari'],
+                'jamKe' => $value['jam_ke'],
+                'idKelas' => $value['id_kelas'],
+            );
+        }
+
+        if ($data == null) return $data = [];
+
+        return $data;
+    }
 }

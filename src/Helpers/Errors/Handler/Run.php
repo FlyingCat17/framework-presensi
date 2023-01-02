@@ -7,13 +7,11 @@ class Run
 {
     protected $system;
     protected $view;
-    protected $log;
 
     public function __construct()
     {
         $this->system = new System();
         $this->view = new View();
-        $this->log = new Logger();
     }
 
     public function run()
@@ -43,7 +41,6 @@ class Run
     public function __destruct()
     {
         $this->view->endOb();
-        $this->system->unregister();
     }
 
     public function getOb()

@@ -6,6 +6,7 @@ use App\Models\Detail_Presensi;
 use App\Models\Jadwal;
 use App\Models\Presensi;
 use App\Models\Siswa;
+use App\Models\Ujian;
 
 trait Query
 {
@@ -159,11 +160,12 @@ trait Query
                     'otp' => null,
                     'otp_expired' => null,
                 ])->save();
+            } else {
+                Siswa::where('nis', $username)->update([
+                    'otp' => $otp,
+                    'otp_expired' => date('Y-m-d H:i:s', strtotime('+5 minutes')),
+                ])->save();
             }
-            Siswa::where('nis', $username)->update([
-                'otp' => $otp,
-                'otp_expired' => date('Y-m-d H:i:s', strtotime('+5 minutes')),
-            ])->save();
         } catch (\Throwable $th) {
             return Response::json(500, 'Terjadi kesalahan');
         }
@@ -245,10 +247,9 @@ trait Query
     protected function getJadwalUjian($idKelasAjaran)
     {
         try {
-            // return Ujian::join('tb_mapel', 'tb_ujian.id_mapel', 'tb_mapel.id_mapel')
-            //     ->where('tb_ujian.id_kelas_ajaran', $idKelasAjaran)
-            //     ->orderby('tb_ujian.tanggal_ujian', 'ASC')
-            //     ->all();
+            return Ujian::join('tb_mapel', 'tb_ujian.id_mapel', 'tb_mapel.id_mapel')
+                ->where('tb_ujian.id_kelas_ajaran', $idKelasAjaran)
+                ->all();
         } catch (\Throwable $th) {
             return Response::json(500, 'Terjadi kesalahan');
         }

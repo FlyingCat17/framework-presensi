@@ -26,12 +26,39 @@ class Logger implements Log
             ->message($errstr)
             ->file($errfile)
             ->line($errline)
-            ->save();
+            ->run();
     }
 
     public function run()
     {
-        error_log($this->datetime . ' ' . $this->type . ' ' . $this->message . ' ' . $this->file . ' ' . $this->line . PHP_EOL, 3, $this->path . 'log.log');
+        if ($this->validation()) {
+            $this->save();
+        }
+    }
+
+    private function validation()
+    {
+        if (empty($this->datetime) || is_null($this->datetime) || $this->datetime == '') {
+            return false;
+        }
+
+        if (empty($this->type) || is_null($this->type) || $this->type == '') {
+            return false;
+        }
+
+        if (empty($this->message) || is_null($this->message) || $this->message == '') {
+            return false;
+        }
+
+        if (empty($this->file) || is_null($this->file) || $this->file == '') {
+            return false;
+        }
+
+        if (empty($this->line) || is_null($this->line) || $this->line == '') {
+            return false;
+        }
+
+        return true;
     }
 
     public function datetime()
@@ -119,10 +146,5 @@ class Logger implements Log
         if (!is_dir($this->path)) {
             mkdir($this->path, 0777, true);
         }
-    }
-
-    public function __destruct()
-    {
-        $this->save();
     }
 }

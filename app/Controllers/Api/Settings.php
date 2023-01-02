@@ -110,7 +110,7 @@ class Settings extends Controller
      * 
      * @return string destination
      */
-    public function foto($foto = array(), string $nis)
+    public function foto($foto, $nis)
     {
         try {
             // Get path info

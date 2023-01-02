@@ -17,8 +17,6 @@ class System implements ContractSystem
 
     public function handle($errno, $errstr, $errfile, $errline)
     {
-        $log = new Logger();
-        $log->write($errno, $errstr, $errfile, $errline);
         if ($this->isSafety) {
             throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
         }
@@ -34,8 +32,17 @@ class System implements ContractSystem
 
     public function exception($exception)
     {
+        $this->handleLog($exception);
         $this->unregister();
         $this->render($exception);
+    }
+
+    public function handleLog($exception)
+    {
+        if (!empty($exception->getMessage())) {
+            $log = new Logger();
+            $log->write($exception->getCode(), $exception->getMessage(), $exception->getFile(), $exception->getLine());
+        }
     }
 
     public function render($exception)
@@ -44,14 +51,15 @@ class System implements ContractSystem
         $view->render($exception, $this->isSafety);
     }
 
-    public function __destruct()
-    {
-        $this->unregister();
-    }
-
     public function unregister()
     {
         restore_error_handler();
         restore_exception_handler();
+        set_error_handler([$this, 'errorLog']);
+    }
+
+    public function errorLog($errno, $errstr, $errfile, $errline)
+    {
+        $this->handleLog(new \ErrorException($errstr, 0, $errno, $errfile, $errline));
     }
 }
