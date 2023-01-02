@@ -3,7 +3,7 @@
     <div class="main-content">
         <div class="container">
             <div>
-                <h1 class="mb-4 font-weight-bold">Guru</h1>
+                <h1 class="mb-4 font-weight-bold">Hasil Pencarian Guru : <?= $data['keyword'] ?></h1>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -20,10 +20,10 @@
                                 </div>
                             </form>
 
-                            <button type="button" class="btn btn-primary mb-2"
-                                onclick="location.href = '<?= base_url; ?>guru/tambah';">
-                                <i class="anticon anticon-plus" style="width: 100%;"></i>
-                                Tambah
+                            <button type="button" class="btn btn-danger mb-2"
+                                onclick="location.href = '<?= base_url; ?>guru';">
+                                <i class="fas fa-reply mr-1"></i>
+                                Kembali
                             </button>
                             <?php
                             use Utils\Flasher;
@@ -48,18 +48,18 @@
                                             <?php $no = 1; ?>
                                             <?php foreach ($data['guru'] as $row): ?>
                                                 <!-- <tr>
-                                                                                <th scope="row">1</th>
-                                                                                <td>1234567</td>
-                                                                                <td>Fathan Maulana</td>
-                                                                                <td>
-                                                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#btn-ubah-siswa">
-                                                                                        <i class="anticon anticon-edit"></i>
-                                                                                    </button>
-                                                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
-                                                                                        <i class="anticon anticon-delete"></i>
-                                                                                    </button>
-                                                                                </td>
-                                                                            </tr> -->
+                                                                                                <th scope="row">1</th>
+                                                                                                <td>1234567</td>
+                                                                                                <td>Fathan Maulana</td>
+                                                                                                <td>
+                                                                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#btn-ubah-siswa">
+                                                                                                        <i class="anticon anticon-edit"></i>
+                                                                                                    </button>
+                                                                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
+                                                                                                        <i class="anticon anticon-delete"></i>
+                                                                                                    </button>
+                                                                                                </td>
+                                                                                            </tr> -->
                                                 <tr>
                                                     <td>
                                                         <?= $no ?>
@@ -111,8 +111,9 @@
                                                 $link_active = ($data['halaman_aktif'] == $i) ? 'active' : '';
                                                 ?>
                                                 <li class="paginate_button page-item <?= $link_active; ?>">
-                                                    <a href="<?= base_url; ?>guru/p/<?= $i; ?>" aria-controls="data-table"
-                                                        data-dt-idx="1" tabindex="0" class="page-link">
+                                                    <a href="<?= base_url; ?>siswa/page/<?= $i; ?>"
+                                                        aria-controls="data-table" data-dt-idx="1" tabindex="0"
+                                                        class="page-link">
                                                         <?= $i; ?>
                                                     </a>
                                                 </li>

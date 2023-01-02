@@ -14,7 +14,9 @@ use App\Models\Jadwal;
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
         integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <title><?= $data['title'] ?></title>
+    <title>
+        <?= $data['title'] ?>
+    </title>
 
 
 </head>
@@ -25,7 +27,7 @@ use App\Models\Jadwal;
         <h1>Rekap Presensi</h1>
         <h5>ID Jadwal : <?= $data['jadwal']->id_jadwal ?></h5>
         <div class="table-responsive">
-            <table class="table">
+            <table class="table table-sm">
                 <thead>
                     <tr>
                         <td style="min-width: 10px;">No</td>
@@ -35,8 +37,8 @@ use App\Models\Jadwal;
                         $noPresensi = 1;
                         if (!empty($data['presensi'])) {
                             foreach ($data['presensi'] as $presensi): ?>
-                        <td style="min-width: 10px;"><?= $presensi['id_presensi'] ?></td>
-                        <?php
+                                <td style="min-width: 10px;"><?= $noPresensi ?></td>
+                                <?php
                                 $noPresensi++;
                             endforeach;
                         }
@@ -48,12 +50,14 @@ use App\Models\Jadwal;
                     $noNis = 1;
                     if (!empty($data['siswa'])) {
                         foreach ($data['siswa'] as $siswa):
-                    ?>
-                    <tr>
-                        <td><?= $noNis; ?></td>
-                        <td><?= $siswa['nis'] ?></td>
-                        <td><?= $siswa['nama_siswa'] ?></td>
-                        <?php foreach ($data['presensi'] as $presensi) {
+                            ?>
+                            <tr>
+                                <td><?= $noNis; ?></td>
+                                <td>
+                                    <?= $siswa['nis'] ?>
+                                </td>
+                                <td><?= $siswa['nama_siswa'] ?></td>
+                                <?php foreach ($data['presensi'] as $presensi) {
                                 $detailPresensi = Detail_Presensi::where('tb_detail_presensi.id_presensi', $presensi['id_presensi'])
                                     ->select('tb_detail_presensi.kehadiran')
                                     ->where('tb_detail_presensi.nis', $siswa['nis'])
@@ -69,37 +73,37 @@ use App\Models\Jadwal;
                                     $hadir = 0;
                                 }
                                 // foreach ($detailPresensi as $detail) {
-                        ?>
-                        <td>
-                            <?php //($detail['kehadiran'] == '1' ? 'H' : ($detail['kehadiran'] == '2' ? 'I' : ($detail['kehadiran'] == '3' ? 'S' : ($detail['kehadiran'] == 'null' ? 'A' : '')))) ?>
-                            <?php
-                                switch ($hadir) {
-                                    case '1':
-                                        echo 'H';
-                                        break;
-                                    case '2':
-                                        echo 'I';
-                                        break;
-                                    case '3':
-                                        echo 'S';
-                                        break;
-                                    default:
-                                        echo 'A';
-                                        break;
-                                }
-                                // echo json_encode($detail['kehadiran']);
-                            ?>
-                        </td>
-                        <?php
+                                ?>
+                                    <td>
+                                        <?php //($detail['kehadiran'] == '1' ? 'H' : ($detail['kehadiran'] == '2' ? 'I' : ($detail['kehadiran'] == '3' ? 'S' : ($detail['kehadiran'] == 'null' ? 'A' : '')))) ?>
+                                        <?php
+                                        switch ($hadir) {
+                                            case '1':
+                                                echo 'H';
+                                                break;
+                                            case '2':
+                                                echo 'I';
+                                                break;
+                                            case '3':
+                                                echo 'S';
+                                                break;
+                                            default:
+                                                echo 'A';
+                                                break;
+                                        }
+                                        // echo json_encode($detail['kehadiran']);
+                                        ?>
+                                    </td>
+                                    <?php
                                 // }
                     
                             }
-                        ?>
-                        <?php
-                            $noNis++;
+                            ?>
+                                <?php
+                                $noNis++;
                         endforeach;
                     }
-                        ?>
+                    ?>
                     </tr>
                 </tbody>
             </table>

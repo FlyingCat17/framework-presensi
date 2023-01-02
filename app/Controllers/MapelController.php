@@ -39,6 +39,12 @@ class MapelController extends Controller
 
     public function insert(Request $request)
     {
+        echo json_encode($request->all());
+        if ($request->mapel == "" || null) {
+            Flasher::setFlash('Harap isi kolom Mata Pelajaran', 'danger');
+            header('location: ' . base_url . 'mapel/tambah');
+            exit();
+        }
         $val = Validation::make($request->all(), [
             'mapel' => 'required|max:35'
         ]);
