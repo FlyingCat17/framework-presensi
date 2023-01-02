@@ -25,7 +25,7 @@
 
               Flasher::flash();
               ?>
-              
+
             </div>
           </div>
         </div>
@@ -76,7 +76,7 @@
                                   onclick="location.href='<?= base_url; ?>presensi/<?= $jadwal['id_jadwal'] ?>'">Buka
                                   Presensi</button>
                                 <button type="button" class="dropdown-item"
-                                  onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $kelas ?>/ubah/<?= $jadwal['id_jadwal'] ?>'">Ubah
+                                  onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $data['kelas']->id_kelas_ajaran ?>/ubah/<?= $jadwal['id_jadwal'] ?>'">Ubah
                                   Jadwal</button>
                                 <a class="dropdown-item tampilModalHapus text-danger" href="#hapus_jadwal"
                                   data-toggle="modal" data-target="#hapus_jadwal" data-id="<?= $jadwal['id_jadwal'] ?>"
@@ -149,7 +149,7 @@
                                   onclick="location.href='<?= base_url; ?>presensi/<?= $jadwal['id_jadwal'] ?>'">Buka
                                   Presensi</button>
                                 <button type="button" class="dropdown-item"
-                                  onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $kelas ?>/ubah/<?= $jadwal['id_jadwal'] ?>'">Ubah
+                                  onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $data['kelas']->id_kelas_ajaran ?>/ubah/<?= $jadwal['id_jadwal'] ?>'">Ubah
                                   Jadwal</button>
                                 <a class="dropdown-item tampilModalHapus text-danger" href="#hapus_jadwal"
                                   data-toggle="modal" data-target="#hapus_jadwal" data-id="<?= $jadwal['id_jadwal'] ?>"
@@ -222,7 +222,7 @@
                                   onclick="location.href='<?= base_url; ?>presensi/<?= $jadwal['id_jadwal'] ?>'">Buka
                                   Presensi</button>
                                 <button type="button" class="dropdown-item"
-                                  onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $kelas ?>/ubah/<?= $jadwal['id_jadwal'] ?>'">Ubah
+                                  onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $data['kelas']->id_kelas_ajaran ?>/ubah/<?= $jadwal['id_jadwal'] ?>'">Ubah
                                   Jadwal</button>
                                 <a class="dropdown-item tampilModalHapus text-danger" href="#hapus_jadwal"
                                   data-toggle="modal" data-target="#hapus_jadwal" data-id="<?= $jadwal['id_jadwal'] ?>"
@@ -295,7 +295,7 @@
                                   onclick="location.href='<?= base_url; ?>presensi/<?= $jadwal['id_jadwal'] ?>'">Buka
                                   Presensi</button>
                                 <button type="button" class="dropdown-item"
-                                  onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $kelas ?>/ubah/<?= $jadwal['id_jadwal'] ?>'">Ubah
+                                  onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $data['kelas']->id_kelas_ajaran ?>/ubah/<?= $jadwal['id_jadwal'] ?>'">Ubah
                                   Jadwal</button>
                                 <a class="dropdown-item tampilModalHapus text-danger" href="#hapus_jadwal"
                                   data-toggle="modal" data-target="#hapus_jadwal" data-id="<?= $jadwal['id_jadwal'] ?>"
@@ -368,7 +368,7 @@
                                   onclick="location.href='<?= base_url; ?>presensi/<?= $jadwal['id_jadwal'] ?>'">Buka
                                   Presensi</button>
                                 <button type="button" class="dropdown-item"
-                                  onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $kelas ?>/ubah/<?= $jadwal['id_jadwal'] ?>'">Ubah
+                                  onclick="location.href='<?= base_url; ?>jadwal/kelas/<?= $data['kelas']->id_kelas_ajaran ?>/ubah/<?= $jadwal['id_jadwal'] ?>'">Ubah
                                   Jadwal</button>
                                 <a class="dropdown-item tampilModalHapus text-danger" href="#hapus_jadwal"
                                   data-toggle="modal" data-target="#hapus_jadwal" data-id="<?= $jadwal['id_jadwal'] ?>"

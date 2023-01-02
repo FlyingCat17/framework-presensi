@@ -24,10 +24,10 @@ class Admin extends Controller
             header('Location: ' . base_url . 'auth/login');
             exit();
         }
-        if (Session::get('type') == "guru") {
-            header('Location: ' . base_url . 'dashboard/guru');
-            exit();
-        }
+        // if (Session::get('type') != "admin") {
+        //     header('Location: ' . base_url . 'dashboard');
+        //     exit();
+        // }
     }
 
     public function index()
@@ -244,6 +244,7 @@ class Admin extends Controller
         $message = [
             'required' => ':field tidak boleh kosong!',
             'max' => ':field maksimal :max karakter!',
+            'min' => ':field minimal :min karakter!',
         ];
 
         $errors = Validation::message($request->all(), $rule, $message);
@@ -256,7 +257,6 @@ class Admin extends Controller
         }
         $checkUsername = User::where('username', trim($request->username))->first();
         $checkPassword = User::where('id_admin', Session::get('user'))
-            ->where('password', trim($request->password))
             ->first();
         // header('Content-Type: application/json');
         if ($checkUsername != false) {
@@ -264,7 +264,7 @@ class Admin extends Controller
             header('Location: ' . base_url . 'profil/admin/ubah/username');
             exit();
         }
-        if ($checkPassword == false) {
+        if (!password_verify(trim($request->password), $checkPassword->password)) {
             Flasher::setFlash('Password tidak sesuai! Silahkan coba lagi', 'danger');
             header('Location: ' . base_url . 'profil/admin/ubah/username');
             exit();
@@ -296,31 +296,54 @@ class Admin extends Controller
     public function updatePassword(Request $request)
     {
         $rule = [
-            'username' => 'required|max:20|min:5',
-            // 'password' => 'required'
+            'password_lama' => 'required|max:25',
+            'password_baru' => 'required|max:30|min:8',
+            'konfirmasi' => 'required|max:30|min:8',
         ];
-
         $message = [
             'required' => ':field tidak boleh kosong!',
             'max' => ':field maksimal :max karakter!',
+            'min' => ':field maksimal :min karakter!',
         ];
-
         $errors = Validation::message($request->all(), $rule, $message);
         $errors = Validation::first($errors);
-
         if ($errors) {
-            Flasher::setFlash('Data Gagal di Simpan! error: ' . $errors, 'danger');
-            header('Location: ' . base_url . 'profil/admin/ubah/username');
+            $errors = str_replace('password_baru', 'Password Baru', $errors);
+            Flasher::setFlash('Password gagal di simpan! error: ' . $errors, 'danger');
+            header('Location: ' . base_url . 'profil/admin/ubah/password');
             exit();
         }
-        $checkPasswordLama = ModelsAdmin::where('password', $request->password_lama)
-            ->where('id_admin', Session::get('user'))
+        $checkPasswordLama = ModelsAdmin::where('id_admin', Session::get('user'))
             ->first();
-        if ($checkPasswordLama == false) {
-            echo 'Password Lama Tidak Sesuai';
+        if (!password_verify(trim($request->password_lama), $checkPasswordLama->password)) {
+            Flasher::setFlash('Password Lama tidak Sesuai!', 'danger');
+            header('Location: ' . base_url . 'profil/admin/ubah/password');
             exit();
         }
-        echo 'Bisa';
-        exit();
+        if (trim($request->password_baru) != trim($request->konfirmasi)) {
+            Flasher::setFlash('Harap Konfirmasi Password!', 'danger');
+            header('Location: ' . base_url . 'profil/admin/ubah/password');
+            exit();
+        }
+        try {
+            $update = ModelsAdmin::update([
+                'password' => password_hash(trim($request->konfirmasi), PASSWORD_BCRYPT)
+            ])
+                ->where('id_admin', Session::get('user'))
+                ->save();
+            if ($update) {
+                Flasher::setFlash('Berhasil mengganti password!', 'success');
+                header('Location: ' . base_url . 'profil/admin/ubah/password');
+                exit();
+            } else {
+                Flasher::setFlash('Berhasil mengganti password!', 'success');
+                header('Location: ' . base_url . 'profil/admin/ubah/password');
+                exit();
+
+            }
+        } catch (Throwable $th) {
+            throw new \riyu\Helpers\Errors\AppException($th->getMessage(), $th->getCode(), $th->getPrevious());
+        }
+
     }
 }

@@ -10,7 +10,7 @@
 
                         Flasher::flash();
                         ?>
-                        <form action="<?= base_url; ?>profil/admin/ubah/password" method="post">
+                        <form action="<?= base_url; ?>profil/admin/ubah/username" method="post">
                             <div class="form-group">
                                 <label for="username">Masukkan Username Baru</label>
                                 <input type="text" name="username" class="form-control" id="username">

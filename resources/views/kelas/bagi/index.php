@@ -57,7 +57,7 @@
                                                             <i class="far fa-trash-alt text-danger"
                                                                 style="font-size: 17px;"></i>
                                                         </a>
-                                                        <!-- <a href="" class="tampilModalHapus" data-toggle="modal" title="Hapus" data-target="#modal-hapus-mapel" id="btn-hapus" data-nama="<?= $mapel['nama_mapel'] ?>" data-id="<?= $mapel['id_mapel']; ?>">
+                                                        <!-- <a href="" class="tampilModalHapus" data-toggle="modal" title="Hapus" data-target="#modal-hapus-mapel" id="btn-hapus" data-nama="<?php// $mapel['nama_mapel'] ?>" data-id="<?php // $mapel['id_mapel']; ?>">
                                                                 <i class="anticon anticon-delete text-danger" style="font-size: 20px;"></i>
                                                             </a> -->
 
