@@ -223,4 +223,104 @@ class Admin extends Controller
             exit();
         }
     }
+
+    public function ubahUsername()
+    {
+        $data['title'] = 'Ubah Username';
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
+        return view([
+            'templates/header_profil',
+            'admin/ubah_username',
+            'templates/footer'
+        ], $data);
+    }
+    public function updateUsername(Request $request)
+    {
+        $rule = [
+            'username' => 'required|max:20|min:5',
+            // 'password' => 'required'
+        ];
+
+        $message = [
+            'required' => ':field tidak boleh kosong!',
+            'max' => ':field maksimal :max karakter!',
+        ];
+
+        $errors = Validation::message($request->all(), $rule, $message);
+        $errors = Validation::first($errors);
+
+        if ($errors) {
+            Flasher::setFlash('Data Gagal di Simpan! error: ' . $errors, 'danger');
+            header('Location: ' . base_url . 'profil/admin/ubah/username');
+            exit();
+        }
+        $checkUsername = User::where('username', trim($request->username))->first();
+        $checkPassword = User::where('id_admin', Session::get('user'))
+            ->where('password', trim($request->password))
+            ->first();
+        // header('Content-Type: application/json');
+        if ($checkUsername != false) {
+            Flasher::setFlash('Username sudah digunakan!', 'danger');
+            header('Location: ' . base_url . 'profil/admin/ubah/username');
+            exit();
+        }
+        if ($checkPassword == false) {
+            Flasher::setFlash('Password tidak sesuai! Silahkan coba lagi', 'danger');
+            header('Location: ' . base_url . 'profil/admin/ubah/username');
+            exit();
+        }
+        $val_char = [
+            'username_baru' => htmlspecialchars(trim($request->username))
+        ];
+        try {
+            ModelsAdmin::update([
+                'username' => $val_char['username_baru']
+            ])->where('id_admin', Session::get('user'))->save();
+            Flasher::setFlash('Username berhasil diubah!', 'success');
+            header('Location: ' . base_url . 'profil/admin/ubah/username');
+            exit();
+        } catch (Throwable $th) {
+            throw new \riyu\Helpers\Errors\AppException($th->getMessage(), $th->getCode(), $th->getPrevious());
+        }
+    }
+    public function ubahPassword()
+    {
+        $data['title'] = "Ganti Password";
+        $data['admin'] = User::where('id_admin', Session::get('user'))->first();
+        return view([
+            'templates/header_profil',
+            'admin/ubah_password',
+            'templates/footer'
+        ], $data);
+    }
+    public function updatePassword(Request $request)
+    {
+        $rule = [
+            'username' => 'required|max:20|min:5',
+            // 'password' => 'required'
+        ];
+
+        $message = [
+            'required' => ':field tidak boleh kosong!',
+            'max' => ':field maksimal :max karakter!',
+        ];
+
+        $errors = Validation::message($request->all(), $rule, $message);
+        $errors = Validation::first($errors);
+
+        if ($errors) {
+            Flasher::setFlash('Data Gagal di Simpan! error: ' . $errors, 'danger');
+            header('Location: ' . base_url . 'profil/admin/ubah/username');
+            exit();
+        }
+        $checkPasswordLama = ModelsAdmin::where('password', $request->password_lama)
+            ->where('id_admin', Session::get('user'))
+            ->first();
+        if ($checkPasswordLama == false) {
+            echo 'Password Lama Tidak Sesuai';
+            exit();
+        }
+        echo 'Bisa';
+        exit();
+    }
 }

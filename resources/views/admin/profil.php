@@ -72,13 +72,15 @@
                             </a>
                         </div>
                         <div class="d-flex justify-content-center my-3">
-                            <button class="btn btn-dark btn-tone w-90">
-                                Ubah Username
+                            <button class="btn btn-dark btn-tone w-90"
+                                onclick="location.href='<?= base_url; ?>profil/admin/ubah/username'">
+                                Ganti Username
                             </button>
                         </div>
                         <div class="d-flex justify-content-center my-3">
-                            <button class="btn btn-dark btn-tone w-90">
-                                Ubah Kata Sandi
+                            <button class="btn btn-dark btn-tone w-90"
+                                onclick="location.href='<?= base_url; ?>profil/admin/ubah/password'">
+                                Ganti Password
                             </button>
                         </div>
                         <div class="d-flex justify-content-center">
