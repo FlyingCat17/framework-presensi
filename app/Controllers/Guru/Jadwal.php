@@ -5,6 +5,7 @@ namespace App\Controllers\Guru;
 use App\Config\Session;
 use App\Controllers\Controller;
 use App\Controllers\KelasAjaran;
+use App\Models\Kelas_Ajaran;
 use App\Models\Tahun_Ajaran;
 use App\Models\User;
 use App\Models\Guru;
@@ -65,28 +66,41 @@ class Jadwal extends Controller
     {
         switch ($request->hari) {
             case '1':
-                $data['title'] = "Jadwal Senin";
+                $data['title'] = "Jadwal";
+                $data['hari'] = "Senin";
                 break;
             case '2':
-                $data['title'] = "Jadwal Selasa";
+                $data['title'] = "Jadwal";
+                $data['hari'] = "Selasa";
                 break;
             case '3':
-                $data['title'] = "Jadwal Rabu";
+                $data['title'] = "Jadwal";
+                $data['hari'] = "Rabu";
                 break;
             case '4':
-                $data['title'] = "Jadwal Kamis";
+                $data['title'] = "Jadwal";
+                $data['hari'] = "Kamis";
                 break;
             case '5':
-                $data['title'] = "Jadwal Jumat";
+                $data['title'] = "Jadwal";
+                $data['hari'] = "Jumat";
                 break;
             default:
-                $data['title'] = "Jadwal";
+                header('Location: ' . base_url . 'g/jadwal');
                 break;
         }
+        $data['k_hari'] = $request->hari;
         $data['guru'] = $this->getGuru();
+        $data['kelas'] = Kelas_Ajaran::where('id_tahun_ajaran', $this->getTahunAjaran()->id_tahun_ajaran)
+            ->join('tb_kelas', 'tb_kelas.id_kelas', 'tb_kelas_ajaran.id_kelas')
+            ->orderBy('tb_kelas.nama_kelas', 'asc')
+            ->all();
+        // header('Content-Type: application/json');
+        // echo json_encode($data['kelas'], JSON_PRETTY_PRINT);
         return view([
             'guru/view/templates/header',
             'guru/view/templates/sidebar',
+            'guru/view/jadwal/index',
             'guru/view/templates/footer',
         ], $data);
     }
