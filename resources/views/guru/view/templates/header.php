@@ -39,6 +39,7 @@
     <script src="<?= base_url ?>resources/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
     <script src="<?= base_url ?>resources/vendors/jquery-validation/jquery.validate.min.js"></script>
     <title>E Presensi | <?= $data['title'] ?>
+        <?=(isset($data['hari']) ? $data['hari'] : '') ?>
     </title>
 </head>
 

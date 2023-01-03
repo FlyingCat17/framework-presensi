@@ -1,3 +1,7 @@
+<?php
+
+?>
+
 <div class="page-container">
     <div class="main-content">
         <div class="container-fluid">
@@ -34,16 +38,31 @@
                             </div>
                             <?php
                             use Utils\Flasher;
+                            use App\Config\Session;
 
                             Flasher::flash();
                             ?>
                             <div class="mb-4"></div>
                             <div class="d-flex justify-content-between align-items-end">
                                 <div>
-                                    <a href="<?= base_url; ?>jadwal/kelas/<?= $data['jadwal']->id_kelas_ajaran ?>"
-                                        class="btn btn-danger mb-3"><i class="anticon anticon-left"
-                                            style="margin-left: -5px;"></i> Daftar
-                                        Jadwal</a>
+                                    <?php
+                                    if (Session::get('type') == 'guru') {
+                                        ?>
+                                        <a href="<?= base_url; ?>g/jadwal/<?= $data['jadwal']->hari ?>"
+                                            class="btn btn-danger mb-3"><i class="anticon anticon-left"
+                                                style="margin-left: -5px;"></i> Daftar
+                                            Jadwal</a>
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <a href="<?= base_url; ?>jadwal/kelas/<?= $data['jadwal']->id_kelas_ajaran ?>"
+                                            class="btn btn-danger mb-3"><i class="anticon anticon-left"
+                                                style="margin-left: -5px;"></i> Daftar
+                                            Jadwal</a>
+                                        <?php
+                                    }
+                                    ?>
+
                                     <br>
                                     <button type="button" class="btn btn-success mb-3 tambah_presensi"
                                         onclick="location.href='<?= base_url; ?>presensi/<?= $data['jadwal']->id_jadwal ?>/tambah'"

@@ -10,6 +10,7 @@ use App\Models\Siswa as ModelsSiswa;
 use App\Models\Presensi as ModelsPresensi;
 use App\Models\Detail_Presensi as ModelsDetail;
 use App\Models\Presensi;
+use App\Models\Guru;
 use App\Models\User;
 use Riyu\Http\Request;
 use Riyu\Validation\Validation;
@@ -21,10 +22,6 @@ class PresensiController extends Controller
     {
         if (!isset($_SESSION['user'])) {
             header('Location: ' . base_url . 'auth/login');
-            exit();
-        }
-        if (Session::get('type') == "guru") {
-            header('Location: ' . base_url . 'dashboard/guru');
             exit();
         }
     }
@@ -57,12 +54,22 @@ class PresensiController extends Controller
         // $output = json_encode(['Presensi' => $data['presensi']], JSON_PRETTY_PRINT);
         // echo $output;
         // echo json_encode(['jumlah_siswa' => $data['jumlah_siswa']], JSON_PRETTY_PRINT);
-        return view([
-            'templates/header',
-            'templates/sidebar',
-            'presensi/index',
-            'templates/footer',
-        ], $data);
+        if (Session::get('type') == 'guru') {
+            $data['guru'] = $this->getGuru();
+            return view([
+                'guru/view/templates/header',
+                'guru/view/templates/sidebar',
+                'presensi/index',
+                'guru/view/templates/footer',
+            ], $data);
+        } else {
+            return view([
+                'templates/header',
+                'templates/sidebar',
+                'presensi/index',
+                'templates/footer',
+            ], $data);
+        }
     }
 
     public function tambah(Request $request)
@@ -88,12 +95,22 @@ class PresensiController extends Controller
             exit();
         }
         $data['admin'] = User::where('id_admin', Session::get('user'))->first();
-        return view([
-            'templates/header',
-            'templates/sidebar',
-            'presensi/tambah',
-            'templates/footer',
-        ], $data);
+        if (Session::get('type') == 'guru') {
+            $data['guru'] = $this->getGuru();
+            return view([
+                'guru/view/templates/header',
+                'guru/view/templates/sidebar',
+                'presensi/tambah',
+                'guru/view/templates/footer',
+            ], $data);
+        } else {
+            return view([
+                'templates/header',
+                'templates/sidebar',
+                'presensi/tambah',
+                'templates/footer',
+            ], $data);
+        }
     }
 
     public function insert(Request $request)
@@ -168,12 +185,22 @@ class PresensiController extends Controller
             echo json_encode('ERROR', JSON_PRETTY_PRINT);
             exit();
         }
-        return view([
-            'templates/header',
-            'templates/sidebar',
-            'presensi/ubah',
-            'templates/footer',
-        ], $data);
+        if (Session::get('type') == 'guru') {
+            $data['guru'] = $this->getGuru();
+            return view([
+                'guru/view/templates/header',
+                'guru/view/templates/sidebar',
+                'presensi/ubah',
+                'guru/view/templates/footer',
+            ], $data);
+        } else {
+            return view([
+                'templates/header',
+                'templates/sidebar',
+                'presensi/ubah',
+                'templates/footer',
+            ], $data);
+        }
     }
     public function update(Request $request)
     {
@@ -287,12 +314,22 @@ class PresensiController extends Controller
         }
         // header('Content-Type: application/json');
         // echo json_encode($data['presensi'], JSON_PRETTY_PRINT);
-        return view([
-            'templates/header',
-            'templates/sidebar',
-            'presensi/detail',
-            'templates/footer',
-        ], $data);
+        if (Session::get('type') == 'guru') {
+            $data['guru'] = $this->getGuru();
+            return view([
+                'guru/view/templates/header',
+                'guru/view/templates/sidebar',
+                'presensi/detail',
+                'guru/view/templates/footer',
+            ], $data);
+        } else {
+            return view([
+                'templates/header',
+                'templates/sidebar',
+                'presensi/detail',
+                'templates/footer',
+            ], $data);
+        }
     }
     public function tambah_presensi(Request $request)
     {
@@ -447,12 +484,22 @@ class PresensiController extends Controller
         $data['admin'] = User::where('id_admin', Session::get('user'))->first();
 
         // echo json_encode($data['siswa'], JSON_PRETTY_PRINT);
-        return view([
-            'templates/header',
-            'templates/sidebar',
-            'presensi/detail/tambah',
-            'templates/footer',
-        ], $data);
+        if (Session::get('type') == 'guru') {
+            $data['guru'] = $this->getGuru();
+            return view([
+                'guru/view/templates/header',
+                'guru/view/templates/sidebar',
+                'presensi/detail/tambah',
+                'guru/view/templates/footer',
+            ], $data);
+        } else {
+            return view([
+                'templates/header',
+                'templates/sidebar',
+                'presensi/detail/tambah',
+                'templates/footer',
+            ], $data);
+        }
     }
 
     public function detailSiswaPresensi(Request $request, $idDetail, $idPresensi, $idJadwal)
@@ -474,12 +521,22 @@ class PresensiController extends Controller
         }
         // echo json_encode(['Detail' => $data['detail']], JSON_PRETTY_PRINT);
         // echo ($idPresensi);
-        return view([
-            'templates/header',
-            'templates/sidebar',
-            'presensi/detail/index',
-            'templates/footer',
-        ], $data);
+        if (Session::get('type') == 'guru') {
+            $data['guru'] = $this->getGuru();
+            return view([
+                'guru/view/templates/header',
+                'guru/view/templates/sidebar',
+                'presensi/detail/index',
+                'guru/view/templates/footer',
+            ], $data);
+        } else {
+            return view([
+                'templates/header',
+                'templates/sidebar',
+                'presensi/detail/index',
+                'templates/footer',
+            ], $data);
+        }
     }
     public function rekapPresensi(Request $request)
     {
@@ -504,5 +561,10 @@ class PresensiController extends Controller
         return view([
             'presensi/rekap/index'
         ], $data);
+    }
+
+    private function getGuru()
+    {
+        return Guru::where('nuptk', Session::get('user'))->first();
     }
 }

@@ -12,7 +12,7 @@
                                         <div class="card shadow mb-5 bg-white rounded">
                                             <div class="card-body d-flex align-items-center justify-content-between">
                                                 <h4 class="ml-1">Senin</h4>
-                                                <a href=""
+                                                <a href="<?= base_url ?>g/jadwal/1"
                                                     class="btn btn-icon btn-dark btn-rounded d-flex justify-content-center align-items-center">
                                                     <i class="fas fa-folder-open font-size-14"></i>
                                                 </a>
@@ -23,7 +23,7 @@
                                         <div class="card shadow mb-5 bg-white rounded">
                                             <div class="card-body d-flex align-items-center justify-content-between">
                                                 <h4 class="ml-1">Selasa</h4>
-                                                <a href=""
+                                                <a href="<?= base_url ?>g/jadwal/2"
                                                     class="btn btn-icon btn-dark btn-rounded d-flex justify-content-center align-items-center">
                                                     <i class="fas fa-folder-open font-size-14"></i>
                                                 </a>
@@ -34,7 +34,7 @@
                                         <div class="card shadow mb-5 bg-white rounded">
                                             <div class="card-body d-flex align-items-center justify-content-between">
                                                 <h4 class="ml-1">Rabu</h4>
-                                                <a href=""
+                                                <a href="<?= base_url ?>g/jadwal/3"
                                                     class="btn btn-icon btn-dark btn-rounded d-flex justify-content-center align-items-center">
                                                     <i class="fas fa-folder-open font-size-14"></i>
                                                 </a>
@@ -45,7 +45,7 @@
                                         <div class="card shadow mb-5 bg-white rounded">
                                             <div class="card-body d-flex align-items-center justify-content-between">
                                                 <h4 class="ml-1">Kamis</h4>
-                                                <a href=""
+                                                <a href="<?= base_url ?>g/jadwal/4"
                                                     class="btn btn-icon btn-dark btn-rounded d-flex justify-content-center align-items-center">
                                                     <i class="fas fa-folder-open font-size-14"></i>
                                                 </a>
@@ -56,7 +56,7 @@
                                         <div class="card shadow mb-5 bg-white rounded">
                                             <div class="card-body d-flex align-items-center justify-content-between">
                                                 <h4 class="ml-1">Jumat</h4>
-                                                <a href=""
+                                                <a href="<?= base_url ?>g/jadwal/5"
                                                     class="btn btn-icon btn-dark btn-rounded d-flex justify-content-center align-items-center">
                                                     <i class="fas fa-folder-open font-size-14"></i>
                                                 </a>
