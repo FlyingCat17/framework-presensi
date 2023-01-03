@@ -6,8 +6,6 @@ use Closure;
 use ReflectionClass;
 use ReflectionFunction;
 use ReflectionMethod;
-use Riyu\App\Config;
-use Riyu\Helpers\Errors\AppException;
 use Riyu\Http\Request;
 
 class Resolver

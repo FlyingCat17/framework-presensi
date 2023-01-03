@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers\Api;
 
-class Response
+class Response extends \Riyu\Http\Response
 {
     /**
      * Response json
@@ -14,13 +14,18 @@ class Response
      */
     public static function json($status = 200, $message = '', $data = [])
     {
-        header('Content-Type: application/json');
-        http_response_code($status);
-        echo json_encode([
+        self::setHeaderType('application/json');
+
+        self::code($status);
+
+        self::content(json_encode([
             'status' => $status,
             'message' => $message,
             'data' => $data
-        ]);
+        ]));
+
+        self::send();
+        
         exit;
     }
 

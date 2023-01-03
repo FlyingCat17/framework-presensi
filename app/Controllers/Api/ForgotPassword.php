@@ -60,19 +60,12 @@ class ForgotPassword extends Controller
         $token = base64_decode($raw);
         $token = json_decode($token);
 
-        if (isset($token->otp) && $token->otp != '' && $token->otp != null) {
-            $otp = $token->otp;
-        } else {
-            return Response::json(404, 'Token tidak ditemukan');
-        }
+        $this->validateToken($token);
 
-        if (isset($token->username) && $token->username != '' && $token->username != null) {
-            $username = $token->username;
-        } else {
-            return Response::json(404, 'Token tidak ditemukan');
-        }
+        $otp = $token->otp;
+        $username = $token->username;
 
-        return $this->verifyOtp(Request::create([
+        $this->verifyOtp(Request::create([
             'username' => $username,
             'otp' => $otp,
         ]));
@@ -82,5 +75,16 @@ class ForgotPassword extends Controller
     {
         header('Location: riyu://myapp.com/otp?token=' . $request->token);
         exit;
+    }
+
+    public function validateToken($token)
+    {
+        if (!isset($token->token) || $token->token == '' || $token->token == null) {
+            return Response::json(404, 'Token tidak ditemukan');
+        }
+
+        if (!isset($token->username) || $token->username == '' || $token->username == null) {
+            return Response::json(404, 'Token tidak ditemukan');
+        }
     }
 }

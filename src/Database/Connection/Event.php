@@ -2,7 +2,6 @@
 namespace Riyu\Database\Connection;
 
 use PDO;
-use PDOException;
 use Riyu\App\Config;
 use Riyu\Helpers\Errors\AppException;
 use Riyu\Helpers\Storage\GlobalStorage;
@@ -55,7 +54,7 @@ class Event
         } else if (GlobalStorage::has('database')) {
             $this->config = GlobalStorage::get('db');
         } else {
-            throw new AppException("Database config not found");
+            throw new AppException("Database config not found, please check your config file");
         }
     }
 
@@ -67,6 +66,7 @@ class Event
     public static function connect()
     {
         $instance = new static;
+        $instance->validateConfig();
         $instance->setDsn();
         $instance->setConnection();
         return $instance->connection;
@@ -80,36 +80,11 @@ class Event
     public function setDsn()
     {
         $dsn = '';
-
-        if (isset($this->config['driver'])) {
-            $dsn .= $this->config['driver'] . ':';
-        } else {
-            throw new AppException("Driver not found");
-        }
-
-        if (isset($this->config['host'])) {
-            $dsn .= 'host=' . $this->config['host'] . ';';
-        } else {
-            throw new AppException("Host not found");
-        }
-
-        if (isset($this->config['port'])) {
-            $dsn .= 'port=' . $this->config['port'] . ';';
-        } else {
-            throw new AppException("Port not found");
-        }
-
-        if (isset($this->config['database'])) {
-            $dsn .= 'dbname=' . $this->config['database'] . ';';
-        } else {
-            throw new AppException("Dbname not found");
-        }
-
-        if (isset($this->config['charset'])) {
-            $dsn .= 'charset=' . $this->config['charset'] . ';';
-        } else {
-            throw new AppException("Charset not found");
-        }
+        $dsn .= $this->config['driver'] . ':';
+        $dsn .= 'host=' . $this->config['host'] . ';';
+        $dsn .= 'port=' . $this->config['port'] . ';';
+        $dsn .= 'dbname=' . $this->config['database'] . ';';
+        $dsn .= 'charset=' . $this->config['charset'] . ';';
 
         $this->dsn = $dsn;
     }
@@ -121,83 +96,78 @@ class Event
      */
     public function setConnection()
     {
-        if (isset($this->config['username'])) {
-            $username = $this->config['username'];
-        } else {
-            throw new AppException("Username not found");
-        }
-
-        if (isset($this->config['password'])) {
-            $password = $this->config['password'];
-        } else {
-            throw new AppException("Password not found");
-        }
-
+        $username = $this->config['username'];
+        $password = $this->config['password'];
+        $options = $this->options;
+        
         if (isset($this->config['options'])) {
             $options = $this->config['options'];
-        } else {
-            $options = $this->options;
         }
 
         try {
             $this->connection = new PDO($this->dsn, $username, $password, $options);
-            return $this->connection;
-        } catch (AppException $e) {
-            new AppException("Connection to database failed");
+        } catch (\Throwable $th) {
+            throw new \ErrorException($th->getMessage(), $th->getCode(), 1, $th->getFile(), $th->getLine(), $th->getPrevious());
         }
     }
 
     public function raw()
     {
+        $this->validateConfig();
+
         $dsn = '';
-
-        if (isset($this->config['driver'])) {
-            $dsn = $this->config['driver'] . ':';
-        } else {
-            throw new AppException("Driver not found");
-        }
-
-        if (isset($this->config['host'])) {
-            $dsn .= 'host=' . $this->config['host'] . ';';
-        } else {
-            throw new AppException("Host not found");
-        }
-
-        if (isset($this->config['port'])) {
-            $dsn .= 'port=' . $this->config['port'] . ';';
-        } else {
-            throw new AppException("Port not found");
-        }
-
-        if (isset($this->config['charset'])) {
-            $dsn .= 'charset=' . $this->config['charset'] . ';';
-        } else {
-            throw new AppException("Charset not found");
-        }
-
-        if (isset($this->config['username'])) {
-            $username = $this->config['username'];
-        } else {
-            throw new AppException("Username not found");
-        }
-
-        if (isset($this->config['password'])) {
-            $password = $this->config['password'];
-        } else {
-            throw new AppException("Password not found");
-        }
+        $dsn .= $this->config['driver'] . ':';
+        $dsn .= 'host=' . $this->config['host'] . ';';
+        $dsn .= 'port=' . $this->config['port'] . ';';
+        $dsn .= 'charset=' . $this->config['charset'] . ';';
+        $username = $this->config['username'];
+        $password = $this->config['password'];
+        $options = $this->options;
 
         if (isset($this->config['options'])) {
             $options = $this->config['options'];
-        } else {
-            $options = $this->options;
         }
 
         try {
             $connection = new PDO($dsn, $username, $password, $options);
-            return $connection;
-        } catch (AppException $e) {
-            new AppException("Connection to database failed");
+        } catch (\Throwable $th) {
+            throw new \ErrorException($th->getMessage(), $th->getCode(), 1, $th->getFile(), $th->getLine(), $th->getPrevious());
+        }
+
+        return $connection;
+    }
+
+    private function validateConfig()
+    {
+        $config = Config::get('path');
+        $config = $config . 'config.php';
+
+        if (!isset($this->config['driver'])) {
+            throw new \ErrorException("Driver not found in config file: $config", 1, 1, $config, 0, null);
+        }
+
+        if (!isset($this->config['host'])) {
+            throw new \ErrorException("Host not found in config file: $config", 1, 1, $config, 0, null);
+        }
+
+        if (!isset($this->config['port'])) {
+            throw new \ErrorException("Port not found in config file: $config", 1, 1, $config, 0, null);
+        }
+
+        if (!isset($this->config['charset'])) {
+            throw new \ErrorException("Charset not found in config file: $config", 1, 1, $config, 0, null);
+        }
+
+        if (!isset($this->config['username'])) {
+            throw new \ErrorException("Username not found in config file: $config", 1, 1, $config, 0, null);
+        }
+
+        if (!isset($this->config['password'])) {
+            throw new \ErrorException("Password not found in config file: $config", 1, 1, $config, 0, null);
+        }
+
+        if (!isset($this->config['database'])) {
+            throw new \ErrorException("Database not found in config file: $config", 1, 1, $config, 0, null);
         }
     }
 }

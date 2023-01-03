@@ -16,7 +16,7 @@ abstract class Foundation
 
     public function booting()
     {
-        $this->get();
+        $this->getAll();
     }
 
     public function getGet()
@@ -100,7 +100,7 @@ abstract class Foundation
         }
     }
 
-    public function get()
+    public function getAll()
     {
         $this->getGet();
         $this->getPost();

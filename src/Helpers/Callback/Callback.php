@@ -10,40 +10,43 @@ class Callback
 {
     public static function call($callback, $data = null)
     {
-        if (is_array($callback)) {
-            $class = new $callback[0];
-            $method = $callback[1];
-            if (isset($method) && $method != null) {
-                $tmp = new ReflectionMethod($class, $method);
-                $params = $tmp->getParameters();
-                if (count($params) > 0) {
-                    if ($data != null) {
-                        return Resolver::resolveData($class, $method, $data);
-                    } else {
-                        return Resolver::resolveWithParams($class, $method, $params);
-                    }
-                } else {
-                    if ($data != null) {
-                        return Resolver::resolveData($class, $method, $data);
-                    } else {
-                        return Resolver::resolveMethod($class, $method);
-                    }
-                }
-            } else {
-                self::callable($callback, $data);
-            }
-        } else {
-            self::object($callback, $data);
+        if (!is_array($callback)) {
+            return self::object($callback, $data);
         }
+
+        $class = new $callback[0];
+        $method = $callback[1];
+
+        if (!isset($method) && $method == null) {
+            return self::callable($callback, $data);
+        }
+
+        $tmp = new ReflectionMethod($class, $method);
+        $params = $tmp->getParameters();
+
+        if (count($params) > 0) {
+            if ($data != null) {
+                return Resolver::resolveData($class, $method, $data);
+            }
+
+            return Resolver::resolveWithParams($class, $method, $params);
+        }
+
+        if ($data != null) {
+            return Resolver::resolveData($class, $method, $data);
+        }
+
+
+        return Resolver::resolveMethod($class, $method);
     }
 
     private static function object($callback, $data = null)
     {
         if (is_object($callback)) {
             return Resolver::resolve($callback, $data);
-        } else {
-            self::callable($callback, $data);
         }
+
+        self::callable($callback, $data);
     }
 
     private static function callable($callback, $data = null)

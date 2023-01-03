@@ -19,9 +19,10 @@ class Foundation
     {
         $data = self::between($uri);
         $uri = preg_replace('/\//', '\/', $uri);
-        $uri = preg_replace('/\{[a-zA-Z0-9]+\}/', '([a-zA-Z0-9]+)', $uri);
+        $uri = preg_replace('/\{[a-zA-Z0-9 ]+\}/', '([a-zA-Z0-9 ]+)', $uri);
         $uri = '/^' . $uri . '$/';
         $url = Request::getRoute();
+        $url = urldecode($url);
         preg_match($uri, $url, $matches);
         array_shift($matches);
         $params = [];

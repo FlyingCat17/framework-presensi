@@ -4,8 +4,6 @@ namespace Riyu\Database\Connection;
 
 use Riyu\Database\Utils\ConnectionManager;
 use PDO;
-use PDOException;
-use Riyu\Helpers\Errors\AppException;
 
 class Manager implements ConnectionManager
 {
@@ -19,15 +17,12 @@ class Manager implements ConnectionManager
     /**
      * Set Connection for query
      * 
-     * @return this
+     * @param object $connection
+     * @return void
      */
     public function __construct($connection)
     {
-        try {
-            $this->connection = $connection;
-        } catch (\Throwable $th) {
-            throw new AppException($th->getMessage());
-        }
+        $this->connection = $connection;
     }
 
     /**
@@ -39,16 +34,15 @@ class Manager implements ConnectionManager
      */
     public function queryAll($query, $options = null)
     {
-        try {
-            $stmt = $this->connection->prepare($query);
-            if (!is_null($options)) {
-                $this->bindValue($stmt, $query, $options);
-            }
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (\Throwable $th) {
-            throw new AppException($th->getMessage());
+        $stmt = $this->connection->prepare($query);
+
+        if (!is_null($options)) {
+            $this->bindValue($stmt, $query, $options);
         }
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -60,16 +54,15 @@ class Manager implements ConnectionManager
      */
     public function queryGet($query, $options = null)
     {
-        try {
-            $stmt = $this->connection->prepare($query);
-            if (!is_null($options)) {
-                $this->bindValue($stmt, $query, $options);
-            }
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $th) {
-            throw new AppException($th->getMessage());
+        $stmt = $this->connection->prepare($query);
+
+        if (!is_null($options)) {
+            $this->bindValue($stmt, $query, $options);
         }
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -81,16 +74,15 @@ class Manager implements ConnectionManager
      */
     public function queryFirst($query, $options = null)
     {
-        try {
-            $stmt = $this->connection->prepare($query);
-            if (!is_null($options)) {
-                $this->bindValue($stmt, $query, $options);
-            }
-            $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_OBJ);
-        } catch (PDOException $th) {
-            throw new AppException($th->getMessage());
+        $stmt = $this->connection->prepare($query);
+
+        if (!is_null($options)) {
+            $this->bindValue($stmt, $query, $options);
         }
+
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_OBJ);
     }
 
     /**
@@ -102,30 +94,27 @@ class Manager implements ConnectionManager
      */
     public function execute($query, $options = null)
     {
-        try {
-            $stmt = $this->connection->prepare($query);
-            if (!is_null($options)) {
-                $this->bindValue($stmt, $query, $options);
-            }
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_OBJ);
-        } catch (\Throwable $th) {
-            throw new AppException($th->getMessage());
+        $stmt = $this->connection->prepare($query);
+
+        if (!is_null($options)) {
+            $this->bindValue($stmt, $query, $options);
         }
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function exec($query, $options = null)
     {
-        try {
-            $stmt = $this->connection->prepare($query);
-            if (!is_null($options)) {
-                $this->bindValue($stmt, $query, $options);
-            }
-            $stmt->execute();
-            return $stmt->rowCount();
-        } catch (\Throwable $th) {
-            throw new AppException($th->getMessage());
+        $stmt = $this->connection->prepare($query);
+
+        if (!is_null($options)) {
+            $this->bindValue($stmt, $query, $options);
         }
+        $stmt->execute();
+
+        return $stmt->rowCount();
     }
 
     /**
@@ -137,16 +126,14 @@ class Manager implements ConnectionManager
      */
     public function count($query, $options = null)
     {
-        try {
-            $stmt = $this->connection->prepare($query);
-            if (!is_null($options)) {
-                $this->bindValue($stmt, $query, $options);
-            }
-            $stmt->execute();
-            return $stmt->rowCount();
-        } catch (\Throwable $th) {
-            throw new AppException($th->getMessage());
+        $stmt = $this->connection->prepare($query);
+
+        if (!is_null($options)) {
+            $this->bindValue($stmt, $query, $options);
         }
+        $stmt->execute();
+
+        return $stmt->rowCount();
     }
 
     /**
@@ -158,16 +145,15 @@ class Manager implements ConnectionManager
      */
     public function queryCount($query, $options = null)
     {
-        try {
-            $stmt = $this->connection->prepare($query);
-            if (!is_null($options)) {
-                $this->bindValue($stmt, $query, $options);
-            }
-            $stmt->execute();
-            return $stmt->rowCount();
-        } catch (\Throwable $th) {
-            throw new AppException($th->getMessage());
+        $stmt = $this->connection->prepare($query);
+
+        if (!is_null($options)) {
+            $this->bindValue($stmt, $query, $options);
         }
+
+        $stmt->execute();
+
+        return $stmt->rowCount();
     }
 
     /**
@@ -180,25 +166,21 @@ class Manager implements ConnectionManager
      */
     public function bindValue($stmt, $query, $options)
     {
-        try {
-            foreach ($options as $key => $value) {
-                switch ($options) {
-                    case is_int($value):
-                        $stmt->bindValue($key, $value, PDO::PARAM_INT);
-                        break;
-                    case is_bool($value):
-                        $stmt->bindValue($key, $value, PDO::PARAM_BOOL);
-                        break;
-                    case is_null($value):
-                        $stmt->bindValue($key, $value, PDO::PARAM_NULL);
-                        break;
-                    default:
-                        $stmt->bindValue($key, $value, PDO::PARAM_STR);
-                        break;
-                }
+        foreach ($options as $key => $value) {
+            switch ($options) {
+                case is_int($value):
+                    $stmt->bindValue($key, $value, PDO::PARAM_INT);
+                    break;
+                case is_bool($value):
+                    $stmt->bindValue($key, $value, PDO::PARAM_BOOL);
+                    break;
+                case is_null($value):
+                    $stmt->bindValue($key, $value, PDO::PARAM_NULL);
+                    break;
+                default:
+                    $stmt->bindValue($key, $value, PDO::PARAM_STR);
+                    break;
             }
-        } catch (\Throwable $th) {
-            throw new AppException($th->getMessage());
         }
     }
 }
