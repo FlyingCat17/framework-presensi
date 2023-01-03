@@ -11,7 +11,7 @@
                     <div class="card">
                         <div class="card-body">
                             <form action="<?= base_url; ?>kelas/bagi/<?= $data['kelas']->id_kelas_ajaran ?>/tambah/cari"
-                                method="post">
+                                method="get">
                                 <div class="input-affix mb-4">
                                     <i class="prefix-icon anticon anticon-search"></i>
                                     <input type="text" class="form-control mr-3" name="keyword"

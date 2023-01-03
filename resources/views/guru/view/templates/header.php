@@ -67,9 +67,9 @@
                             <div class="pointer" data-toggle="dropdown">
                                 <div class="avatar avatar-image  m-h-10 m-r-15">
                                     <?php
-                                    if ($data['admin']->foto_profile != null) {
+                                    if ($data['guru']->foto_profile != null) {
                                         ?>
-                                        <img src="<?= base_url ?>images/profile/<?= $data['admin']->foto_profile ?>" alt="">
+                                        <img src="<?= base_url ?>images/profile/<?= $data['guru']->foto_profile ?>" alt="">
                                         <?php
                                     } else {
                                         ?>
@@ -86,16 +86,16 @@
 
                                         <div class="">
                                             <p class="m-b-0 text-dark font-weight-semibold">
-                                                <?=(!isset($data['admin']->nama_admin) ? '' : $data['admin']->nama_admin) ?>
+                                                <?=(!isset($data['guru']->nama_guru) ? '' : $data['guru']->nama_guru) ?>
                                             </p>
                                             <p class="m-b-0 opacity-07">
-                                                <?=(!isset($_SESSION['type']) ? '' : strtoupper($_SESSION['type'])) ?>
+                                                <?=(!isset($data['guru']->status_kepegawaian) ? '' : strtoupper($data['guru']->status_kepegawaian)) ?>
                                             </p>
                                         </div>
                                     </div>
                                 </div>
-                                <a href="<?= base_url; ?>profil/admin" data-edit="<?= base_url ?>/user/edit"
-                                    id="header-edit" class="dropdown-item d-block p-h-15 p-v-10">
+                                <a href="<?= base_url; ?>profil/guru" id="header-edit"
+                                    class="dropdown-item d-block p-h-15 p-v-10">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>
                                             <i class="anticon opacity-04 font-size-16 anticon-user"></i>

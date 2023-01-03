@@ -89,10 +89,10 @@ class Login
                 $_SESSION['user'] = $user->id_admin;
                 switch ($user->isRoot) {
                     case '1':
-                        $_SESSION['type'] = strtoupper('admin root');
+                        $_SESSION['type'] = 'admin root';
                         break;
                     default:
-                        $_SESSION['type'] = strtoupper('admin');
+                        $_SESSION['type'] = 'admin';
                         break;
                 }
                 // Session::set('user', $user->id_admin);
@@ -110,7 +110,9 @@ class Login
             // }
         } else if ($guru) {
             if (password_verify($password, $guru->password)) {
-                echo 'LOGIN GURU';
+                $_SESSION['user'] = $guru->nuptk;
+                $_SESSION['type'] = 'guru';
+                return redirect(base_url . 'g/dashboard');
             } else {
                 Flasher::setFlash('Username atau password salah', 'danger');
                 return redirect();
