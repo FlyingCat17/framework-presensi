@@ -11,7 +11,7 @@ class Redirect
     public function __construct($url = null)
     {
         $this->url = $url;
-        return $this->redirect($url);
+        $this->redirect($url);
     }
 
     public function redirect($url)
@@ -25,10 +25,6 @@ class Redirect
     {
         if (is_array($this->url)) {
             $url = $url[0];
-        }
-
-        if (is_string($url)) {
-            $url = $url;
         }
 
         if (is_null($url)) {
@@ -50,10 +46,8 @@ class Redirect
         if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
             $url = $this->validationUrl($url);
             $url = $fullUrl . $url;
-        } else {
-            $url = $url;
         }
-
+        
         return $url;
     }
 

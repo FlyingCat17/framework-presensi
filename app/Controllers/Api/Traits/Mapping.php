@@ -9,7 +9,7 @@ trait Mapping
      * 
      * @param object $username
      * 
-     * @return object
+     * @return array
      */
     protected function mapUser(object $user)
     {

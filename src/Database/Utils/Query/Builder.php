@@ -115,8 +115,15 @@ class Builder extends Grammar
 
     protected $fillable = [];
 
-    public function __construct()
+    public function __construct($model = null)
     {
+        if ($model) {
+            $this->model = $model;
+            $this->table = $model->getTable();
+            $this->fillable = $model->getFillable();
+            $this->timestamp = $model->getTimestamp();
+        }
+
         parent::__construct();
     }
 
@@ -133,7 +140,7 @@ class Builder extends Grammar
     /**
      * Create a new record
      * 
-     * @param array|string|args $data
+     * @param array|string $data
      */
     public function create($data)
     {
@@ -166,11 +173,7 @@ class Builder extends Grammar
         $query = $this->buildQuery();
         $this->setStorage($query);
 
-        try {
-            return $this->manager->queryGet($query, $this->bindings);
-        } catch (\Throwable $th) {
-            throw new AppException($th->getMessage());
-        }
+        return $this->manager->queryGet($query, $this->bindings);
     }
 
     public function all()
@@ -178,11 +181,7 @@ class Builder extends Grammar
         $query = $this->buildQuery();
         $this->setStorage($query);
 
-        try {
-            return $this->manager->queryAll($query, $this->bindings);
-        } catch (\Throwable $th) {
-            throw new AppException($th->getMessage());
-        }
+        return $this->manager->queryAll($query, $this->bindings);
     }
 
     public function first()
@@ -192,11 +191,7 @@ class Builder extends Grammar
 
         $this->setStorage($query);
 
-        try {
-            return $this->manager->queryFirst($query, $this->bindings);
-        } catch (\Throwable $th) {
-            throw new AppException($th->getMessage());
-        }
+        return $this->manager->queryFirst($query, $this->bindings);
     }
 
     public function count()
@@ -204,11 +199,7 @@ class Builder extends Grammar
         $query = $this->buildQuery();
         $this->setStorage($query);
 
-        try {
-            return $this->manager->queryCount($query, $this->bindings);
-        } catch (\Throwable $th) {
-            throw new AppException($th->getMessage());
-        }
+        return $this->manager->queryCount($query, $this->bindings);
     }
 
     public function save()
@@ -216,11 +207,7 @@ class Builder extends Grammar
         $query = $this->buildQuery();
         $this->setStorage($query);
 
-        try {
-            return $this->manager->exec($query, $this->bindings);
-        } catch (\Throwable $th) {
-            throw new AppException($th->getMessage());
-        }
+        return $this->manager->exec($query, $this->bindings);
     }
 
     public function execInsert(array $attributes)
@@ -229,11 +216,7 @@ class Builder extends Grammar
         $query = $this->buildQuery();
         $this->setStorage($query);
 
-        try {
-            return $this->manager->exec($query, $this->bindings);
-        } catch (\Throwable $th) {
-            throw new AppException($th->getMessage());
-        }
+        return $this->manager->exec($query, $this->bindings);
     }
 
     public function paginate($page = 1, $limit = 10)
@@ -243,11 +226,7 @@ class Builder extends Grammar
         $query = $this->buildQuery();
         $this->setStorage($query);
 
-        try {
-            return $this->manager->queryAll($query, $this->bindings);
-        } catch (\Throwable $th) {
-            throw new AppException($th->getMessage());
-        }
+        return $this->manager->queryAll($query, $this->bindings);
     }
 
     protected function setStorage($query)
@@ -307,10 +286,6 @@ class Builder extends Grammar
         $query = "TRUNCATE TABLE {$this->table}";
         GlobalStorage::set('last_query', $query);
 
-        try {
-            return $this->manager->exec($query);
-        } catch (\Throwable $th) {
-            throw new AppException($th->getMessage());
-        }
+        return $this->manager->exec($query);
     }
 }

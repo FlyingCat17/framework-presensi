@@ -2,14 +2,18 @@
 namespace Riyu\Helpers\Errors\Handler;
 
 use Riyu\Helpers\Errors\Handler\Contract\System as ContractSystem;
+use Riyu\Helpers\Errors\ViewError;
 
 class System implements ContractSystem
 {
     private $isSafety;
 
-    public function register($safety = false)
+    private $isDebug;
+
+    public function register($safety = false, $debug = false)
     {
         $this->isSafety = $safety;
+        $this->isDebug = $debug;
         set_error_handler([$this, 'handle']);
         set_exception_handler([$this, 'exception']);
         register_shutdown_function([$this, 'shutdown']);
@@ -17,6 +21,7 @@ class System implements ContractSystem
 
     public function handle($errno, $errstr, $errfile, $errline)
     {
+        $this->errorLog($errno, $errstr, $errfile, $errline);
         if ($this->isSafety) {
             throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
         }
@@ -32,16 +37,12 @@ class System implements ContractSystem
 
     public function exception($exception)
     {
-        $this->handleLog($exception);
-        $this->unregister();
-        $this->render($exception);
-    }
-
-    public function handleLog($exception)
-    {
-        if (!empty($exception->getMessage())) {
-            $log = new Logger();
-            $log->write($exception->getCode(), $exception->getMessage(), $exception->getFile(), $exception->getLine());
+        http_response_code(500);
+        if ($this->isDebug) {
+            $this->unregister();
+            $this->render($exception);
+        } else {
+            ViewError::code(500);
         }
     }
 
@@ -55,11 +56,11 @@ class System implements ContractSystem
     {
         restore_error_handler();
         restore_exception_handler();
-        set_error_handler([$this, 'errorLog']);
     }
 
     public function errorLog($errno, $errstr, $errfile, $errline)
     {
-        $this->handleLog(new \ErrorException($errstr, 0, $errno, $errfile, $errline));
+        $log = new Logger();
+        $log->write($errno, $errstr, $errfile, $errline);
     }
 }

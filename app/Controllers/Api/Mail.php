@@ -16,17 +16,14 @@ class Mail extends Controller
 
         $otp = rand(1000, 9999);
 
-        $dataToken = [
-            'otp' => $otp,
-            'username' => $username,
-        ];
-        $token = base64_encode(json_encode($dataToken));
+        $token = $this->generateToken($otp, $username);
+
         try {
             $token = str_replace('=', '', $token);
         } catch (\Exception $e) {
-            $token = $token;
         }
-        $url = base_url.'verify-token='.$token;
+
+        $url = base_url.'user/auth?token='.$token;
 
         $data = [
             'nama' => $user->nama_siswa,
@@ -44,6 +41,19 @@ class Mail extends Controller
         }
 
         return Response::json(500, 'Terjadi kesalahan');
+    }
+
+    private function generateToken($otp, $username)
+    {
+        $token = password_hash($username, PASSWORD_BCRYPT);
+
+        $dataToken = [
+            'otp' => $otp,
+            'username' => $username,
+            'token' => $token,
+        ];
+
+        return base64_encode(json_encode($dataToken));
     }
 
     public function send(array $data)

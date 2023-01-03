@@ -1,4 +1,5 @@
 <?php
+
 namespace Riyu\Database\Utils\Query;
 
 use Riyu\Helpers\Errors\AppException;
@@ -27,7 +28,7 @@ trait Query
     {
         $selects = is_array($selects) ? $selects : func_get_args();
 
-        foreach($selects as $key => $column) {
+        foreach ($selects as $key => $column) {
             if (is_string($key)) {
                 $select[$key] = $column . " AS " . $key;
             } else {
@@ -49,12 +50,12 @@ trait Query
     {
         $insert = is_array($insert) ? $insert : func_get_args();
 
-        foreach($insert as $key => $value) {
+        foreach ($insert as $key => $value) {
             if (!in_array($key, $this->fillable)) {
                 throw new AppException("The column {$key} is not fillable");
             }
             $this->columns[] = $key;
-            $this->values[] = ":".$key;
+            $this->values[] = ":" . $key;
             $this->binding($key, $value);
         }
 
@@ -73,17 +74,17 @@ trait Query
     {
         $update = is_array($update) ? $update : func_get_args();
 
-        foreach($update as $key => $value) {
+        foreach ($update as $key => $value) {
             if (!in_array($key, $this->fillable)) {
                 throw new AppException("The column {$key} is not fillable");
             }
             if (is_string($key)) {
-                $binding = "update".count($this->set);
-                $this->set[] = "`".$key . "` = :" . $binding;
+                $binding = "update" . count($this->set);
+                $this->set[] = "`" . $key . "` = :" . $binding;
                 $this->binding($binding, $value);
             } else {
-                $binding = "update".count($this->set);
-                $this->set[] ="`".$key . "` = :" . $binding;
+                $binding = "update" . count($this->set);
+                $this->set[] = "`" . $key . "` = :" . $binding;
                 $this->binding($binding, $update[$value]);
             }
         }
@@ -181,6 +182,34 @@ trait Query
     }
 
     /**
+     * Handle inner join query
+     * 
+     * @param string $table
+     * @param string $first
+     * @param string $operator
+     * @param string $second
+     * @return $this
+     */
+    public function innerJoin($table, $first, $operator = null, $second = null)
+    {
+        return $this->join($table, $first, $operator, $second, 'INNER');
+    }
+
+    /**
+     * Handle outer join query
+     * 
+     * @param string $table
+     * @param string $first
+     * @param string $operator
+     * @param string $second
+     * @return $this
+     */
+    public function outerJoin($table, $first, $operator = null, $second = null)
+    {
+        return $this->join($table, $first, $operator, $second, 'OUTER');
+    }
+
+    /**
      * Handle where query
      * 
      * @param string $column
@@ -200,14 +229,14 @@ trait Query
         if (func_num_args() == 2) {
             list($value, $operator) = [$operator, '='];
         }
-        
+
         // check if the value is null
         if (is_null($value)) {
             list($value, $operator) = [$operator, '='];
         }
 
         $binding = $value;
-        $value = ":where".count($this->where);
+        $value = ":where" . count($this->where);
 
         $this->where[] = compact('column', 'operator', 'value', 'boolean');
 

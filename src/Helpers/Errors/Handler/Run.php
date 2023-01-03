@@ -21,11 +21,7 @@ class Run
 
     private function running()
     {
-        if ($this->isDebug()) {
-            $this->system->register($this->isSafety());
-        } else {
-            $this->system->unregister();
-        }
+        $this->system->register($this->isSafety(), $this->isDebug());
     }
 
     private function isSafety()

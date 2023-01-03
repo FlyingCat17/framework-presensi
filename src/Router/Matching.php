@@ -3,7 +3,6 @@
 namespace Riyu\Router;
 
 use Riyu\Helpers\Callback\Callback;
-use Riyu\Helpers\Errors\AppException;
 use Riyu\Helpers\Errors\ViewError;
 use Riyu\Http\Request;
 use Riyu\Router\Utils\Foundation;
@@ -27,15 +26,21 @@ class Matching extends Storage
         $routes = self::getRoutes();
         $url = $uri;
         $uri = $this->pregReplace($uri);
+        
         if ($method == "HEAD") {
             $method = "GET";
         }
+
+        if (empty($routes[$method])) {
+            return ViewError::code(404);
+        }
+
         foreach ($routes[$method] as $route) {
             if (preg_match($uri, $route)) {
                 return $this->callback($route, $method);
             }
             $rout = $this->pregReplaceRoute($route);
-            if (preg_match($rout, $url)) {
+            if (preg_match($rout, $this->specialUrl($url))) {
                 return $this->callback($route, $method);
             }
         }
@@ -57,7 +62,7 @@ class Matching extends Storage
                 return $this->callback($route, $method);
             }
             $rout = $this->pregReplaceRoute($route);
-            if (preg_match($rout, $url)) {
+            if (preg_match($rout, $this->specialUrl($url))) {
                 return $this->callback($route, $method);
             }
         }
@@ -85,8 +90,14 @@ class Matching extends Storage
     public function pregReplaceRoute($route)
     {
         $route = preg_replace('/\//', '\/', $route);
-        $route = preg_replace('/\{[a-zA-Z0-9]+\}/', '([a-zA-Z0-9]+)', $route);
+        $route = preg_replace('/\{[a-zA-Z0-9_ ]+\}/', '([a-zA-Z0-9_ ]+)', $route);
         $route = '/^' . $route . '$/';
         return $route;
+    }
+
+    public function specialUrl($url)
+    {
+        $url = urldecode($url);
+        return $url;
     }
 }

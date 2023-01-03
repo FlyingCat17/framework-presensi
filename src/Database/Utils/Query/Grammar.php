@@ -320,6 +320,7 @@ class Grammar
         }
         
         $query = '';
+        
         foreach ($where as $key => $value) {
             if ($key == 0) {
                 if (!is_array($value)) {
@@ -335,9 +336,12 @@ class Grammar
                 }
             }
         }
-        if ($query != '') {
-            return ' WHERE ' . $query;
+
+        if ($query == '') {
+            return '';
         }
+
+        return ' WHERE ' . $query;
     }
 
     /**

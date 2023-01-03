@@ -12,19 +12,6 @@ class AppException extends Exception
     public function __construct($message, $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
-        // http_response_code(500);
-        // try {
-        //     new \Riyu\Helpers\Errors\Backtrace\Handler\Logging();
-        // } catch (\Throwable $th) {
-        // }
-        // $config = Config::get('app');
-        // if ($config['debug']) {
-        //     return new Backtrace;
-        //     exit;
-        // } else {
-        //     return ViewError::code(500);
-        //     exit;
-        // }
     }
 
     final public static function msg()
@@ -35,10 +22,5 @@ class AppException extends Exception
     final public function code()
     {
         return $this->code;
-    }
-
-    final public function previous()
-    {
-        return $this->previous;
     }
 }
