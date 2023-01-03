@@ -18,7 +18,7 @@ class MapelController extends Controller
             exit();
         }
         if (Session::get('type') == "guru") {
-            header('Location: ' . base_url . 'dashboard/guru');
+            header('Location: ' . base_url . 'g/dashboard');
             exit();
         }
     }

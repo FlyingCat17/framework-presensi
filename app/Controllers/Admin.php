@@ -24,14 +24,15 @@ class Admin extends Controller
             header('Location: ' . base_url . 'auth/login');
             exit();
         }
-        // if (Session::get('type') != "admin") {
-        //     header('Location: ' . base_url . 'dashboard');
-        //     exit();
-        // }
+        if (Session::get('type') == "guru") {
+            header('Location: ' . base_url . 'g/dashboard');
+            exit();
+        }
     }
 
     public function index()
     {
+        // echo Session::get('type');
         $data['title'] = "Dashboard";
         $tahun_ajaran = Tahun_Ajaran::where('isActive', '1')->first();
         $data['kelas'] = Kelas_Ajaran::select('COUNT(id_kelas_ajaran) AS jumlah_kelas')
@@ -43,6 +44,7 @@ class Admin extends Controller
         $data['guru'] = Guru::select('COUNT(nuptk) AS jumlah_guru')->where('isActive', '1')->first();
         $data['mapel'] = Mapel::select('COUNT(id_mapel) AS jumlah_mapel')->where('status', '1')->first();
         return view(['templates/header', 'templates/sidebar', 'home/index', 'templates/footer'], $data);
+
     }
 
     public function profil()

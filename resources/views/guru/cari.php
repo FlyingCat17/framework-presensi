@@ -9,7 +9,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="<?= base_url; ?>guru/cari" method="post">
+                            <form action="<?= base_url; ?>guru/cari" method="get">
                                 <div class="input-affix mb-4">
                                     <i class="prefix-icon anticon anticon-search"></i>
                                     <input type="text" class="form-control mr-3" name="keyword"
@@ -48,18 +48,18 @@
                                             <?php $no = 1; ?>
                                             <?php foreach ($data['guru'] as $row): ?>
                                                 <!-- <tr>
-                                                                                                <th scope="row">1</th>
-                                                                                                <td>1234567</td>
-                                                                                                <td>Fathan Maulana</td>
-                                                                                                <td>
-                                                                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#btn-ubah-siswa">
-                                                                                                        <i class="anticon anticon-edit"></i>
-                                                                                                    </button>
-                                                                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
-                                                                                                        <i class="anticon anticon-delete"></i>
-                                                                                                    </button>
-                                                                                                </td>
-                                                                                            </tr> -->
+                                                                                                    <th scope="row">1</th>
+                                                                                                    <td>1234567</td>
+                                                                                                    <td>Fathan Maulana</td>
+                                                                                                    <td>
+                                                                                                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#btn-ubah-siswa">
+                                                                                                            <i class="anticon anticon-edit"></i>
+                                                                                                        </button>
+                                                                                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
+                                                                                                            <i class="anticon anticon-delete"></i>
+                                                                                                        </button>
+                                                                                                    </td>
+                                                                                                </tr> -->
                                                 <tr>
                                                     <td>
                                                         <?= $no ?>

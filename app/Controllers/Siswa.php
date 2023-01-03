@@ -208,17 +208,22 @@ class Siswa extends Controller
 
     public function cari(Request $request)
     {
+        if ($request->q == null || "") {
+            Flasher::setFlash('Masukkan keyword pencarian siswa!', 'danger');
+            header("Location: " . base_url . 'siswa');
+            exit();
+        }
         $data['title'] = 'Hasil Pencarian Siswa';
         try {
-
-            $data['keyword'] = $request->keyword;
+            $keyword = $request->q;
+            $data['keyword'] = $keyword;
             $data['jumlah_data'] = ModelsSiswa::where('status', '1')
-                ->where('nama_siswa', 'LIKE', '%' . $request->keyword . '%')
-                ->orWhere('nis', 'LIKE', '%' . $request->keyword . '%')
+                ->where('nama_siswa', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('nis', 'LIKE', '%' . $keyword . '%')
                 ->count();
             $data['data_siswa'] = ModelsSiswa::where('status', '1')
-                ->where('nama_siswa', 'LIKE', '%' . $request->keyword . '%')
-                ->orWhere('nis', 'LIKE', '%' . $request->keyword . '%')
+                ->where('nama_siswa', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('nis', 'LIKE', '%' . $keyword . '%')
                 ->orderby('nama_siswa', 'asc')->paginate($request->page);
             $data['admin'] = User::where('id_admin', Session::get('user'))->first();
             $data['halaman_aktif'] = $request->page;
@@ -247,5 +252,17 @@ class Siswa extends Controller
         // echo $request->keyword;
         header('Location: ' . base_url . 'siswa/cari/' . trim($request->keyword) . '/page/1');
         exit();
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->keyword;
+
+        if (isset($request->page)) {
+            $this->cari($request);
+        } else {
+            header('Location: ' . base_url . 'siswa/cari?q=' . $keyword . '&page=1');
+            exit();
+        }
     }
 }

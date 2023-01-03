@@ -63,12 +63,12 @@ class KelasAjaran extends Controller
             exit();
         }
         // echo json_encode($request->all());
-        // ModelsKelasAjaran::insert([
-        //     'id_kelas_ajaran' => '',
-        //     'id_kelas' => $request->nama_kelas,
-        //     'id_tahun_ajaran' => $request->id,
-        //     'status' => '1'
-        // ])->save();
+        ModelsKelasAjaran::insert([
+            'id_kelas_ajaran' => '',
+            'id_kelas' => $request->nama_kelas,
+            'id_tahun_ajaran' => $request->id,
+            'status' => '1'
+        ])->save();
         Flasher::setFlash('Berhasil Ditambahkan', 'success');
         header('location: ' . base_url . 'kelas/bagi/tambah');
         exit();
@@ -157,7 +157,7 @@ class KelasAjaran extends Controller
         header('Location: ' . base_url . 'kelas/bagi/' . $request->id . '/tambah/cari/' . trim($request->keyword) . '/page/1');
         exit();
     }
-    public function cariTambahSiswa(Request $request, $id)
+    public function cariTambahSiswa(Request $request)
     {
         $check = ModelsKelasAjaran::where('id_kelas_ajaran', $request->id)->first();
         if (!$check) {
@@ -165,17 +165,23 @@ class KelasAjaran extends Controller
             exit();
         }
         try {
-            $data['keyword'] = $request->keyword;
+            $keyword = $request->q;
+            if ($keyword == "" || null) {
+                Flasher::setFlash('Masukkan keyword pencarian!', 'danger');
+                header('Location: ' . base_url . 'kelas/bagi/' . $request->id . '/tambah/page/1');
+                exit();
+            }
+            $data['keyword'] = $keyword;
             $data['title'] = 'Pembagian Kelas';
             $data['jumlah_data'] = ModelsSiswa::where('status', '1')
-                ->where('nama_siswa', 'LIKE', '%' . $request->keyword . '%')
-                ->orWhere('nis', 'LIKE', '%' . $request->keyword . '%')
+                ->where('nama_siswa', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('nis', 'LIKE', '%' . $keyword . '%')
                 ->count();
             $data['data_siswa'] = ModelsSiswa::where('status', '1')
-                ->where('nama_siswa', 'LIKE', '%' . $request->keyword . '%')
-                ->orWhere('nis', 'LIKE', '%' . $request->keyword . '%')
+                ->where('nama_siswa', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('nis', 'LIKE', '%' . $keyword . '%')
                 ->orderby('nama_siswa', 'asc')->paginate($request->page);
-            $data['kelas'] = ModelsKelasAjaran::where('id_kelas_ajaran', $id)->join('tb_kelas', 'tb_kelas.id_kelas', 'tb_kelas_ajaran.id_kelas')->first();
+            $data['kelas'] = ModelsKelasAjaran::where('id_kelas_ajaran', $request->id)->join('tb_kelas', 'tb_kelas.id_kelas', 'tb_kelas_ajaran.id_kelas')->first();
             $data['admin'] = User::where('id_admin', Session::get('user'))->first();
             $data['halaman_aktif'] = $request->page;
             $data['jumlah_halaman'] = ceil($data['jumlah_data'] / 10);
@@ -193,5 +199,18 @@ class KelasAjaran extends Controller
         Flasher::setFlash('Berhasil Ditambahkan', 'success');
         header('location: ' . base_url . 'kelas/bagi/' . $id);
         exit();
+    }
+
+    public function searchSiswa(Request $request)
+    {
+        // print_r($request->all());
+        $keyword = $request->keyword;
+
+        if (isset($request->page)) {
+            $this->cariTambahSiswa($request);
+        } else {
+            header('Location: ' . base_url . 'kelas/bagi/' . $request->id . '/tambah/cari?q=' . $keyword . '&page=1');
+            exit();
+        }
     }
 }

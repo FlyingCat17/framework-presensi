@@ -14,6 +14,10 @@ use App\Controllers\Siswa;
 use App\Controllers\MapelController;
 use App\Controllers\JadwalController;
 use App\Controllers\Testing;
+
+use App\Controllers\Guru\Dashboard as Guru_Dashboard;
+use App\Controllers\Guru\Mapel as Guru_Mapel;
+use App\Controllers\Guru\Jadwal as Guru_Jadwal;
 use App\Models\Presensi;
 use Riyu\Http\Request;
 use Riyu\Router\Route;
@@ -44,7 +48,6 @@ Route::get('/register', [Login::class, 'register']);
 Route::post('/register', [Login::class, 'authRegister']);
 
 Route::get('/dashboard', [Admin::class, 'index']);
-Route::get('/dashboard/guru', [Guru::class, 'index']);
 // tahun ajaran
 Route::get('/tahun_ajaran', [Tahun_Ajaran::class, 'index']);
 Route::post('/tahun_ajaran', [Tahun_Ajaran::class, 'delete']);
@@ -70,14 +73,10 @@ Route::get('/profile', [HomeController::class, 'profile']);
 Route::group('/siswa', function () {
     Route::get('', [Siswa::class, 'index']);
     Route::get('/cari/{keyword}/page/{page}', [Siswa::class, 'cari']);
-    Route::post('/cari', [Siswa::class, 'aksiCari']);
+    // Route::post('/cari', [Siswa::class, 'aksiCari']);
     Route::get(
         '/cari',
-        function () {
-            Flasher::setFlash('Masukkan keyword pencarian', 'danger');
-            header('Location: ' . base_url . 'siswa');
-            exit();
-        }
+        [Siswa::class, 'search']
     );
     Route::get('/page/{page}', [Siswa::class, 'pagination']);
     Route::get('/tambah', [Siswa::class, 'tambah']);
@@ -139,9 +138,13 @@ Route::group('/kelas', function () {
         '/bagi/{id}/tambah/page/{page}',
         [KelasAjaran::class, 'tambah_siswa']
     );
-    Route::post(
+    // Route::post(
+    //     '/bagi/{id}/tambah/cari',
+    //     [KelasAjaran::class, 'aksiCariSiswa']
+    // );
+    Route::get(
         '/bagi/{id}/tambah/cari',
-        [KelasAjaran::class, 'aksiCariSiswa']
+        [KelasAjaran::class, 'searchSiswa']
     );
     Route::get(
         '/bagi/{id}/tambah/cari/{keyword}/page/{page}',
@@ -162,7 +165,7 @@ Route::group('/guru', function () {
         }
     );
     Route::get('/p/{page}', [Guru::class, 'index']);
-    Route::post('/cari', [Guru::class, 'aksiCari']);
+    Route::get('/cari', [Guru::class, 'search']);
     Route::get('/cari/{keyword}/p/{page}', [Guru::class, 'cari']);
     Route::get('/tambah', [Guru::class, 'tambah']);
     Route::post('/tambah', [Guru::class, 'insert']);
@@ -201,6 +204,7 @@ Route::group('/jadwal', function () {
         }
     );
 });
+
 Route::group('/presensi', function () {
     Route::get(
         '',
@@ -224,6 +228,7 @@ Route::group('/presensi', function () {
     Route::get('/{idJadwal}/detail/{idPresensi}/d/{idDetail}', [PresensiController::class, 'detailSiswaPresensi']);
     Route::get('/{idJadwal}/rekap', [PresensiController::class, 'rekapPresensi']);
 });
+
 Route::group('/mapel', function () {
     Route::get('/', [MapelController::class, 'index']);
     Route::get('/tambah', [MapelController::class, 'tambah']);
@@ -275,4 +280,20 @@ Route::group('/profil', function () {
         '/admin/ubah/password',
         [Admin::class, 'updatePassword']
     );
+});
+
+# ROLE GURU
+Route::get('/g', function () {
+    redirect(base_url . 'g/dashboard');
+});
+
+Route::group('/g/dashboard', function () {
+    Route::get('/', [Guru_Dashboard::class, 'index']);
+});
+Route::group('/g/mapel', function () {
+    Route::get('/', [Guru_Mapel::class, 'index']);
+});
+Route::group('/g/jadwal', function () {
+    Route::get('/', [Guru_Jadwal::class, 'index']);
+    Route::get('/{hari}', [Guru_Jadwal::class, 'jadwalHarian']);
 });

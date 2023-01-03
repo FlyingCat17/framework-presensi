@@ -9,7 +9,7 @@
 				<div class="col-md-12">
 					<div class="card">
 						<div class="card-body">
-							<form action="<?= base_url; ?>siswa/cari" method="post">
+							<form action="<?= base_url; ?>siswa/cari" method="get">
 								<div class="input-affix mb-4">
 									<i class="prefix-icon anticon anticon-search"></i>
 									<input type="text" class="form-control mr-3" name="keyword"
@@ -113,7 +113,7 @@
 												$link_active = ($data['halaman_aktif'] == $i) ? 'active' : '';
 												?>
 												<li class="paginate_button page-item <?= $link_active; ?>">
-													<a href="<?= base_url; ?>siswa/cari/<?= $data['keyword'] ?>/page/<?= $i; ?>"
+													<a href="<?= base_url; ?>siswa/cari?q=<?= $data['keyword'] ?>&page=<?= $i; ?>"
 														aria-controls="data-table" data-dt-idx="1" tabindex="0"
 														class="page-link">
 														<?= $i; ?>

@@ -20,7 +20,7 @@ class Guru extends Controller
             exit();
         }
         if (Session::get('type') == "guru") {
-            header('Location: ' . base_url . 'dashboard/guru');
+            header('Location: ' . base_url . 'g/dashboard');
             exit();
         }
     }
@@ -47,26 +47,33 @@ class Guru extends Controller
     public function aksiCari(Request $request)
     {
         // echo $request->keyword;
-        if ($request->keyword == "") {
+        if (trim($request->keyword) != "" || null) {
+            header('Location: ' . base_url . 'guru/cari/' . trim($request->keyword) . '/p/1');
+            exit();
+        } else {
             Flasher::setFlash('Masukkan keyword pencarian', 'danger');
             header('Location: ' . base_url . 'guru');
             exit();
         }
-        header('Location: ' . base_url . 'guru/cari/' . trim($request->keyword) . '/p/1');
-        exit();
     }
     public function cari(Request $request)
     {
+        if ($request->q == "") {
+            Flasher::setFlash('Masukkan Keyword Pencarian!', 'danger');
+            header('Location: ' . base_url . 'guru');
+            exit();
+        }
         try {
             $data['title'] = "Hasil Pencarian Guru";
-            $data['keyword'] = $request->keyword;
+            $keyword = $request->q;
+            $data['keyword'] = $keyword;
             $data['jumlah_data'] = ModelsGuru::where('isActive', '1')
-                ->where('tb_guru.nama_guru', 'LIKE', '%' . $request->keyword . '%')
-                ->where('tb_guru.nuptk', 'LIKE', '%' . $request->keyword . '%')
+                ->where('tb_guru.nama_guru', 'LIKE', '%' . $keyword . '%')
+                ->where('tb_guru.nuptk', 'LIKE', '%' . $keyword . '%')
                 ->count();
             $data['guru'] = ModelsGuru::where('isActive', '1')
-                ->where('nama_guru', 'LIKE', '%' . $request->keyword . '%')
-                ->orWhere('nuptk', 'LIKE', '%' . $request->keyword . '%')
+                ->where('nama_guru', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('nuptk', 'LIKE', '%' . $keyword . '%')
                 ->orderby('nama_guru', 'asc')->paginate($request->page);
             $data['admin'] = User::where('id_admin', Session::get('user'))->first();
             $data['halaman_aktif'] = $request->page;
@@ -253,5 +260,17 @@ class Guru extends Controller
     private function view(string $view, array $data = [])
     {
         return view(['templates/header', 'templates/sidebar', $view, 'templates/footer'], $data);
+    }
+
+    public function search(Request $request)
+    {
+
+        if (!isset($request->page)) {
+            $keyword = $request->keyword;
+            header('Location: ' . base_url . 'guru/cari?q=' . $keyword . '&page=1');
+            exit();
+        } else {
+            $this->cari($request);
+        }
     }
 }
