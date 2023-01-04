@@ -112,6 +112,8 @@ class Settings extends Controller
      */
     public function foto($foto, $nis)
     {
+        $this->validate($foto);
+
         try {
             // Get path info
             $ekstensi = pathinfo($foto['name'], PATHINFO_EXTENSION);

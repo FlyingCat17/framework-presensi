@@ -14,17 +14,13 @@ class Response extends \Riyu\Http\Response
      */
     public static function json($status = 200, $message = '', $data = [])
     {
-        self::setHeaderType('application/json');
-
         self::code($status);
 
-        self::content(json_encode([
+        parent::json([
             'status' => $status,
             'message' => $message,
-            'data' => $data
-        ]));
-
-        self::send();
+            'data' => $data,
+        ]);
         
         exit;
     }

@@ -74,6 +74,8 @@ class Absensi extends Controller
      */
     private function foto($foto, $nis, $id, $type = 2)
     {
+        $this->validate($foto);
+
         try {
             // Get path info
             $ekstensi = pathinfo($foto['name'], PATHINFO_EXTENSION);
