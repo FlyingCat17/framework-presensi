@@ -1,7 +1,7 @@
 <div class="page-container">
     <div class="main-content">
         <div class="container">
-            <h3 class="font-weight-bold mb-3">Informasi Akademik</h3>
+            <h3 class="font-weight-bold mb-3">Hasil Pencarian : <?=$data['keyword']?></h3>
             <div class="card">
                 <div class="card-body">
                     <?php
@@ -11,14 +11,14 @@
                     ?>
                     <form action="<?= base_url; ?>informasi/cari" method="get">
                         <div class="input-affix">
-                            <input type="text" class="form-control mr-1"  name="keyword" placeholder="Cari judul...">
-                            <button
+                            <input type="text" class="form-control mr-1" name="keyword" placeholder="Cari judul...">
+                            <button type="submit"
                                 class="btn btn-success btn-icon d-flex d-inline justify-content-center align-items-center">
                                 <i class="material-icons">search</i>
                             </button>
                         </div>
                     </form>
-                    <a href="<?= base_url; ?>informasi/tambah" class="btn btn-primary mt-3">Tambah</a>
+                    <a href="<?= base_url; ?>informasi" class="btn btn-danger mt-3">Kembali</a>
                 </div>
             </div>
             <div class="row">
@@ -109,7 +109,7 @@
                                 $link_active = ($data['halaman_aktif'] == $i) ? 'active' : '';
                                 ?>
                                 <li class="paginate_button page-item <?= $link_active; ?>">
-                                    <a href="<?= base_url; ?>informasi/page/<?= $i; ?>" aria-controls="data-table"
+                                    <a href="<?= base_url; ?>informasi/cari?q=<?= $data['keyword']?>&page=<?= $i; ?>" aria-controls="data-table"
                                         data-dt-idx="1" tabindex="0" class="page-link">
                                         <?= $i; ?>
                                     </a>

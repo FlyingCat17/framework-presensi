@@ -337,9 +337,7 @@ class PresensiController extends Controller
             $kehadiran = $request->kehadiran;
             switch ($kehadiran) {
                 case '1':
-                    // echo 'Hadir';
                     $date2 = date('Y-m-d H:i:s', time());
-                    // echo $date2;
                     ModelsDetail::insert([
                         'id_presensi' => $request->idPresensi,
                         'nis' => $request->nis,

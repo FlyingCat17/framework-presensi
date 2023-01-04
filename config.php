@@ -3,7 +3,7 @@
 return [
     'app' => [
         'debug' => true,
-        'safety' => true,
+        'safety' => false,
         'name' => 'Riyu',
         'url' => 'http://localhost/framework-presensi/',
         'timezone' => 'Asia/Jakarta',
