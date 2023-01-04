@@ -73,16 +73,16 @@
             </li>
             <li class="nav-item dropdown <?=(strtolower($data['title']) === "ujian" ? 'active' : (strtolower($data['title']) === "tambah ujian" ? 'active' : (strtolower($data['title']) === "ubah ujian" ? 'active' : ''))) ?>"
                 id="liNav">
-                <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>jadwal">
+                <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>ujian">
                     <span class="icon-holder">
                         <i class="material-icons" style="font-size: 18px;">free_cancellation</i>
                     </span>
                     <span class="title">Jadwal Ujian</span>
                 </a>
             </li>
-            <li class="nav-item dropdown <?=(strtolower($data['title']) === "Informasi Akademik" ? 'active' : (strtolower($data['title']) === "tambah Informasi Akademik" ? 'active' : (strtolower($data['title']) === "ubah Informasi Akademik" ? 'active' : ''))) ?>"
+            <li class="nav-item dropdown <?=(strtolower($data['title']) === "informasi akademik" ? 'active' : (strtolower($data['title']) === "tambah informasi" ? 'active' : (strtolower($data['title']) === "ubah informasi" ? 'active' : (strtolower($data['title']) === "detail informasi" ? 'active' : '')))) ?>"
                 id="liNav">
-                <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>jadwal">
+                <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>informasi">
                     <span class="icon-holder">
                         <i class="material-icons" style="font-size: 18px;">feed</i>
                     </span>

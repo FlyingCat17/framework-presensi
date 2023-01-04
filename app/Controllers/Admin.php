@@ -175,7 +175,6 @@ class Admin extends Controller
                 $formatFile = 'profile-' . $idAdmin . '.' . $ekstensiFile;
                 $moveFile = __DIR__ . "/../../images/profile/admin/" . $formatFile;
                 if (move_uploaded_file($tmpName, $moveFile)) {
-
                     $update = ModelsAdmin::update([
                         'nama_admin' => $val_char['nama_lengkap'],
                         'notelp' => $val_char['notelp'],

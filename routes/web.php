@@ -6,11 +6,13 @@ use App\Controllers\Guru;
 use App\Controllers\HomeController;
 use App\Controllers\Kelas;
 use App\Controllers\KelasAjaran;
+use App\Controllers\Informasi;
 use App\Controllers\PresensiController;
 use App\Controllers\Tahun_Ajaran;
 use App\Controllers\Login;
 use App\Controllers\Admin;
 use App\Controllers\Siswa;
+use App\Controllers\Ujian;
 use App\Controllers\MapelController;
 use App\Controllers\JadwalController;
 use App\Controllers\Testing;
@@ -280,6 +282,35 @@ Route::group('/profil', function () {
         '/admin/ubah/password',
         [Admin::class, 'updatePassword']
     );
+});
+
+Route::group('/ujian', function () {
+    Route::get('/', [Ujian::class, 'index']);
+});
+
+Route::group('/informasi', function () {
+    Route::get(
+        '/',
+        function () {
+            header('Location: ' . base_url . 'informasi/page/1');
+            exit();
+        }
+    );
+    Route::get('/page/{page}', [Informasi::class, 'index']);
+    Route::get('/detail/{id}', [Informasi::class, 'detail']);
+    Route::get('/tambah', [Informasi::class, 'tambah']);
+    Route::post('/tambah', [Informasi::class, 'insert']);
+
+    Route::get('/ubah', function () {
+        header('Location: ' . base_url . 'informasi');
+        exit();
+    }
+    );
+    Route::get('/ubah/{id}', [Informasi::class, 'ubah']);
+    Route::post('/ubah/{id}', [Informasi::class, 'update']);
+    Route::post('/hapus/{id}', [Informasi::class, 'delete']);
+
+    Route::get('/cari', [Informasi::class, 'search']);
 });
 
 # ROLE GURU

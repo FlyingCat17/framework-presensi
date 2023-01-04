@@ -73,7 +73,7 @@ class Siswa extends Controller
             exit();
         }
         $rule = [
-            'nis' => 'required|min:4|max:15',
+            'nis' => 'required|min:1|max:15',
             'nama' => 'required|min:3|max:120',
             'alamat' => 'required|min:10|max:120',
             'telepon' => 'required|min:10|max:14',
@@ -149,7 +149,7 @@ class Siswa extends Controller
     public function update(Request $request)
     {
         $errors = Validation::make($request->all(), [
-            'nis' => 'required|min:4|max:15',
+            'nis' => 'required|min:1|max:15',
             'nama' => 'required|min:3|max:120',
             'alamat' => 'required|min:10|max:120',
             'telepon' => 'required|min:10|max:14',
