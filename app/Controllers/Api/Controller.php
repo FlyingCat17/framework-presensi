@@ -24,6 +24,23 @@ class Controller
         }
     }
 
+    protected function validate($file)
+    {
+        if (!is_file($file['tmp_name'])) {
+            return Response::json(400, 'Foto tidak valid');
+        }
+
+        $ekstensi = pathinfo($file['name'], PATHINFO_EXTENSION);
+
+        if ($ekstensi != 'jpg' && $ekstensi != 'jpeg' && $ekstensi != 'png') {
+            return Response::json(400, 'Ekstensi foto tidak valid');
+        }
+
+        if ($file['size'] > 10000000) {
+            return Response::json(400, 'Ukuran foto terlalu besar');
+        }
+    }
+
     /**
      * Compress image
      * 
@@ -71,6 +88,22 @@ class Controller
                 return 'Sabtu';
             default:
                 return 'Minggu';
+        }
+    }
+
+    protected function typeUjian($type)
+    {
+        switch ($type) {
+            case 1:
+                return 'UTS Ganjil';
+            case 2:
+                return 'UAS Ganjil';
+            case 3:
+                return 'UTS Genap';
+            case 4:
+                return 'UAS Genap';
+            default:
+                return 'Ulangan Harian';
         }
     }
 }

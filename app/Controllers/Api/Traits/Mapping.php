@@ -129,15 +129,11 @@ trait Mapping
 
         foreach ($jadwal as $key => $value) {
             $data[] = array(
-                // $hari 
-                'namaMapel' => $value['nama_mapel'],
-                'guru' => $value['nama_guru'],
-                'idUjian' => $value['id_ujian'],
-                'mulaiUjian' => $value['mulai_ujian'],
-                'akhirUjian' => $value['akhir_ujian'],
-                'hari' => $value['hari'],
-                'jamKe' => $value['jam_ke'],
-                'idKelas' => $value['id_kelas'],
+                'id' => $value['id_ujian'],
+                'name' => $value['nama_mapel'],
+                'days' => $this->daysSelector($value['hari']),
+                'date' => $value['date_ujian'],
+                'type' => $this->typeUjian($value['jenis_ujian']),
             );
         }
 

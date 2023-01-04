@@ -8,6 +8,7 @@ use App\Controllers\Api\Informasi;
 use App\Controllers\Api\Jadwal;
 use App\Controllers\Api\Mail;
 use App\Controllers\Api\Settings;
+use App\Models\Siswa;
 
 Route::group('/api/v3/user', function () {
     Route::post('/login', [Auth::class, 'login']);

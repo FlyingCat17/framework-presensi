@@ -1,26 +1,20 @@
 <?php
+
 namespace Riyu\Http;
 
 class Response
 {
-    private static $content;
+    protected static $content;
 
-    private static $code;
+    protected static $code;
 
-    private static $method;
+    protected static $method;
 
-    private static $headers;
+    protected static $headers;
 
-    private static $cookies;
+    protected static $cookies;
 
-    public function __construct($content = '', $code = 200, $method = 'GET', $headers = [], $cookies = [])
-    {
-        $this->content = $content;
-        $this->code = $code;
-        $this->method = $method;
-        $this->headers = $headers;
-        $this->cookies = $cookies;
-    }
+    protected static $protocol;
 
     public static function code($code = 200)
     {
@@ -66,6 +60,12 @@ class Response
         return (new static);
     }
 
+    public static function setProtocol($protocol = 'HTTP/1.1')
+    {
+        self::$protocol = $protocol;
+        return (new static);
+    }
+
     public static function content($content)
     {
         self::$content = $content;
@@ -99,9 +99,19 @@ class Response
         return self::$cookies !== null;
     }
 
+    public static function hasCookie($name)
+    {
+        return isset($_COOKIE[$name]);
+    }
+
     public static function hasContent()
     {
         return self::$content !== null;
+    }
+
+    public static function hasProtocol()
+    {
+        return self::$protocol !== null;
     }
 
     public static function send()
@@ -126,9 +136,19 @@ class Response
             }
         }
 
+        if (self::hasProtocol()) {
+            header(self::$protocol);
+        }
+
         if (self::hasContent()) {
             echo self::$content;
         }
+
+        self::$code = null;
+        self::$method = null;
+        self::$headers = null;
+        self::$cookies = null;
+        self::$content = null;
     }
 
     public static function sendJson($content)
@@ -139,5 +159,12 @@ class Response
     public static function sendContent($content)
     {
         self::content($content)->send();
+    }
+
+    public function __destruct()
+    {
+        if (self::hasContent() || self::hasHeaders() || self::hasCookies() || self::hasCode() || self::hasMethod() || self::hasProtocol()) {
+            self::send();
+        }
     }
 }
