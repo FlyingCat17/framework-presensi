@@ -20,6 +20,7 @@ use App\Controllers\Testing;
 use App\Controllers\Guru\Dashboard as Guru_Dashboard;
 use App\Controllers\Guru\Mapel as Guru_Mapel;
 use App\Controllers\Guru\Jadwal as Guru_Jadwal;
+use App\Controllers\Guru\Ganti_Password as Guru_Ganti_Password;
 use App\Models\Presensi;
 use Riyu\Http\Request;
 use Riyu\Router\Route;
@@ -136,6 +137,7 @@ Route::group('/kelas', function () {
         }
     );
     Route::get('/bagi/{id}', [KelasAjaran::class, 'detail']);
+    Route::post('/bagi/{id}/{nis}', [KelasAjaran::class, 'deleteSiswa']);
     Route::get(
         '/bagi/{id}/tambah/page/{page}',
         [KelasAjaran::class, 'tambah_siswa']
@@ -286,6 +288,14 @@ Route::group('/profil', function () {
 
 Route::group('/ujian', function () {
     Route::get('/', [Ujian::class, 'index']);
+    Route::get('/{jenis}', [Ujian::class, 'pilihKelas']);
+    Route::get('/{jenis}/tambah/{kelas}', [Ujian::class, 'tambahJadwal']);
+    Route::post('/{jenis}/tambah/{kelas}', [Ujian::class, 'insertUjian']);
+
+    Route::get('/{jenis}/ubah/{id}', [Ujian::class, 'ubahJadwal']);
+    Route::post('/{jenis}/ubah/{id}', [Ujian::class, 'updateJadwal']);
+
+    Route::post('/{jenis}/hapus/{id}', [Ujian::class, 'delete']);
 });
 
 Route::group('/informasi', function () {
@@ -301,10 +311,12 @@ Route::group('/informasi', function () {
     Route::get('/tambah', [Informasi::class, 'tambah']);
     Route::post('/tambah', [Informasi::class, 'insert']);
 
-    Route::get('/ubah', function () {
-        header('Location: ' . base_url . 'informasi');
-        exit();
-    }
+    Route::get(
+        '/ubah',
+        function () {
+            header('Location: ' . base_url . 'informasi');
+            exit();
+        }
     );
     Route::get('/ubah/{id}', [Informasi::class, 'ubah']);
     Route::post('/ubah/{id}', [Informasi::class, 'update']);
@@ -328,3 +340,5 @@ Route::group('/g/jadwal', function () {
     Route::get('/', [Guru_Jadwal::class, 'index']);
     Route::get('/{hari}', [Guru_Jadwal::class, 'jadwalHarian']);
 });
+Route::get('/g/ubah/password', [Guru_Ganti_Password::class, 'index']);
+Route::post('/g/ubah/password', [Guru_Ganti_Password::class, 'updatePassword']);

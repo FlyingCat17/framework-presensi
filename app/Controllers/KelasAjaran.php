@@ -213,4 +213,17 @@ class KelasAjaran extends Controller
             exit();
         }
     }
+
+    public function deleteSiswa(Request $request)
+    {
+        $siswa = ModelsSiswa::where('nis', $request->nis)->first();
+        $hapus = ModelsSiswa::update([
+            'id_kelas_ajaran' => null
+        ])->where('tb_siswa.nis', $request->nis)->save();
+        if ($hapus) {
+            Flasher::setFlash('Berhasil menghapus ' . $siswa->nama_siswa . '!', 'success');
+            header('Location: ' . base_url . 'kelas/bagi/' . $request->id);
+            exit();
+        }
+    }
 }

@@ -39,7 +39,6 @@
     <script src="<?= base_url ?>resources/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
     <script src="<?= base_url ?>resources/vendors/jquery-validation/jquery.validate.min.js"></script>
     <title>E Presensi | <?= $data['title'] ?>
-        <?=(isset($data['hari']) ? $data['hari'] : '') ?>
     </title>
 </head>
 
@@ -47,7 +46,7 @@
     <div class="app">
         <div class="layout">
             <div class="header">
-                <div class="logo logo-dark">
+                <div class="logo logo-dark" style="background-color: #F2FCEF;">
                     <a href="<?= base_url ?>dashboard">
                         <img src="<?= base_url ?>resources/img/logo/new_logo/logo.png" width="150px" class="mt-3"
                             alt="Logo">
@@ -55,22 +54,19 @@
                             width="40px" alt="Logo">
                     </a>
                 </div>
-                <div class="nav-wrap">
+                <div class="nav-wrap" style="background: #F2FCEF;">
                     <ul class="nav-left">
-                        <li class="mobile-toggle">
-                            <a href="javascript:void(0);">
-                                <i class="anticon"></i>
-                            </a>
-                        </li>
+
                     </ul>
                     <ul class="nav-right">
                         <li class="dropdown dropdown-animated scale-left">
                             <div class="pointer" data-toggle="dropdown">
-                                <div class="avatar avatar-image  m-h-10 m-r-15">
+                                <div class="avatar avatar-image m-h-10 m-r-15">
                                     <?php
-                                    if ($data['guru']->foto_profile != null) {
+                                    if ($data['admin']->foto_profile != null) {
                                         ?>
-                                        <img src="<?= base_url ?>images/profile/<?= $data['guru']->foto_profile ?>" alt="">
+                                        <img src="<?= base_url ?>images/profile/<?= $data['guru']->foto_profile ?>" alt=""
+                                            style="object-fit: cover;">
                                         <?php
                                     } else {
                                         ?>
@@ -95,8 +91,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <a href="<?= base_url; ?>g/ubah/password" id="header-edit"
-                                    class="dropdown-item d-block p-h-15 p-v-10">
+                                <a href="<?= base_url; ?>g/ubah/password" data-edit="<?= base_url ?>/user/edit"
+                                    id="header-edit" class="dropdown-item d-block p-h-15 p-v-10">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>
                                             <i class="anticon opacity-04 font-size-16 anticon-lock"></i>
