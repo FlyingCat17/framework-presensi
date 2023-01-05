@@ -73,8 +73,8 @@ trait Mapping
         foreach ($jadwal as $key => $value) {
             if ($value['mulai_presensi'] <= $date && $value['akhir_presensi'] >= $date) {
                 $data[] = array(
-                    'namaMapel' => $value['nama_mapel'],
-                    'guru' => $value['nama_guru'],
+                    'namaMapel' => htmlspecialchars_decode($value['nama_mapel']),
+                    'guru' => htmlspecialchars_decode($value['nama_guru']),
                     'idPresensi' => $value['id_presensi'],
                     'mulaiPresensi' => $value['mulai_presensi'],
                     'akhirPresensi' => $value['akhir_presensi'],
@@ -107,7 +107,7 @@ trait Mapping
 
             $data[] = [
                 'hari' => $this->daysSelector($hari),
-                'pelajaran' => $pelajaran,
+                'pelajaran' => htmlspecialchars_decode($pelajaran),
                 'jam_mulai' => $jam_mulai,
                 'jam_selesai' => $jam_selesai
             ];
@@ -130,7 +130,7 @@ trait Mapping
         foreach ($jadwal as $key => $value) {
             $data[] = array(
                 'id' => $value['id_ujian'],
-                'name' => $value['nama_mapel'],
+                'name' => htmlspecialchars_decode($value['nama_mapel']),
                 'days' => $this->daysSelector($value['hari']),
                 'date' => $value['date_ujian'],
                 'type' => $this->typeUjian($value['jenis_ujian']),
