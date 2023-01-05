@@ -75,8 +75,6 @@
                                         </option>
                                         <option value="5" <?=($data['jadwal']->hari==5) ? 'selected' : '' ?>>Jumat
                                         </option>
-                                        <option value="6" <?=($data['jadwal']->hari==6) ? 'selected' : '' ?>>Sabtu
-                                        </option>
                                     </select>
                                 </div>
                                 <div class="form-group">

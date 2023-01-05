@@ -1,6 +1,6 @@
 $(document).ready(function () {
     ClassicEditor
-        .create(document.querySelector('#isi'))
+        .create(document.querySelector('#isias'))
         .catch(error => {
             console.error(error);
         });

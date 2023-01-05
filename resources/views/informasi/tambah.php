@@ -26,7 +26,7 @@
                                     <label for="isi">Isi Informasi Akademik</label>
                                 </div>
                                 <div class="input-group mb-3">
-                                    <textarea name="isi"
+                                    <textarea name="isi" class="form-control"
                                         id="isi"><?=(isset($data['isi']) ? $data['isi'] : '') ?></textarea>
                                 </div>
                                 <div class="d-flex justify-content-between">

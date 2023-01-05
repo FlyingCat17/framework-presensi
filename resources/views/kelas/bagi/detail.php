@@ -50,7 +50,7 @@
                                             foreach ($data['siswa'] as $siswa): ?>
                                                 <tr>
                                                     <th scope="row">
-                                                        <input type="checkbox" value="<?= $siswa['nis']; ?>" />
+                                                        <!-- <input type="checkbox" value="<?php// $siswa['nis']; ?>" /> -->
                                                         <?= $no ?>
 
                                                     </th>
@@ -64,10 +64,39 @@
                                                         <button type="button" data-id="<?= $kelas['id_kelas'] ?>"
                                                             data-nama="<?= $kelas['nama_kelas'] ?>"
                                                             class="btn btn-icon btn-danger tampilModalHapus" data-toggle="modal"
-                                                            data-target="#hapusModal">
+                                                            data-target="#exampleModalCenter<?= $siswa['nis'] ?>">
                                                             <i class="anticon anticon-delete"></i>
                                                         </button>
                                                     </td>
+                                                    <form
+                                                        action="<?= base_url; ?>kelas/bagi/<?= $data['id_kelas'] ?>/<?= $siswa['nis'] ?>"
+                                                        method="post">
+                                                        <div class="modal fade" id="exampleModalCenter<?= $siswa['nis'] ?>">
+                                                            <div class="modal-dialog modal-dialog-centered">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="exampleModalCenterTitle">
+                                                                            Yakin ingin menghapus siswa ini dari <?= $data['kelas']->nama_kelas ?>?
+                                                                        </h5>
+                                                                        <button type="button" class="close"
+                                                                            data-dismiss="modal">
+                                                                            <i class="anticon anticon-close"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <h6>NIS : <?= $siswa['nis'] ?></h6>
+                                                                        <h6>Nama : <?= $siswa['nama_siswa'] ?></h6>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-default"
+                                                                            data-dismiss="modal">Close</button>
+                                                                        <button type="submit" class="btn btn-primary">Save
+                                                                            changes</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
                                                 </tr>
                                                 <?php $no++;
                                             endforeach;

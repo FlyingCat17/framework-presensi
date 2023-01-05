@@ -18,6 +18,10 @@ class Informasi extends Controller
             header('Location: ' . base_url . 'auth/login');
             exit();
         }
+        if (Session::get('type') == "guru") {
+            header('Location: ' . base_url . 'g/dashboard');
+            exit();
+        }
     }
     private function getUser()
     {

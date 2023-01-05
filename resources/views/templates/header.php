@@ -11,7 +11,7 @@
     <link href="<?= base_url ?>resources/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <?php
-    if ($data['title'] == 'Presensi' || $data['title'] == 'Jadwal') {
+    if ($data['title'] == 'Presensi' || $data['title'] == 'Jadwal' || $data['title'] == 'Tambah Jadwal Ujian' || $data['title'] == 'Ubah Jadwal Ujian') {
         echo '<!-- FLATPICKR -->';
         echo '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">';
         echo '<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>';
@@ -70,12 +70,12 @@
                                     if ($data['admin']->foto_profile != null) {
                                         ?>
                                         <img src="<?= base_url ?>images/profile/<?= $data['admin']->foto_profile ?>" alt="">
-                                        <?php
+                                    <?php
                                     } else {
                                         ?>
                                         <img src="https://i.pinimg.com/564x/15/0f/a8/150fa8800b0a0d5633abc1d1c4db3d87.jpg"
                                             alt="">
-                                        <?php
+                                    <?php
                                     }
                                     ?>
                                 </div>

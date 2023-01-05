@@ -71,7 +71,7 @@
                     <span class="title">Jadwal & Presensi</span>
                 </a>
             </li>
-            <li class="nav-item dropdown <?=(strtolower($data['title']) === "ujian" ? 'active' : (strtolower($data['title']) === "tambah ujian" ? 'active' : (strtolower($data['title']) === "ubah ujian" ? 'active' : ''))) ?>"
+            <li class="nav-item dropdown <?=(strtolower($data['title']) === "ujian" ? 'active' : (strtolower($data['title']) === "jadwal ujian" ? 'active' : (strtolower($data['title']) === "ubah jadwal ujian" ? 'active' : (strtolower($data['title']) === "tambah jadwal ujian" ? 'active' : '')))) ?>"
                 id="liNav">
                 <a class="dropdown-toggle d-flex pt-3" href="<?= base_url ?>ujian">
                     <span class="icon-holder">
