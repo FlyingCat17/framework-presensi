@@ -24,8 +24,12 @@ class Controller
         }
     }
 
-    protected function validate($file)
+    protected function validate(array $file)
     {
+        if (!isset($file) || empty($file) || $file['error'] != 0 || !array($file)) {
+            return;
+        }
+
         if (!is_file($file['tmp_name'])) {
             return Response::json(400, 'Foto tidak valid');
         }
